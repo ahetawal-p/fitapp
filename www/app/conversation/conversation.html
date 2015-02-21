@@ -1,0 +1,18 @@
+<ion-view view-title="Wall-e" title="Wall-e" ng-controller="ConversationCtrl">
+<ion-header-bar align-title="center" class="bar">
+  <h1 class="title">Wall-e</h1>
+  <div class="buttons">
+    <button class="button button-clear">
+    	<i class="icon ion-share icon-accessory"></i>
+    </button>
+  </div>
+</ion-header-bar>
+  <ion-content class="has-header">
+    <ol class="messages">
+      <li ng-repeat="message in messages" ng-bind-html="message.content"></li>
+    </ol>
+  </ion-content>
+    <ion-footer-bar class="bar-frosted">
+    <button class="button button-clear button-positive" ng-click="add()">Add Message</button>
+  </ion-footer-bar>
+</ion-view>
