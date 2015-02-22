@@ -7,7 +7,8 @@ angular.module('fitapp', [
             'ionic',
             'angular.filter',
             'app.activity.parent',
-            'app.conversation'
+            'app.conversation',
+            'app.settings'
             //'app.services'
                         //'app.home',
             //'app.settings'
@@ -55,15 +56,6 @@ angular.module('fitapp', [
     views: {
       'activityContent': {
         templateUrl: 'app/activity/home/chart/activityChart.html'
-      }
-    }
-  })  
-
-  .state('tab.settings', {
-    url: '/settings',
-    views: {
-      'tab-settings': {
-        templateUrl: 'app/settings/settings.html'
       }
     }
   });
