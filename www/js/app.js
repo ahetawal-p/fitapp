@@ -7,9 +7,9 @@ angular.module('fitapp', [
             'ionic',
             'angular.filter',
             'app.activity.parent',
-            'app.conversation'
-            //'app.services'
-            //'app.home',
+            'app.conversation',
+            'app.services'
+                        //'app.home',
             //'app.settings'
 ])
 
