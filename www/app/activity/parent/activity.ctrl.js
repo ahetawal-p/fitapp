@@ -1,12 +1,11 @@
 angular.module('app.activity.parent')
 
 .controller('ActivityParentCtrl', [
-		'$rootScope',
 		'$scope',
 		'$state',
 		'$ionicModal',
 		'fitApi',
-		function ($state, $ionicModal, $scope, fitApi) {
+		function ($scope, $state, $ionicModal, fitApi) {
 
 		var vm = this;
 		vm.activities = fitApi.getActivities();
