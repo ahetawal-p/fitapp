@@ -5,7 +5,7 @@ angular.module('app.conversation')
 		'$scope',
 		'$state',
 		'$ionicScrollDelegate',
-		function ($scope, $ionicScrollDelegate, $rootScope) {
+		function ($rootScope, $scope, $state, $ionicScrollDelegate) {
 
 			var vm = this;
 	  		var messageOptions = [
