@@ -7,6 +7,8 @@ angular.module('fitapp', [
             'ionic',
             'angular.filter',
             'app.activity.parent',
+            'app.activity.create',
+            'app.activity.update',
             'app.conversation',
             'app.settings'
             //'app.services'
@@ -47,7 +49,7 @@ angular.module('fitapp', [
     url: '/activityList',
     views: {
       'activityContent': {
-        templateUrl: 'app/activity/home/list/activityList.html'
+        templateUrl: 'app/activity/parent/list/activityList.html'
       }
     }
   })
@@ -55,7 +57,7 @@ angular.module('fitapp', [
     url: '/activityChart',
     views: {
       'activityContent': {
-        templateUrl: 'app/activity/home/chart/activityChart.html'
+        templateUrl: 'app/activity/parent/chart/activityChart.html'
       }
     }
   });

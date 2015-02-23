@@ -1,0 +1,41 @@
+<ion-modal-view>
+    <ion-header-bar>
+      <button class="button-clear icon-left ion-ios7-arrow-back" ng-click="createActivityModal.hide()">Activity Type</button>
+      <h1 class="title">Add Activity</h1>
+      <button class="button button-clear button-primary" ng-click="createActivityModal.hide()">Done</button>
+    </ion-header-bar>
+    <ion-content ng-controller="CreateActivityCtrl">
+<div class="list">
+  <div class="item item-divider">
+    </br>
+    ACTIVITY TYPE
+  </div>
+  <a class="item item-icon-left" href="#">
+    <p ng-model="activity.activityType">{{vm.selectedActivity.activityType.activityType}}</p>
+    <i class="icon {{vm.selectedActivity.activityType.icon}}"></i>
+  </a>
+  <div class="item item-divider">
+    </br>
+    DETAILS
+  </div>
+  <div class="item" href="#">
+  	<div class="row">
+  		<div class="col col-50">Time</div>
+  		<div class="col col-50" style="text-align:right;">
+  			{{vm.selectedActivity.date | date:'EEE, MMM d'}} {{vm.selectedActivity.timeStamp | date:'HH:mm'}}
+  		</div>
+  	</div>
+  </div>
+  <div class="item" href="#">
+  	<div class="row">
+  		<div class="col col-50">Duration</div>
+  		<div class="col col-50" style="text-align:right;">{{vm.selectedActivity.length}}</div>
+  	</div>  
+  </div>
+  <div class="item item-divider" style="text-align:center;">
+    </br>
+    <p>Source: lark</p>
+  </div>
+</div>    
+</ion-content>
+  </ion-modal-view>

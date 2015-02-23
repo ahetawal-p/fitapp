@@ -15,9 +15,39 @@ angular.module('app.activity.parent')
 			vm.selectedActivity = activity;
 			$scope.openEditActivityModal();
 		};
+  	
+  	vm.createActivity = function(){
+      $scope.openSelectActivityTypeModal();
+    };
 
 
-		$ionicModal.fromTemplateUrl('app/activity/update/editActivityModal.html', {
+  	vm.selectActivityType = function(activityType){
+      $scope.selectedActivity = buildNewActivity(activityType);
+      $scope.openCreateActivityModal();
+    };
+
+    
+    buildNewActivity = function(activityType){
+      var activity = {activityType:activityType
+              , icon: activityType.icon};
+      // activity.activityType = activityType;
+      // activity.icon = activityType.icon;
+      var currentTime = new Date();
+
+      if (activityType.activityType === "sleep"){
+        activity.date = currentTime.getDate();
+        activity.length = "8 hours";
+        activity.timeStamp = "23:00";
+      }else{
+        activity.date = currentTime.getDate();
+        activity.length = "5 mins";
+        activity.timeStamp = currentTime.getTime();
+      }
+
+      return activity;
+    };
+
+		$ionicModal.fromTemplateUrl('app/activity/update/updateActivityModal.html', {
 		    scope: $scope,
 		    animation: 'slide-in-up'
 		  }).then(function(modal) {
@@ -67,6 +97,33 @@ angular.module('app.activity.parent')
 		  $scope.$on('createActivityModal.removed', function() {
 		    // Execute action
 		  });
-		}	
+
+		  $ionicModal.fromTemplateUrl('app/activity/create/selectActivityTypeModal.html', {
+        		scope: $scope,
+        		animation: 'slide-in-up'
+      	  }).then(function(modal) {
+        		$scope.selectActivityTypeModal = modal;
+      	  });
+      	  $scope.openSelectActivityTypeModal = function() {
+        	$scope.selectActivityTypeModal.show();
+      	  };
+      	  $scope.closeSelectActivityTypeModal = function() {
+        	$scope.selectActivityTypeModal.hide();
+          };
+      	  //Cleanup the modal when we're done with it!
+      	  $scope.$on('$destroy', function() {
+        	$scope.selectActivityTypeModal.remove();
+      	  });
+      	  // Execute action on hide modal
+      	  $scope.$on('selectActivityTypeModal.hidden', function() {
+        	// Execute action
+      	  });
+      	  // Execute action on remove modal
+      	  $scope.$on('selectActivityTypeModal.removed', function() {
+        // Execute action
+      });
+
+
+	}	
 
 ]);
