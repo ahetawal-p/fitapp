@@ -1,5 +1,21 @@
-       <ion-nav-view title="'List'" >
-        <ion-content>
-          <h1>List Tab</h1>
-        </ion-content>        
-        </ion-nav-view>
+<ion-view view-title="Activity" ng-controller="ActivityParentCtrl as vm">
+<ion-content class="has-header has-subheader" delegate-handle="scrollHandle">
+      <div class="transaction-list item-container" ng-repeat="activityDate in vm.activities | groupBy: 'date' | toArray:true | orderBy:'$key':true">
+      <div class="item item-divider">
+        <p>{{activityDate.$key | date:'EEE, MMM d'}}</p>
+      </div>
+      <div class="item transaction-item item-icon-left" ng-repeat="activity in activityDate" href="" ng-click="vm.openEditActivityModal(activity)"> 
+        <div class="row">
+          <i class="icon {{activity.icon}}"></i>
+          <div class="col">
+            <p>{{activity.length}} {{activity.activityType}}</p>
+            <p>{{activity.description}}</p>
+          </div>
+          <div class="col" style="text-align:right;">
+            <p>{{activity.timeStamp}}</p>
+          </div>
+        </div>
+    </div>
+    </div>
+  </ion-content>
+</ion-view>

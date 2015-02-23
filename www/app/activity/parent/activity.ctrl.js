@@ -26,7 +26,14 @@ angular.module('app.activity.parent')
       $scope.openCreateActivityModal();
     };
 
-    
+	$scope.demo = 'ios';
+	$scope.setPlatform = function(p) {
+	    document.body.classList.remove('platform-ios');
+	    document.body.classList.remove('platform-android');
+	    document.body.classList.add('platform-' + p);
+	    $scope.demo = p;
+	}
+
     buildNewActivity = function(activityType){
       var activity = {activityType:activityType
               , icon: activityType.icon};

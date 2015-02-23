@@ -42,25 +42,25 @@ angular.module('fitapp', [
     url: "/tab",
     abstract: true,
     templateUrl: "app/home/apptabs.html"
-  })
+  });
 
   
-  .state('tab.activityList', {
-    url: '/activityList',
-    views: {
-      'activityContent': {
-        templateUrl: 'app/activity/parent/list/activityList.html'
-      }
-    }
-  })
-  .state('tab.activityChart', {
-    url: '/activityChart',
-    views: {
-      'activityContent': {
-        templateUrl: 'app/activity/parent/chart/activityChart.html'
-      }
-    }
-  });
+  // .state('tab.activityList', {
+  //   url: '/activityList',
+  //   views: {
+  //     'activityContent': {
+  //       templateUrl: 'app/activity/parent/list/activityList.html'
+  //     }
+  //   }
+  // })
+  // .state('tab.activityChart', {
+  //   url: '/activityChart',
+  //   views: {
+  //     'activityContent': {
+  //       templateUrl: 'app/activity/parent/chart/activityChart.html'
+  //     }
+  //   }
+  // });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/conversation');
