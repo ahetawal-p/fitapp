@@ -8,7 +8,7 @@ angular.module('app.services')
 	var treeData = {
 		root: ['onboarding', 'onboardingInfo'],
 		'onboarding' : {
-			text: "Hi There! I am wall-e",
+			text: "Hi There I am wall-e",
 			children: ['askName']
 		},
 		'askName': {
@@ -21,7 +21,8 @@ angular.module('app.services')
 			children: ['greetUser']
 		},
 		'greetUser': {
-			text: "Hi {{name}}! Nice to meet you",
+			text: '"Hi " + user.name + "! Nice to meet you"',
+			evalType : "string",
 			children: ['lookData']
 		},
 		'lookData':{

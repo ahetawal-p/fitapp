@@ -7,11 +7,16 @@ angular.module('app.conversation')
 		'talky',
 		'$ionicScrollDelegate',
 		'$timeout',
-		function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout) {
+		'$parse',
+		function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse) {
 
 
 			var USER_INPUT_DELAY_MAX = 1000;
 			var SYSTEM_INPUT_DELAY_MAX = 3000;
+			var root = talky.getOnboarding('onboarding');
+
+			var lastNodePushed = {};
+			$scope.messages = [];
 
 			var getRandom = function(limit){
 				var randomWait = Math.floor((Math.random() * limit) + 1);
@@ -20,7 +25,15 @@ angular.module('app.conversation')
 
 			};
 
-			var lastNodePushed = {};
+			var evalTypeProcessing = function(message){
+				if(message.evalType != null 
+					&& message.evalType == "string"){
+					
+					var evaluatedMsg = $scope.$eval(message.text);
+					console.log("evaluated as >> " + evaluatedMsg);
+					message.text = evaluatedMsg;	
+				}
+			};
 
 			var performAddToConversationList = function(message, waitLimit) {
 				message.wait = true;	  		
@@ -30,19 +43,27 @@ angular.module('app.conversation')
 				
 				var lastMsgInList = $scope.messages[$scope.messages.length - 1];
 				return $timeout( function() { 
-									lastMsgInList.wait=false;
+									lastMsgInList.wait = false;
+									evalTypeProcessing(lastMsgInList);
 									$ionicScrollDelegate.scrollBottom(true);
 									}, 
 								getRandom(waitLimit));
 
 			};
 
-			$scope.messages = [];
-	  		var root = talky.getOnboarding('onboarding');
+			
 	  		performAddToConversationList(root['onboarding'], SYSTEM_INPUT_DELAY_MAX)
 	  										.then(function(){ 
 	  											$scope.evaluateNextNode();
 	  										});
+
+	  		//TODO: To be set when we first load the data or get user input
+			$scope.user = {
+    				name: 'Amit'
+  			};
+
+  			
+	  		
 
 			$scope.evaluateNextNode = function() {
 	    		var currentNodeToBeAdded = root[lastNodePushed.children[0]]; 
