@@ -3,16 +3,41 @@
   <h1 class="title">Wall-e</h1>
   <div class="buttons">
     <button class="button button-clear">
-    	<i class="icon ion-share icon-accessory"></i>
+      <i class="icon ion-share icon-accessory"></i>
     </button>
   </div>
 </ion-header-bar>
   <ion-content class="has-header">
-    <ol class="messages">
-      <li ng-repeat="message in messages" ng-bind-html="message.content"></li>
-    </ol>
+    
+    
+    <ion-list class="messages">
+      <ion-item ng-repeat="message in messages" style="border-style:none">
+        
+        <div class="systemMsg" ng-if="message.wait">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+        </div>
+        
+        <div class="systemMsg" ng-if="message.type == null && !message.wait">
+              {{message.text}}
+        </div>
+        
+        <div class="userMsg" ng-if="(message.display.length > 0) && !message.wait">
+            <span ng-click="usermsg.isClickDisabled || userInput(usermsg)" ng-repeat="usermsg in message.display">
+              {{usermsg.text}}
+            </span> 
+        </div>
+
+      </ion-item>
+
+    </ion-list>
+
   </ion-content>
-    <ion-footer-bar class="bar-frosted">
+   <!--  <ion-footer-bar class="bar-frosted">
     <button class="button button-clear button-positive" ng-click="add()">Add Message</button>
-  </ion-footer-bar>
+  </ion-footer-bar> -->
 </ion-view>
+
+
+
