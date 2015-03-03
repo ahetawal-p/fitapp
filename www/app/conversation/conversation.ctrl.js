@@ -12,7 +12,7 @@ angular.module('app.conversation')
 
 
 			var USER_INPUT_DELAY_MAX = 1000;
-			var SYSTEM_INPUT_DELAY_MAX = 3000;
+			var SYSTEM_INPUT_DELAY_MAX = 1000;
 			var root = talky.getOnboarding('onboarding');
 
 			var lastNodePushed = {};
@@ -26,8 +26,8 @@ angular.module('app.conversation')
 			};
 
 			var evalTypeProcessing = function(message){
-				if(message.evalType != null 
-					&& message.evalType == "string"){
+				if(message.evalInfo != null 
+					&& message.evalInfo.type == "string"){
 					
 					var evaluatedMsg = $scope.$eval(message.text);
 					console.log("evaluated as >> " + evaluatedMsg);
@@ -41,10 +41,10 @@ angular.module('app.conversation')
 	  			lastNodePushed = message;
 				console.log(message);
 				
-				var lastMsgInList = $scope.messages[$scope.messages.length - 1];
+				var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
 				return $timeout( function() { 
-									lastMsgInList.wait = false;
-									evalTypeProcessing(lastMsgInList);
+									lastMsgInListOnUi.wait = false;
+									evalTypeProcessing(lastMsgInListOnUi);
 									$ionicScrollDelegate.scrollBottom(true);
 									}, 
 								getRandom(waitLimit));
@@ -66,26 +66,49 @@ angular.module('app.conversation')
 	  		
 
 			$scope.evaluateNextNode = function() {
-	    		var currentNodeToBeAdded = root[lastNodePushed.children[0]]; 
-	    		currentNodeToBeAdded['display'] = [];
-				var childLen = currentNodeToBeAdded.children.length;
 
-	    		if(childLen > 1){
-	    			for(i in currentNodeToBeAdded.children){
-	    				var msg = root[currentNodeToBeAdded.children[i]];
-	    				msg.isClickDisabled = false;
-	    				currentNodeToBeAdded['display'].push(angular.extend({}, msg));
+				//console.log(typeof lastNodePushed.evalInfo);
+				
+				if(typeof lastNodePushed.evalInfo != "undefined" 
+					&& lastNodePushed.evalInfo.type == "func"){
 
+	    			console.log("I am here");
+	    			var output = $parse(lastNodePushed.evalInfo.method)($scope.user.name);
+	    			console.log("Ouput " + output);
+
+	    		} else {
+
+
+		    		var currentNodeToBeAdded = root[lastNodePushed.children[0]];
+		    		currentNodeToBeAdded['display'] = [];
+
+
+
+
+					var childLen = currentNodeToBeAdded.children.length;
+
+		    		if(childLen > 1){
+		    			for(i in currentNodeToBeAdded.children){
+		    				var msg = root[currentNodeToBeAdded.children[i]];
+		    				msg.isClickDisabled = false;
+		    				currentNodeToBeAdded['display'].push(angular.extend({}, msg));
+
+		    			}
+		    		} else if (root[currentNodeToBeAdded.children[0]].type != null){
+		    			var msg = root[currentNodeToBeAdded.children[0]];
+		    			msg.isClickDisabled = false;
+		    			currentNodeToBeAdded['display'].push(angular.extend({}, msg));
+		    		}
+
+					var addToListPromise = performAddToConversationList(currentNodeToBeAdded, SYSTEM_INPUT_DELAY_MAX);
+				
+					/*
+					If no child node of user type present, 
+					move to the next system node from the config
+					*/
+					if(currentNodeToBeAdded.display.length < 1){
+	    				addToListPromise.then(function(){$scope.evaluateNextNode();});
 	    			}
-	    		} else if (root[currentNodeToBeAdded.children[0]].type != null){
-	    			var msg = root[currentNodeToBeAdded.children[0]];
-	    			msg.isClickDisabled = false;
-	    			currentNodeToBeAdded['display'].push(angular.extend({}, msg));
-	    		}
-
-				var addToListPromise = performAddToConversationList(currentNodeToBeAdded, SYSTEM_INPUT_DELAY_MAX);
-				if(currentNodeToBeAdded.display.length < 1){
-	    			addToListPromise.then(function(){$scope.evaluateNextNode();});
 	    		}
 
 	   		};

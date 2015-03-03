@@ -5,6 +5,12 @@ angular.module('app.services')
  */
 .factory('talky', function() {
 
+	var testMethod = function(name) {
+		console.log("I am called here..." + name);
+		return "new msg";
+
+	};
+
 	var treeData = {
 		root: ['onboarding', 'onboardingInfo'],
 		'onboarding' : {
@@ -22,7 +28,9 @@ angular.module('app.services')
 		},
 		'greetUser': {
 			text: '"Hi " + user.name + "! Nice to meet you"',
-			evalType : "string",
+			evalInfo : {
+				type : "string",
+			},
 			children: ['lookData']
 		},
 		'lookData':{
@@ -62,13 +70,21 @@ angular.module('app.services')
 		'onboardingInfoUserConfirm': {
 			text: "Sounds great",
 			type: "user",
-			children: []
+			children: ['dummyAnalyzer']
 		},
 		'onboardingInfoUserNo': {
 			text: "No Thanks",
 			type: "user",
 			children: []
+		},
+		'dummyAnalyzer' : {
+			evalInfo : {
+				type : "func",
+				method : testMethod,
+			},
+			children:[]
 		}
+
 
 	};
 
