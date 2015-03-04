@@ -3,8 +3,7 @@ angular.module('app.activity.create')
 .controller('CreateActivityCtrl', [
 		'$scope',
 		'$state',
-		'fitApi',
-		function ($scope, $state, fitApi) {
+		function ($scope, $state) {
 
 			 $scope.showAlert = function(){ alert("I'm a modal window!") }
 

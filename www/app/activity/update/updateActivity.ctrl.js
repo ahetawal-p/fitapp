@@ -3,8 +3,7 @@ angular.module('app.activity.update')
 .controller('UpdateActivityCtrl', [
 		'$scope',
 		'$state',
-		'fitApi',
-		function ($scope, $state, fitApi) {
+		function ($scope, $state) {
 
 			 $scope.showAlert = function(){ alert("I'm a modal window!") }
 

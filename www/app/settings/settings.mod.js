@@ -1,4 +1,4 @@
-angular.module('app.settings', ['app.services'])
+angular.module('app.settings', ['app.stubs'])
 
 
 .config(['$stateProvider',

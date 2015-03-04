@@ -4,12 +4,17 @@ angular.module('app.activity.parent')
 	'$scope',
 	'$state',
 	'$ionicModal',
-	'fitApi',
-	function ($scope, $state, $ionicModal, fitApi) {
+	'healthKitService',
+	function ($scope, $state, $ionicModal, healthKitService) {
 
 		var vm = this;
-		vm.activities = fitApi.getActivities();
-		vm.activityTypes = fitApi.getActivityTypes();
+		console.log("activityCtrl");
+		healthKitService.getActivities().then(function(response){
+			console.log("healthKitConnector: getWorkouts");
+			vm.activities = response;
+		});
+
+		//vm.activityTypes = fitApi.getActivityTypes();
 
 		vm.openEditActivityModal = function(activity){
 			vm.selectedActivity = activity;

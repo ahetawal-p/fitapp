@@ -17,14 +17,32 @@
      <script src="lib/angular-filter/dist/angular-filter.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
-    <!-- fitApi service -->
-    <script src="app/services/fitApi.mod.js"></script>
-    <script src="app/services/fitApi.js"></script>
-    <!-- activity tab -->
 
+    <!-- builders -->
+    <script src="app/support/builders/builders.mod.js"></script>
+    <script src="app/support/builders/groupedActivityBuilder.js"></script> 
+
+    <!-- util classes -->
+    <script src="app/support/utils/utils.mod.js"></script>
+    <script src="app/support/utils/dateTimeUtil.js"></script> 
+    <script src="app/support/utils/activityTypeUtil.js"></script> 
+    <script src="app/support/utils/iconUtil.js"></script> 
+    <script src="app/support/utils/workoutProcessor.js"></script> 
+
+    <!-- services -->
+    <script src="app/services/healthKit/healthKit.mod.js"></script>
+    <script src="app/services/healthKit/healthKitApi.js"></script>
+    <script src="app/services/healthKit/healthKitService.js"></script>
+
+    <!-- stub services -->
+    <script src="app/services/stubs/stubs.mod.js"></script>
+    <script src="app/services/stubs/stubService.js"></script>
+
+    <!-- activity tab -->
     <script src="app/activity/create/createActivity.mod.js"></script>
     <script src="app/activity/create/createActivity.ctrl.js"></script>
 

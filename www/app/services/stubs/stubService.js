@@ -1,9 +1,9 @@
-angular.module('app.services')
+angular.module('app.stubs')
 
 /**
  * A simple example service that returns some data.
  */
-.factory('fitApi', function() {
+.factory('stubService', function() {
   // Might use a resource here that returns a JSON array
 
         var activities = JSON.parse('[{"date": "2015-02-09", "length": "15 min", "activityType": "walk", "description": "0.5 miles, 80 cal", "timeStamp": "17:00", "icon": "ion-fireball"},{"date": "2015-02-10", "length": "7 hr 30 min", "activityType": "sleep", "description": "00:33 - 08:01", "timeStamp": "00:33", "icon": "ion-ios7-moon"}, {"date": "2015-02-09", "length": "7 hr 5 min", "activityType": "sleep", "description": "01:00 - 08:04", "timeStamp": "01:00", "icon": "ion-ios7-moon"},{"date": "2015-02-12", "length": "7 hr 5 min", "activityType": "sleep", "description": "01:00 - 08:04", "timeStamp": "01:00", "icon": "ion-ios7-moon"},{"date": "2015-02-08", "length": "7 hr 5 min", "activityType": "walk", "description": "0.7 miles, 120 cal", "timeStamp": "16:00", "icon": "ion-fireball"}]');

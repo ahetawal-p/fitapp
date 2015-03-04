@@ -10,22 +10,43 @@ angular.module('fitapp', [
             'app.activity.create',
             'app.activity.update',
             'app.conversation',
-            'app.settings'
-            //'app.services'
-                        //'app.home',
-            //'app.settings'
+            'app.settings',
+            'ngCordova'
 ])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $cordovaHealthKit) {
   $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
+    // // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // // for form inputs)
+    // if(window.cordova && window.cordova.plugins.Keyboard) {
+    //   cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    // }
+    // if(window.StatusBar) {
+    //   StatusBar.styleDefault();
+    // }
+
+    //Ask/set user permissions for Healthkit data
+    $cordovaHealthKit.isAvailable().then(function(yes) {
+    // HK is available
+        var permissions = ['HKWorkoutTypeIdentifier', 'HKQuantityTypeIdentifierActiveEnergyBurned', 
+        'HKQuantityTypeIdentifierDistanceWalkingRunning',
+        'HKQuantityTypeIdentifierDistanceCycling',
+        'HKCategoryValueSleepAnalysisAsleep',
+        'HKQuantityTypeIdentifierHeight'];
+     
+        $cordovaHealthKit.requestAuthorization(
+            permissions, // Read permission
+            permissions // Write permission
+        ).then(function(success) {
+            // store that you have permissions
+
+        }, function(err) {
+            // handle error
+        });
+     
+        }, function(no) {
+            // No HK available
+        }); 
   });
 })
 

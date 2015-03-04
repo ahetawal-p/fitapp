@@ -1,1 +1,1 @@
-angular.module('app.activity.create', ['app.services']);
+angular.module('app.activity.create', ['app.healthKit']);

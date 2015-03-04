@@ -1,8 +1,8 @@
 	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'fitApi','$ionicModal', '$scope', SettingsCtrl]);
-	function SettingsCtrl($state, fitApi, $ionicModal, $scope){
+	function SettingsCtrl($state, stubService, $ionicModal, $scope){
 		var vm = this;
-		vm.myProfile = fitApi.getProfile();
-		vm.goalTypes = fitApi.getGoalTypes();
+		vm.myProfile = stubService.getProfile();
+		vm.goalTypes = stubService.getGoalTypes();
 		vm.selectedGoal = vm.goalTypes[vm.myProfile.goalTypeId];
 
 		$ionicModal.fromTemplateUrl('app/settings/editProfileModal.html', {
