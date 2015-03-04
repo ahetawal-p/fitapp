@@ -1,4 +1,4 @@
-angular.module('app.conversation', [])
+angular.module('app.conversation', ['app.services'])
 
 
 .config(['$stateProvider',

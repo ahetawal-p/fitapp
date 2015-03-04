@@ -3,29 +3,14 @@ body {
   cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
 
-.messages {
-	margin:0;
-	padding:0;
-	list-style-type:none;
-}
-
-.messages li {
+.systemMsg {
 	display:block;
-	clear:both;
-	max-width:50%;
+	word-wrap: break-word;
+	white-space: normal;
+	max-width:25%;
 	margin:0 0 1rem 0;
 	padding:0;
-}
-
-.messages li:nth-child(even) {
-	float:right;
-}
-
-.messages li:nth-child(even) img {
-	float:right;
-}
-
-.messages p {
+	float: left;
 	border-radius:.75rem;
 	background:#e6e5eb;
 	color:#383641;
@@ -34,14 +19,69 @@ body {
 	font-size:.875rem;
 }
 
-.messages li:nth-child(even) p {
-	background:#158ffe;
-	color:#fff;
-}
-
-.messages img {
+.userMsg {
 	display:block;
-	max-width:65%;
-	border-radius:.75rem;
+	word-wrap: break-word;
+	white-space: normal;
+	max-width:25%;
+	margin:0 0 1rem 0;
+	padding:0;
+	float: right;
+	
 }
 
+.userMsg span {
+	border-radius:.75rem;
+	background:#49b245;
+	color:#383641;
+	padding:.6875rem;
+	margin-right:5px;
+	font-size:.875rem;
+}
+
+
+.systemMsg .dot {
+    background: #CCC;
+    height: 8px;
+    width: 8px;
+    border-radius: 12px;
+    margin-right: 5px;
+    display: inline-block;
+    -webkit-animation: flash 1.3s infinite;
+    -webkit-animation-delay: 0.0s;
+    animation: flash 1.3s infinite;
+    animation-delay: 0.0s;
+}
+.systemMsg .dot:first-child {
+    background: black;
+}
+.systemMsg .dot:nth-child(2) {
+   -webkit-animation: flash 1.3s infinite;
+    -webkit-animation-delay: 0.2s;
+      animation: flash 1.3s infinite;
+      animation-delay: 0.2s;
+}
+.systemMsg .dot:nth-child(3) {
+    -webkit-animation: flash 1.3s infinite;
+    -webkit-animation-delay: 0.3s;
+     animation: flash 1.3s infinite;
+     animation-delay: 0.3s;
+}
+
+@-webkit-keyframes flash {
+    from  {
+        background: black;
+    }
+    to {
+        background: #CCC;
+    }
+}
+
+@keyframes dot {
+     from  {
+        background: black;
+    }
+    to {
+        background: #CCC;
+    }
+}
