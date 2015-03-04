@@ -3,32 +3,45 @@ angular.module('app.healthKit')
 .factory('healthKitService', ['healthKitApi', 'workoutProcessor', '$q',
 	function(healthKitApi, workoutProcessor, $q) {
 
-		var workoutObjects = [];
-		function getWorkouts(){
-        	//clear workout objects
-        	workoutObjects.length = 0;
+        function getActivities(){
         	var deferred = $q.defer();
-        	healthKitApi.getWorkouts().then(processWorkouts);
-        	deferred.resolve(workoutObjects);
+        	healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+        		var processedActivities = workoutProcessor.processWorkouts(walkRunActivities);
+        		console.log("processed activities: " + JSON.stringify(processedActivities));
+        		processedActivities.sort(sortByStartDate);
+        		deferred.resolve(processedActivities);
+        	});
+        	return deferred.promise;
+        }
+
+        function getWeekdayWeekendAverages(){
+        	weekdayAverage: "25 minutes",
+        	weekendAverage: "40 minutes"
+        }
+
+        function getDailyAverageDuration(){
+        	var deferred = $q.defer();
+        	deferred.resolve("30 minutes");
 
         	return deferred.promise;
         }
 
-        function getActivities(){
+        function getTodaysDurationSum(){
         	var deferred = $q.defer();
-        	healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
-    //     		var processedActivities = [];
-				// for (var ii=0; ii<walkRunActivities.length; ii++){
-				// 	var walkRunActivity = walkRunActivities[ii];
-				// 	var processedActivity = workoutProcessor.processWorkout(walkRunActivity);
+        	deferred.resolve("20 minutes");
 
-				// 	processedActivities.push(processedActivity);
-				// }
-				var processedActivities = workoutProcessor.processWorkouts(walkRunActivities);
-				console.log("processed activities: " + JSON.stringify(processedActivities));
+        	return deferred.promise;
+        }
 
-        		deferred.resolve(processedActivities);
-        	});
+        function getMostRecentActivity(){
+        	var deferred = $q.defer();
+        	var mostRecentActivity = {
+        		activityType: "walk",
+        		duration: "20 minutes"
+        	}
+
+        	deferred.resolve(mostRecentActivity);
+
         	return deferred.promise;
         }
 
@@ -41,6 +54,8 @@ angular.module('app.healthKit')
 
         	return workoutBDate - workoutADate;
         }
+
+
 
         function processWorkouts(rawWorkoutObjects){
 				//sort raw workout objects first
@@ -60,22 +75,15 @@ angular.module('app.healthKit')
 							workoutObjects.sort(sortByStartDate);
 						});
 
-					// var response = healthKitApi.getWorkoutDistance(rawWorkoutObject).then(function(workoutDistanceObject){
-					// 	healthKitApi.getWorkoutCalories(workoutDistanceObject);
-					// })
-					// 			.then(function(workoutDistanceObject){
-					// 				console.log("workoutD: " + JSON.stringify(workoutDistanceObject));
-
-
-					// 			})
-					// 			;
-
 				})(ii);
 			}
 
 			return {
-				getWorkouts: getWorkouts,
 				getActivities: getActivities,
+				getWeekdayWeekendAverages: getWeekdayWeekendAverages,
+				getDailyAverageDuration: getDailyAverageDuration,
+				getTodaysDurationSum: getTodaysDurationSum,
+				getMostRecentActivity: getMostRecentActivity
 				saveWorkouts: function(){
 					$cordovaHealthKit.saveWorkout(
 					{
