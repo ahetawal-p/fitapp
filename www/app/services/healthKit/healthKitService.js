@@ -15,8 +15,16 @@ angular.module('app.healthKit')
         }
 
         function getWeekdayWeekendAverages(){
-        	weekdayAverage: "25 minutes",
-        	weekendAverage: "40 minutes"
+        	var deferred = $q.defer();
+
+        	var averages = {
+	        	weekdayAverage: "25 minutes",
+	        	weekendAverage: "40 minutes"
+            };
+
+        	deferred.resolve(averages);
+
+        	return deferred.promise;
         }
 
         function getDailyAverageDuration(){
@@ -83,7 +91,7 @@ angular.module('app.healthKit')
 				getWeekdayWeekendAverages: getWeekdayWeekendAverages,
 				getDailyAverageDuration: getDailyAverageDuration,
 				getTodaysDurationSum: getTodaysDurationSum,
-				getMostRecentActivity: getMostRecentActivity
+				getMostRecentActivity: getMostRecentActivity,
 				saveWorkouts: function(){
 					$cordovaHealthKit.saveWorkout(
 					{
