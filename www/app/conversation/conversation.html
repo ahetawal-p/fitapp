@@ -23,8 +23,8 @@
               {{message.text}}
         </div>
         
-        <div class="userMsg" ng-if="(message.display.length > 0) && !message.wait">
-            <span ng-click="usermsg.isClickDisabled || userInput(usermsg)" ng-repeat="usermsg in message.display">
+        <div class="userMsg" ng-if="(message.userOptions.length > 0) && !message.wait">
+            <span ng-click="usermsg.isClickDisabled || userInput(usermsg)" ng-repeat="usermsg in message.userOptions">
               {{usermsg.text}}
             </span> 
         </div>

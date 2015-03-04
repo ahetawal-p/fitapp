@@ -1,21 +1,37 @@
 angular.module('app.services')
 
 /**
- * A simple example service that returns some data.
+ * A simple example service that returns tree data for conversation
  */
 .factory('talky', function() {
 
-	var testMethod = function(name) {
-		console.log("I am called here..." + name);
-		return "new msg";
+	// Sample method to show how can we provide the 
+	// runtime decision making in the conversation UI
+	// Can be used for similar stuff when we call the 
+	// health kit for data and decide on next nodes in conversation.
+	var testMethod = function(minutes) {
+		if(minutes > 50){
+			return treeData['aboveAverage'];
+		}else if(minutes == 50){
+			return treeData['onParAverage'];
+		}else{
+			return treeData['belowAverage'];
+		}
 
 	};
 
+
 	var treeData = {
 		root: ['onboarding', 'onboardingInfo'],
+
+		'skeletonWaitNode' : {
+			wait : true,
+		},
+
 		'onboarding' : {
 			text: "Hi There I am wall-e",
 			children: ['askName']
+			//children: ['onboardingInfo']
 		},
 		'askName': {
 			text: "What is your name?",
@@ -83,8 +99,23 @@ angular.module('app.services')
 				method : testMethod,
 			},
 			children:[]
+		},
+		'aboveAverage':{
+			text: "It beats the daily average for an average Joe",
+			children:['moreActiveTip']
+		},
+		'onParAverage':{
+			text: "You are on par with the average of Fitapp users",
+			children:['moreActiveTip']
+		},
+		'belowAverage': {
+			text: "It is slightly under the average of a typical Fitapp user.",
+			children:['moreActiveTip']
+		},
+		'moreActiveTip': {
+			text: "Consider this",
+			children:[]
 		}
-
 
 	};
 
