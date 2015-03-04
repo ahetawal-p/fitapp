@@ -24,6 +24,7 @@ angular.module('app.services')
 	var treeData = {
 		root: ['onboarding', 'onboardingInfo'],
 
+		// used when actual processing is in-progress for user data
 		'skeletonWaitNode' : {
 			wait : true,
 		},
@@ -31,7 +32,6 @@ angular.module('app.services')
 		'onboarding' : {
 			text: "Hi There I am wall-e",
 			children: ['askName']
-			//children: ['onboardingInfo']
 		},
 		'askName': {
 			text: "What is your name?",
