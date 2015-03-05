@@ -1,1 +1,1 @@
-angular.module('app.healthKit', ['app.utils']);
+angular.module('app.services.healthKit', ['app.utils']);

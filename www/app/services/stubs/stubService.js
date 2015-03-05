@@ -1,4 +1,4 @@
-angular.module('app.stubs')
+angular.module('app.services.stubs')
 
 /**
  * A simple example service that returns some data.

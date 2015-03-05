@@ -1,4 +1,4 @@
-angular.module('app.healthKit')
+angular.module('app.services.healthKit')
 
 .factory('healthKitService', ['healthKitApi', 'workoutProcessor', '$q',
 	function(healthKitApi, workoutProcessor, $q) {

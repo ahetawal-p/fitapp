@@ -1,4 +1,4 @@
-angular.module('app.healthKit')
+angular.module('app.services.healthKit')
 
  .factory('healthKitApi', ['$cordovaHealthKit', '$q',
   function($cordovaHealthKit, $q) {
@@ -40,13 +40,16 @@ angular.module('app.healthKit')
     }
 
     function getWorkoutDistanceAndCalories(rawWorkoutObject){
-        var deferred = $q.defer();
-        var distanceCaloriesObject = {};
-        getWorkoutDistance(rawWorkoutObject, distanceCaloriesObject).then(getWorkoutCalories(rawWorkoutObject, distanceCaloriesObject)).then(function(){
-            deferred.resolve(distanceCaloriesObject);
-        });
+        // var deferred = $q.defer();
+        // var distanceCaloriesObject = {};
+        // getWorkoutDistance(rawWorkoutObject, distanceCaloriesObject).then(getWorkoutCalories(rawWorkoutObject, distanceCaloriesObject)).then(function(){
+        //     deferred.resolve(distanceCaloriesObject);
+        // });
 
-        return deferred.promise;
+        // return deferred.promise;
+
+        // taking out deferred antipattern
+        return getWorkoutDistance(rawWorkoutObject, distanceCaloriesObject).then(getWorkoutCalories(rawWorkoutObject, distanceCaloriesObject));
     }
 
     function getWorkoutDistance(rawWorkoutObject, distanceCaloriesObject){

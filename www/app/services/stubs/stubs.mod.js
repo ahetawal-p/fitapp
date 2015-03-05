@@ -1,1 +1,1 @@
-angular.module('app.stubs', []);
+angular.module('app.services.stubs', []);

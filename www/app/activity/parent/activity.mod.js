@@ -1,4 +1,4 @@
-angular.module('app.activity.parent', ['app.healthKit'])
+angular.module('app.activity.parent', ['app.services.healthKit'])
 
 .config(['$stateProvider',
 		function ($stateProvider) {

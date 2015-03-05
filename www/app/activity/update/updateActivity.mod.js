@@ -1,1 +1,1 @@
-angular.module('app.activity.update', ['app.healthKit']);
+angular.module('app.activity.update', ['app.services.healthKit']);
