@@ -7,8 +7,6 @@ angular.module('app.services.healthKit')
         	var deferred = $q.defer();
         	healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
         		var processedActivities = workoutProcessor.processWorkouts(walkRunActivities);
-        		console.log("processed activities: " + JSON.stringify(processedActivities));
-        		processedActivities.sort(sortByStartDate);
         		deferred.resolve(processedActivities);
         	});
         	return deferred.promise;
@@ -27,64 +25,39 @@ angular.module('app.services.healthKit')
         	return deferred.promise;
         }
 
+        //calc avg over N days (depends on what data has)
         function getDailyAverageDuration(){
-        	var deferred = $q.defer();
-        	deferred.resolve("30 minutes");
+			var deferred = $q.defer();
+			healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+        		var total = workoutProcessor.calculateDailyAverageDuration(walkRunActivities);
+        		console.log("avg duration: " + total);
+        		deferred.resolve(total);
+        	});
 
         	return deferred.promise;
         }
 
         function getTodaysDurationSum(){
         	var deferred = $q.defer();
-        	deferred.resolve("20 minutes");
+			healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+        		var total = workoutProcessor.calculateTodaysTotalDuration(walkRunActivities);
+        		deferred.resolve(total);
+        	});
 
         	return deferred.promise;
         }
 
         function getMostRecentActivity(){
         	var deferred = $q.defer();
-        	var mostRecentActivity = {
-        		activityType: "walk",
-        		duration: "20 minutes"
-        	}
-
-        	deferred.resolve(mostRecentActivity);
+			healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+        		var processedActivities = workoutProcessor.processWorkouts(walkRunActivities);
+        		var mostRecentActivity = processedActivities[0];
+        		console.log("most recent: " + JSON.stringify(mostRecentActivity));
+        		deferred.resolve(mostRecentActivity);
+        	});
 
         	return deferred.promise;
         }
-
-        function sortByStartDate(workoutA, workoutB){
-        	var workoutADateString = workoutA.date + "  "+ workoutA.timeStamp;
-        	var workoutBDateString = workoutB.date + "  "+ workoutB.timeStamp;
-        	console.log("sort: " + workoutADateString);
-        	var workoutADate = new Date(workoutADateString.replace(/-/g, "/"));
-        	var workoutBDate = new Date(workoutBDateString.replace(/-/g, "/"));
-
-        	return workoutBDate - workoutADate;
-        }
-
-
-
-        function processWorkouts(rawWorkoutObjects){
-				//sort raw workout objects first
-				//rawWorkoutObjects.sort(sortByStartDate);
-				console.log("raw: "+JSON.stringify(rawWorkoutObjects));
-				for (var ii=0; ii<rawWorkoutObjects.length; ii++)
-					(function(ii){
-						var rawWorkoutObject = rawWorkoutObjects[ii];
-						var processedWorkout = workoutProcessor.processWorkout(rawWorkoutObject);
-						var response = healthKitApi.getWorkoutDistanceAndCalories(rawWorkoutObject).then(function(distanceCaloriesObject){
-							console.log("got distance/calories: " + JSON.stringify(distanceCaloriesObject));
-							var caloriesString = distanceCaloriesObject.calories.toString().concat(" kcal");
-							var distanceString = distanceCaloriesObject.distance.toString().concat(" km");
-							processedWorkout.description = distanceString.concat(" ").concat(caloriesString);
-							console.log("workoutObj: "+ JSON.stringify(processedWorkout));
-							workoutObjects.push(processedWorkout);
-							workoutObjects.sort(sortByStartDate);
-						});
-
-				})(ii);
-			}
 
 			return {
 				getActivities: getActivities,

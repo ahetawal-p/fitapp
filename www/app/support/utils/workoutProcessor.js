@@ -4,14 +4,17 @@ angular.module('app.utils')
 	function(activityTypeUtil, dateTimeUtil, iconUtil, groupedActivityBuilder) {
 
 	function processWorkouts(rawActivityObjects){
-				console.log("########################");
-		console.log("length: " + rawActivityObjects.length);
 		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+		//sort group activities by startDate (time)
+		groupedActivities.sort(sortByStartDate);
+
+		//filter group activities less than 0.2 km
+		groupedActivities = groupedActivities.filter(filterGroupedActivities);
+
 		var processedActivities = [];
 		for (var ii=0; ii<groupedActivities.length; ii++){
 			var groupedActivity = groupedActivities[ii];
 			var calories = calculateCalories(groupedActivity);
-			console.log("groupedStartdate: " + groupedActivity.startDate);
 			var durationString = dateTimeUtil.getDurationString(groupedActivity.startDate, groupedActivity.endDate);
 			var distanceString = groupedActivity.distance.toFixed(2) + " km";
 			var description = distanceString + ", " + calories + " cal";
@@ -30,6 +33,45 @@ angular.module('app.utils')
 		return processedActivities;
 	}
 
+	function calculateDailyAverageDuration(rawActivityObjects){
+		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+		//calculate summed duration of all activities
+		var totalDuration = 0;
+		for(var ii=0; ii<groupedActivities.length; ii++){
+			totalDuration += dateTimeUtil.getDurationInSeconds(groupedActivities[ii].startDate, groupedActivities[ii].endDate);
+		}
+
+		//get number of days in data
+		var days = [];
+		for(var ii=0; ii<groupedActivities.length; ii++){
+			var groupActivityDate = new Date(groupedActivities[ii].startDate.replace(/-/g, "/"));
+			days.push(groupActivityDate.getDate());
+		}
+
+		days = days.filter(function(v,i) { return i==days.lastIndexOf(v); });
+		var avgSeconds = totalDuration/(days.length);
+		console.log("avg duration string: " + dateTimeUtil.getDurationStringFromSeconds(avgSeconds));
+		return dateTimeUtil.getDurationStringFromSeconds(avgSeconds);
+	}
+
+	function calculateTodaysTotalDuration(rawActivityObjects){
+		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+		//filter by today's date
+		var todaysDate = new Date().getDate();
+		groupedActivities = groupedActivities.filter(function (activity){
+			var activityDate = new Date(activity.startDate.replace(/-/g, "/"));
+			var time24HoursAgo = new Date(new Date().getTime()-24*60*60*1000);
+			return activityDate > time24HoursAgo;
+		});
+
+		var totalDuration = 0;
+		for(var ii=0; ii<groupedActivities.length; ii++){
+			totalDuration += dateTimeUtil.getDurationInSeconds(groupedActivities[ii].startDate, groupedActivities[ii].endDate);
+		}
+		console.log("total duration: " + dateTimeUtil.getDurationStringFromSeconds(totalDuration));
+		return dateTimeUtil.getDurationStringFromSeconds(totalDuration);
+	}
+
 	function groupActivities(rawActivityObjects){
 		var groupedActivities = [];
 		for (var ii=0;ii<rawActivityObjects.length;ii++){
@@ -37,7 +79,6 @@ angular.module('app.utils')
 
 			if (ii == 0){
 				var timeStamp = dateTimeUtil.getTimeStamp(rawActivityObject.startDate);	
-				console.log("beginning timestamp: " + timeStamp);
 				groupedActivityBuilder.createGroupedActivity(rawActivityObject.startDate);
 			}
 
@@ -52,7 +93,6 @@ angular.module('app.utils')
 				var nextWorkoutStartDate = new Date(nextWorkoutStartDateString);
 				var timeDiff = Math.abs(nextWorkoutStartDate - workoutStartDate);
 				var timeDiffInMins = Math.floor((timeDiff/1000)/60);
-				console.log("time diff: " + timeDiffInMins);
 				if (timeDiffInMins > 1){
 					groupedActivities.push(groupedActivityBuilder.getGroupedActivity(rawActivityObject.endDate));
 					groupedActivityBuilder.clearGroupedActivity();
@@ -68,30 +108,34 @@ angular.module('app.utils')
 		return groupedActivities;
 	}
 
-	function filterGroupedActivities(rawActivityObjects){
+  	function sortByStartDate(workoutA, workoutB){
+		var workoutADate = new Date(workoutA.startDate.replace(/-/g, "/"));
+    	var workoutBDate = new Date(workoutB.startDate.replace(/-/g, "/"));
 
+    	return workoutBDate - workoutADate;
+    }
+
+	function filterGroupedActivities(groupedActivity){
+		//need to externalize the lower limit to a config
+		return groupedActivity.distance > 0.2;
 	}
 
 	function calculateCalories(groupedActivity){
 		//CB = [0.0215 x KPH3 - 0.1765 x KPH2 + 0.8710 x KPH + 1.4577] x WKG x T
 		//assume weight is 60kg
-		console.log("calories end date: " + groupedActivity.endDate);
-				console.log("calories start date: " + groupedActivity.startDate);
 
 		var durationInHours = dateTimeUtil.getDurationInHours(groupedActivity.startDate, groupedActivity.endDate)
-		console.log("durationInHours: " + durationInHours);
 		var kph = groupedActivity.distance/durationInHours;
-		console.log("kph: " + kph);
 		var weight = 60;
 		var calories = (0.0215 * Math.pow(kph, 3) - 0.1765 * Math.pow(kph, 2) 
 						+ 0.8710 * kph + 1.4577) * weight * durationInHours;
-		console.log("calories: " + calories);
-		console.log("distance: " + groupedActivity.quantity);
 		var roundedCalories = Math.ceil(calories);
 		return roundedCalories;
 	}
 
 	return {
-		processWorkouts: processWorkouts
+		processWorkouts: processWorkouts,
+		calculateTodaysTotalDuration: calculateTodaysTotalDuration,
+		calculateDailyAverageDuration: calculateDailyAverageDuration
 	}
 }]);

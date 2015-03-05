@@ -5,7 +5,6 @@ angular.module('app.services.healthKit')
 
     function getWalkingAndRunningDistance(){
       var deferred = $q.defer();
-      console.log("in walkingRunningDistance: ");
       var queryObject = {
         'startDate' :  new Date(new Date().getTime()-50*24*60*60*1000),
         'endDate' : new Date(), 
@@ -14,7 +13,6 @@ angular.module('app.services.healthKit')
       };
 
       $cordovaHealthKit.querySampleType(queryObject).then(function(response) {
-        console.log("walkingRunningDistance: " + JSON.stringify(response));
         deferred.resolve(response);
       }, function(err) {
         alert(err);
@@ -25,29 +23,12 @@ angular.module('app.services.healthKit')
       return deferred.promise;
     }
 
+
     function getWorkouts(){
-      var deferred = $q.defer();
-
-      $cordovaHealthKit.findWorkouts().then(function(rawWorkoutObjects) {
-        deferred.resolve(rawWorkoutObjects);
-      }, function(err) {
-        console.log(err);
-        deferred.reject();
-      })
-
-
-      return deferred.promise;
+      return $cordovaHealthKit.findWorkouts();
     }
 
     function getWorkoutDistanceAndCalories(rawWorkoutObject){
-        // var deferred = $q.defer();
-        // var distanceCaloriesObject = {};
-        // getWorkoutDistance(rawWorkoutObject, distanceCaloriesObject).then(getWorkoutCalories(rawWorkoutObject, distanceCaloriesObject)).then(function(){
-        //     deferred.resolve(distanceCaloriesObject);
-        // });
-
-        // return deferred.promise;
-
         // taking out deferred antipattern
         return getWorkoutDistance(rawWorkoutObject, distanceCaloriesObject).then(getWorkoutCalories(rawWorkoutObject, distanceCaloriesObject));
     }
@@ -71,7 +52,6 @@ angular.module('app.services.healthKit')
       };
 
       $cordovaHealthKit.querySampleType(queryObject).then(function(response) {
-        console.log("distance: " + JSON.stringify(response));
         distanceCaloriesObject.distance = response.quantity;
         deferred.resolve(response);
       }, function(err) {
@@ -95,7 +75,6 @@ angular.module('app.services.healthKit')
 
       $cordovaHealthKit.querySampleType(queryObject).then(function(response) {
         distanceCaloriesObject.calories = response[0].quantity;
-        console.log("getWorkoutCalories: " + JSON.stringify(response));
         deferred.resolve(response);
       }, function(err) {
         alert(err);
@@ -112,24 +91,5 @@ return {
   getWorkoutCalories: getWorkoutCalories,
   getWorkoutDistanceAndCalories: getWorkoutDistanceAndCalories,
   getWalkingAndRunningDistance: getWalkingAndRunningDistance
- // saveWorkouts: function(){
- //   $cordovaHealthKit.saveWorkout(
- //   {
- //    'activityType': 'HKWorkoutActivityTypeCycling',
- //    'quantityType': 'HKQuantityTypeIdentifierDistanceCycling',
- //            'startDate': new Date(), // now
- //            'endDate': null, // not needed when using duration
- //            'duration': 6000, //in seconds
- //            'energy': 400, //
- //            'energyUnit': 'kcal', // J|cal|kcal
- //            'distance': 5, // optional
- //            'distanceUnit': 'km'
- //        }
- //        ).then(function(v) {
- //        //alert(JSON.stringify(v));
- //    }, function(err) {
- //        console.log(err);
- //    });
- //    }
 }}]
 );

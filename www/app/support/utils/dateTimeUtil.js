@@ -19,7 +19,6 @@ angular.module('app.utils')
     }
 
     function getTimeStamp(date){
-        console.log("getTimeStamp: " + date);
         var convertedDate = new Date(date.toString().replace(/-/g, "/"));
         return (convertedDate.getHours() < 10? '0': '') + convertedDate.getHours() + ":" + (convertedDate.getMinutes() < 10 ? '0': '') + convertedDate.getMinutes();
     }
@@ -31,12 +30,10 @@ angular.module('app.utils')
 
     function getDurationString(startDate, endDate){
         var timeDiffInSeconds = getDurationInSeconds(startDate, endDate);
-        console.log("timeDiffInSeconds: " + timeDiffInSeconds);
         return getDurationStringFromSeconds(timeDiffInSeconds);
     }
 
     function getDurationInSeconds(startDate, endDate){
-        console.log("startDate: " + startDate);
         var convertedStartDateString = startDate;
         var convertedEndDateString = endDate;
 
@@ -50,7 +47,6 @@ angular.module('app.utils')
 
         var convertedStartDate = new Date(convertedStartDateString);
         var convertedEndDate = new Date(convertedEndDateString);
-        console.log("convertedStartDate: " + convertedStartDate);
         var timeDiff = Math.abs(convertedEndDate - convertedStartDate);
         var timeDiffInSeconds = Math.floor((timeDiff/1000));
 
@@ -78,6 +74,8 @@ angular.module('app.utils')
         getFormattedDateString: getFormattedDateString,
         getTimeStamp: getTimeStamp,
         getDurationString: getDurationString,
-        getDurationInHours: getDurationInHours
+        getDurationInHours: getDurationInHours,
+        getDurationInSeconds: getDurationInSeconds,
+        getDurationStringFromSeconds: getDurationStringFromSeconds
     };
 });

@@ -7,7 +7,6 @@ angular.module('app.builders')
     function createGroupedActivity(startDate){
         currentGroupedActivity = {};
         currentGroupedActivity.startDate = startDate;
-        console.log("createGroupedActivity: startDate " + currentGroupedActivity.startDate );
         currentGroupedActivity.distance = 0;
     }
 
@@ -16,9 +15,7 @@ angular.module('app.builders')
     }
 
     function getGroupedActivity(endDate){
-        currentGroupedActivity.endDate = endDate;    
-        console.log("createGroupedActivity: endDate " + currentGroupedActivity.endDate );
-    
+        currentGroupedActivity.endDate = endDate;        
     	return currentGroupedActivity;
     }
 
