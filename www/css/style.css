@@ -5,9 +5,8 @@ body {
 
 .systemMsg {
 	display:block;
-	word-wrap: break-word;
 	white-space: normal;
-	max-width:25%;
+	max-width:50%;
 	margin:0 0 1rem 0;
 	padding:0;
 	float: left;
@@ -21,9 +20,7 @@ body {
 
 .userMsg {
 	display:block;
-	word-wrap: break-word;
-	white-space: normal;
-	max-width:25%;
+	max-width:50%;
 	margin:0 0 1rem 0;
 	padding:0;
 	float: right;
@@ -40,7 +37,10 @@ body {
 }
 
 
-.systemMsg .dot {
+.wrapper {
+  width: 50px;
+}
+.systemMsg .wrapper .dot {
     background: #CCC;
     height: 8px;
     width: 8px;
@@ -52,16 +52,16 @@ body {
     animation: flash 1.3s infinite;
     animation-delay: 0.0s;
 }
-.systemMsg .dot:first-child {
+.systemMsg .wrapper .dot:first-child {
     background: black;
 }
-.systemMsg .dot:nth-child(2) {
+.systemMsg .wrapper .dot:nth-child(2) {
    -webkit-animation: flash 1.3s infinite;
     -webkit-animation-delay: 0.2s;
       animation: flash 1.3s infinite;
       animation-delay: 0.2s;
 }
-.systemMsg .dot:nth-child(3) {
+.systemMsg .wrapper .dot:nth-child(3) {
     -webkit-animation: flash 1.3s infinite;
     -webkit-animation-delay: 0.3s;
      animation: flash 1.3s infinite;

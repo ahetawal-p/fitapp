@@ -14,9 +14,11 @@
       <ion-item ng-repeat="message in messages" style="border-style:none">
         
         <div class="systemMsg" ng-if="message.wait">
+            <div class="wrapper">
               <span class="dot"></span>
               <span class="dot"></span>
               <span class="dot"></span>
+            </div>
         </div>
         
         <div class="systemMsg" ng-if="message.type == null && !message.wait">
@@ -24,6 +26,8 @@
         </div>
         
         <div class="userMsg" ng-if="(message.userOptions.length > 0) && !message.wait">
+            <br/>
+            <br/>
             <span ng-click="usermsg.isClickDisabled || userInput(usermsg)" ng-repeat="usermsg in message.userOptions">
               {{usermsg.text}}
             </span> 

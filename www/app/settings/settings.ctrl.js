@@ -1,4 +1,4 @@
-	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'fitApi','$ionicModal', '$scope', SettingsCtrl]);
+	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', SettingsCtrl]);
 	function SettingsCtrl($state, stubService, $ionicModal, $scope){
 		var vm = this;
 		vm.myProfile = stubService.getProfile();
