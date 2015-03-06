@@ -1,5 +1,5 @@
 <ion-view view-title="Wall-e" title="Wall-e" ng-controller="ConversationCtrl">
-<ion-header-bar align-title="center" class="bar">
+<ion-header-bar align-title="center" class="headerOverride">
   <h1 class="title">Wall-e</h1>
   <div class="buttons">
     <button class="button button-clear">
@@ -11,7 +11,7 @@
     
     
     <ion-list class="messages">
-      <ion-item ng-repeat="message in messages" style="border-style:none">
+      <ion-item ng-repeat="message in messages" style="border-style:none; padding:4px;">
         
         <div class="systemMsg" ng-if="message.wait">
             <div class="wrapper">
@@ -22,25 +22,37 @@
         </div>
         
         <div class="systemMsg" ng-if="message.type == null && !message.wait">
-              {{message.text}}
+              <div class="innerDiv">
+                 {{message.text}} 
+              </div>
         </div>
         
-        <div class="userMsg" ng-if="(message.userOptions.length > 0) && !message.wait">
+        <div class="userMsg" ng-if="message.type == 'user' &&  !message.wait">
+              
+          <span>  {{message.text}} </span>
+              
+        </div>
+
+       <!--  <div class="userMsg" ng-if="(message.userOptions.length > 0) && !message.wait">
             <br/>
             <br/>
-            <span ng-click="usermsg.isClickDisabled || userInput(usermsg)" ng-repeat="usermsg in message.userOptions">
+            <span ng-repeat="usermsg in message.userOptions">
               {{usermsg.text}}
             </span> 
-        </div>
+        </div> -->
 
       </ion-item>
 
     </ion-list>
 
   </ion-content>
-   <!--  <ion-footer-bar class="bar-frosted">
-    <button class="button button-clear button-positive" ng-click="add()">Add Message</button>
-  </ion-footer-bar> -->
+     <ion-footer-bar align-title="center" class="footerOverride">
+       <div class="userMsgFooter" ng-if="!waitIndicator">
+            <span ng-click="userInput(msg)" ng-repeat="msg in options">
+              {{msg.text}}
+            </span> 
+        </div>
+  </ion-footer-bar>
 </ion-view>
 
 

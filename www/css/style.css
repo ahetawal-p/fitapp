@@ -4,25 +4,30 @@ body {
 }
 
 .systemMsg {
-	display:block;
+	display:inline-block;
 	white-space: normal;
-	max-width:50%;
+	max-width:70%;
 	margin:0 0 1rem 0;
-	padding:0;
-	float: left;
-	border-radius:.75rem;
-	background:#e6e5eb;
-	color:#383641;
 	padding:.6875rem;
-	margin:0;
-	font-size:.875rem;
+  border-radius:.75rem;
+  background:#e6e5eb;
+  color:#383641;
+  
+  
 }
+
+.innerDiv {
+  font-size:.875rem;
+  left: 0;
+  overflow: auto;
+}
+
 
 .userMsg {
 	display:block;
 	max-width:50%;
 	margin:0 0 1rem 0;
-	padding:0;
+	padding:.6875rem;
 	float: right;
 	
 }
@@ -40,7 +45,7 @@ body {
 .wrapper {
   width: 50px;
 }
-.systemMsg .wrapper .dot {
+.systemMsg .wrapper  .dot {
     background: #CCC;
     height: 8px;
     width: 8px;
@@ -52,16 +57,16 @@ body {
     animation: flash 1.3s infinite;
     animation-delay: 0.0s;
 }
-.systemMsg .wrapper .dot:first-child {
+.systemMsg .wrapper  .dot:first-child {
     background: black;
 }
-.systemMsg .wrapper .dot:nth-child(2) {
+.systemMsg .wrapper  .dot:nth-child(2) {
    -webkit-animation: flash 1.3s infinite;
     -webkit-animation-delay: 0.2s;
       animation: flash 1.3s infinite;
       animation-delay: 0.2s;
 }
-.systemMsg .wrapper .dot:nth-child(3) {
+.systemMsg .wrapper  .dot:nth-child(3) {
     -webkit-animation: flash 1.3s infinite;
     -webkit-animation-delay: 0.3s;
      animation: flash 1.3s infinite;
@@ -85,3 +90,30 @@ body {
         background: #CCC;
     }
 }
+
+
+
+.footerOverride {
+  background: none;
+}
+
+.userMsgFooter {
+  left:40%;
+  position: absolute;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  white-space: nowrap;
+  padding:0;
+ }
+
+.userMsgFooter span {
+  
+  position: relative;
+  border-radius:.75rem;
+  background:#49b245;
+  color:#383641;
+  padding:.6875rem;
+  margin-right:1px;
+  font-size:.875rem;
+}
+
