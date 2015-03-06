@@ -23,6 +23,26 @@ angular.module('app.services.healthKit')
       return deferred.promise;
     }
 
+    function getWalkingAndRunningDistanceByDateTime(startDate, endDate){
+      var deferred = $q.defer();
+      var queryObject = {
+        'startDate' :  startDate,
+        'endDate' : endDate, 
+        'sampleType': "HKQuantityTypeIdentifierDistanceWalkingRunning",
+        'unit' : 'km' 
+      };
+
+      $cordovaHealthKit.querySampleType(queryObject).then(function(response) {
+        deferred.resolve(response);
+      }, function(err) {
+        alert(err);
+       console.log(err);
+       deferred.reject();
+     });
+
+      return deferred.promise;
+    }
+
 
     function getWorkouts(){
       return $cordovaHealthKit.findWorkouts();
@@ -90,6 +110,7 @@ return {
   getWorkoutDistance: getWorkoutDistance,
   getWorkoutCalories: getWorkoutCalories,
   getWorkoutDistanceAndCalories: getWorkoutDistanceAndCalories,
-  getWalkingAndRunningDistance: getWalkingAndRunningDistance
+  getWalkingAndRunningDistance: getWalkingAndRunningDistance,
+  getWalkingAndRunningDistanceByDateTime: getWalkingAndRunningDistanceByDateTime
 }}]
 );

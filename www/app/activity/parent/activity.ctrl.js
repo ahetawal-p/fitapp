@@ -12,6 +12,9 @@ angular.module('app.activity.parent')
 			vm.activities = response;
 		});
 
+		//TEST METHODS FOR HEALTHKIT ENDPOINTS
+		//healthKitService.getActivityDataPoints(new Date("3/5/2015 7:00"), new Date());
+
 		vm.openEditActivityModal = function(activity){
 			vm.selectedActivity = activity;
 			$scope.openEditActivityModal();
@@ -20,7 +23,6 @@ angular.module('app.activity.parent')
 		vm.createActivity = function(){
 			$scope.openSelectActivityTypeModal();
 		};
-
 
 		vm.selectActivityType = function(activityType){
 			$scope.selectedActivity = buildNewActivity(activityType);

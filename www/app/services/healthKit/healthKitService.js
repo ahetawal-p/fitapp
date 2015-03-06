@@ -12,15 +12,28 @@ angular.module('app.services.healthKit')
         	return deferred.promise;
         }
 
+
         function getWeekdayWeekendAverages(){
         	var deferred = $q.defer();
+        	healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+        		var weekdayWeekendAverages = workoutProcessor.calculateWeekdayWeekendAverages(walkRunActivities);
+        		deferred.resolve(weekdayWeekendAverages);
+        	});
+        	return deferred.promise;
+        	// var averages = {
+	        // 	weekdayAverage: "25 seconds",
+	        // 	weekendAverage: "40 seconds"
+         //    };
 
-        	var averages = {
-	        	weekdayAverage: "25 minutes",
-	        	weekendAverage: "40 minutes"
-            };
+        }
 
-        	deferred.resolve(averages);
+        function getActivityDataPoints(startDateTime, endDateTime){
+        	var deferred = $q.defer();
+			healthKitApi.getWalkingAndRunningDistanceByDateTime(startDateTime, endDateTime).then(function(walkRunActivities){
+        		var dataPoints = workoutProcessor.getActivityDataPoints(startDateTime, endDateTime, walkRunActivities);
+        		console.log("data points: " + JSON.stringify(dataPoints));
+        		deferred.resolve(dataPoints);
+        	});
 
         	return deferred.promise;
         }
@@ -65,6 +78,7 @@ angular.module('app.services.healthKit')
 				getDailyAverageDuration: getDailyAverageDuration,
 				getTodaysDurationSum: getTodaysDurationSum,
 				getMostRecentActivity: getMostRecentActivity,
+				getActivityDataPoints: getActivityDataPoints,
 				saveWorkouts: function(){
 					$cordovaHealthKit.saveWorkout(
 					{

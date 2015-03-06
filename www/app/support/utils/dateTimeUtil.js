@@ -18,6 +18,11 @@ angular.module('app.utils')
         return date.substring(0, 10);//.toJSON().substring(0,10)
     }
 
+    function getMonthDay(date){
+        var dateObj = new Date(date.toString().replace(/-/g, "/"));
+        return dateObj.getMonth() + 1 + "-" + dateObj.getDate();
+    }
+
     function getTimeStamp(date){
         var convertedDate = new Date(date.toString().replace(/-/g, "/"));
         return (convertedDate.getHours() < 10? '0': '') + convertedDate.getHours() + ":" + (convertedDate.getMinutes() < 10 ? '0': '') + convertedDate.getMinutes();
@@ -76,6 +81,7 @@ angular.module('app.utils')
         getDurationString: getDurationString,
         getDurationInHours: getDurationInHours,
         getDurationInSeconds: getDurationInSeconds,
-        getDurationStringFromSeconds: getDurationStringFromSeconds
+        getDurationStringFromSeconds: getDurationStringFromSeconds,
+        getMonthDay: getMonthDay
     };
 });

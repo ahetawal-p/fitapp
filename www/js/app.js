@@ -11,7 +11,8 @@ angular.module('fitapp', [
             'app.activity.update',
             'app.conversation',
             'app.settings',
-            'ngCordova'
+            'ngCordova',
+            'underscore'
 ])
 
 .run(function($ionicPlatform, $cordovaHealthKit) {

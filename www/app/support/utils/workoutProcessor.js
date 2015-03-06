@@ -1,7 +1,7 @@
 angular.module('app.utils')
 
-.factory('workoutProcessor', ['activityTypeUtil', 'dateTimeUtil', 'iconUtil', 'groupedActivityBuilder' ,
-	function(activityTypeUtil, dateTimeUtil, iconUtil, groupedActivityBuilder) {
+.factory('workoutProcessor', ['activityTypeUtil', 'dateTimeUtil', 'iconUtil', 'groupedActivityBuilder', '_',
+	function(activityTypeUtil, dateTimeUtil, iconUtil, groupedActivityBuilder, _) {
 
 	function processWorkouts(rawActivityObjects){
 		var groupedActivities = groupActivities(rawActivityObjects.reverse());
@@ -33,7 +33,87 @@ angular.module('app.utils')
 		return processedActivities;
 	}
 
+	function getActivityDataPoints(startDateTime, endDateTime, rawActivityObjects){
+		var iterDateTime = startDateTime;
+		var dataPoints = [];
+		//increment by 30 minutes
+		var increment = 30;
+		while (iterDateTime < endDateTime){
+			// get raw activities that fall bewteen startDateTime and iterDateTime
+			var activitiesInRange = _.filter(rawActivityObjects, function(rawActivityObject){
+				var rawActivityDateTime = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
+				return rawActivityDateTime < iterDateTime;
+			});
+
+			//iterate through activities in range and sum up their durations
+			var totalDuration = 0;
+			_.each(activitiesInRange, function(activityInRange){
+				var activityDuration = dateTimeUtil.getDurationInSeconds(activityInRange.startDate, activityInRange.endDate);
+				totalDuration += activityDuration;
+			});
+
+			var timeString = (iterDateTime.getHours() < 10? '0': '') + iterDateTime.getHours() + ":" + (iterDateTime.getMinutes() < 10 ? '0': '') + iterDateTime.getMinutes();
+			var dataPoint = {
+				"dateTime": timeString,
+				"durationTillNow": totalDuration
+			};
+
+			dataPoints.push(dataPoint);
+			iterDateTime = new Date(iterDateTime.getTime() + increment*60000);
+
+		}
+
+		return dataPoints;
+	}
+
+	function calculateWeekdayWeekendAverages(rawActivityObjects){
+		//get raw activities for weekdays and weekends
+		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+		groupedActivities = groupedActivities.filter(filterGroupedActivities);
+
+		var activities = _.groupBy(groupedActivities, function(activity){
+			var date = new Date(activity.startDate.replace(/-/g, "/"));
+			//pretending weekend starts on thursday for testing
+			if (date.getDay() > 3){
+				return "weekend";
+			}
+			return "weekday";
+		});
+
+		//average out activities on weekdays
+		var weekdayActivities = activities.weekday;
+		var weekdayAverageSeconds = calculateProcessedDailyAverageDuration(weekdayActivities);
+		//var weekdayAvgString = dateTimeUtil.getDurationStringFromSeconds(weekdayAverageSeconds);
+
+		var weekendActivities = activities.weekend;
+		var weekendAverageSeconds = calculateProcessedDailyAverageDuration(weekendActivities);
+		//var weekendAvgString = dateTimeUtil.getDurationStringFromSeconds(weekendAverageSeconds);
+
+		return {
+			"weekdayAverage": weekdayAverageSeconds,
+			"weekendAverage": weekendAverageSeconds
+		}
+	}
+
+	function calculateProcessedDailyAverageDuration(groupedActivities){
+		var summedDuration = 0;
+		var dates = [];
+		_.each(groupedActivities, function(groupedActivity){
+			var durationInSeconds = dateTimeUtil.getDurationInSeconds(groupedActivity.startDate, groupedActivity.endDate);
+			summedDuration += durationInSeconds;
+			var monthDay = dateTimeUtil.getMonthDay(groupedActivity.startDate);
+			dates.push(monthDay);
+		});
+
+		var daysCount = _.uniq(dates).length;
+
+		console.log("sum: " + summedDuration);
+		console.log("daysCount: " + daysCount);
+		return summedDuration/daysCount;
+	}
+
 	function calculateDailyAverageDuration(rawActivityObjects){
+		console.log("raw: "+rawActivityObjects);
 		var groupedActivities = groupActivities(rawActivityObjects.reverse());
 		//calculate summed duration of all activities
 		var totalDuration = 0;
@@ -136,6 +216,8 @@ angular.module('app.utils')
 	return {
 		processWorkouts: processWorkouts,
 		calculateTodaysTotalDuration: calculateTodaysTotalDuration,
-		calculateDailyAverageDuration: calculateDailyAverageDuration
+		calculateDailyAverageDuration: calculateDailyAverageDuration,
+		calculateWeekdayWeekendAverages: calculateWeekdayWeekendAverages,
+		getActivityDataPoints: getActivityDataPoints
 	}
 }]);
