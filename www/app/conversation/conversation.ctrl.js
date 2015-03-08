@@ -27,6 +27,8 @@ angular.module('app.conversation')
 			// actual message list which serves as the model for UI
 			$scope.messages = [];
 
+			$scope.waitIndicator = false;
+
 			/**
 			* Method to generate a random nunmber 
 			* between 0 and given limit, to simulate a wait 
@@ -65,6 +67,7 @@ angular.module('app.conversation')
 			* nodes with evaluation logic look at handleEvaluationNode()
 			**/
 			var performAddToConversationList = function(message, waitLimit) {
+				$scope.waitIndicator = true;
 				message.wait = true;	  		
 	  			$scope.messages.push(angular.extend({}, message));
 	  			lastNodePushed = message;
@@ -75,6 +78,7 @@ angular.module('app.conversation')
 				var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
 				return $timeout( function() { 
 									lastMsgInListOnUi.wait = false;
+									$scope.waitIndicator = false;
 									evalTypeStringProcessing(lastMsgInListOnUi);
 									$ionicScrollDelegate.scrollBottom(true);
 									}, 
@@ -142,7 +146,7 @@ angular.module('app.conversation')
     				minutes: 50
   			};
 
-  			
+  			$scope.options = [];
   			/**
   			* Core method to evaluate and add nodes to the conversation, based on the 
   			* config tree which gets loaded in the current scope.
@@ -172,6 +176,7 @@ angular.module('app.conversation')
 			    				var msg = root[currentNodeToBeAdded.children[i]];
 			    				msg.isClickDisabled = false;
 			    				currentNodeToBeAdded['userOptions'].push(angular.extend({}, msg));
+			    				$scope.options.push(angular.extend({}, msg));
 			    			}
 						}
 						var addToListPromise = performAddToConversationList(currentNodeToBeAdded, SYSTEM_INPUT_DELAY_MAX);
@@ -196,8 +201,10 @@ angular.module('app.conversation')
 	   		$scope.userInput = function(message) {
 	   			console.log("User Input Msg ");
 	   			console.log(message);
+	   			$scope.messages.push(angular.extend({}, message));
+	   			
 	   			if(message.children != null && message.children.length > 0){
-
+	   				$scope.options = [];
 	   				// disable click after clicked once, might need to update again for undo
 	   				message.isClickDisabled = true;
 	   				var currentNodeToBeAdded = root[message.children[0]];
