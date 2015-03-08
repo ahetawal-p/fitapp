@@ -33,6 +33,26 @@ angular.module('app.utils')
 		return processedActivities;
 	}
 
+	function getAverageActivityDuration(startDateTime, endDateTime, rawActivityObjects, filterFunction){
+		//pre filter rawActivityObjects, potentially by weekend or weekday
+		rawActivityObjects = rawActivityObjects.filter(filterFunction);
+
+		var totalUniqueDays = _.uniq(rawActivityObjects, function(activityObj){
+			var activityDate = new Date(activityObj.startDate.replace(/-/g, "/"));
+			var dateString = activityDate.getMonth()+1 + "/" + activityDate.getDate();
+			return dateString;
+		});	
+
+		//get sum of duration of rawActivityObjects in given time
+		var totalDuration = getTotalDurationBetweenDateTimes(startDateTime, endDateTime, rawActivityObjects);
+		console.log("unique Days: " + totalUniqueDays.length);
+		if (totalUniqueDays == null || totalUniqueDays.length == 0){
+			return 0;
+		}
+
+		return totalDuration/totalUniqueDays.length;
+	} 
+
 	/* specify startTime and endTime, and get average activity durations for time slots in between
 		can use filterFunction to pass in filter criteria, ex. weekday, weekend */
 	function getAverageActivityDataPoints(startDateTime, endDateTime, rawActivityObjects, filterFunction){
@@ -74,6 +94,27 @@ angular.module('app.utils')
 		}
 
 		return activityAverages;
+	}
+
+	//get activities between two times of day of given datetimes
+	function getTotalDurationBetweenDateTimes(startDateTime, endDateTime, rawActivityObjects){
+		var activitiesInRange = _.filter(rawActivityObjects, function(rawActivityObject){
+			var rawActivityDateTime = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
+
+			var afterStartTime = dateTimeUtil.secondTimeGreaterThanFirst(startDateTime, rawActivityDateTime);
+			var beforeEndTime = dateTimeUtil.secondTimeGreaterThanFirst(rawActivityDateTime, endDateTime);
+
+			return afterStartTime && beforeEndTime;
+		});
+
+		var totalDuration = 0;
+			_.each(activitiesInRange, function(activityInRange){
+				var activityDuration = dateTimeUtil.getDurationInSeconds(activityInRange.startDate, activityInRange.endDate);
+				totalDuration += activityDuration;
+			});
+
+
+		return totalDuration;
 	}
 
 
@@ -292,6 +333,9 @@ angular.module('app.utils')
 		calculateDailyAverageDuration: calculateDailyAverageDuration,
 		calculateWeekdayWeekendAverages: calculateWeekdayWeekendAverages,
 		getActivityDataPoints: getActivityDataPoints,
-		getAverageActivityDataPoints: getAverageActivityDataPoints
+		getAverageActivityDataPoints: getAverageActivityDataPoints,
+		getAverageActivityDuration: getAverageActivityDuration,
+		getTotalDurationBetweenDateTimes: getTotalDurationBetweenDateTimes,
+		getAverageActivityDuration: getAverageActivityDuration
 	}
 }]);

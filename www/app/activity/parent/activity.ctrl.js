@@ -13,8 +13,8 @@ angular.module('app.activity.parent')
 		});
 
 		//TEST METHODS FOR HEALTHKIT ENDPOINTS
-		healthKitService.getAverageActivityDataPoints(new Date("3/5/2015 7:00"), new Date("3/5/2015 20:00"));
-
+		//healthKitService.getAverageActivityDataPoints(new Date("3/5/2015 7:00"), new Date("3/5/2015 20:00"));
+		//healthKitService.getWeekdayTimesOfDayAverages();
 		vm.openEditActivityModal = function(activity){
 			vm.selectedActivity = activity;
 			$scope.openEditActivityModal();
