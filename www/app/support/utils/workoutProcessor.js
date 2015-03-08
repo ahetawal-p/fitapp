@@ -3,8 +3,8 @@ angular.module('app.utils')
 .factory('workoutProcessor', ['activityTypeUtil', 'dateTimeUtil', 'iconUtil', 'groupedActivityBuilder', '_',
 	function(activityTypeUtil, dateTimeUtil, iconUtil, groupedActivityBuilder, _) {
 
-	function processWorkouts(rawActivityObjects){
-		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+		function processWorkouts(rawActivityObjects){
+			var groupedActivities = groupActivities(rawActivityObjects.reverse());
 		//sort group activities by startDate (time)
 		groupedActivities.sort(sortByStartDate);
 
@@ -33,6 +33,82 @@ angular.module('app.utils')
 		return processedActivities;
 	}
 
+	/* specify startTime and endTime, and get average activity durations for time slots in between
+		can use filterFunction to pass in filter criteria, ex. weekday, weekend */
+	function getAverageActivityDataPoints(startDateTime, endDateTime, rawActivityObjects, filterFunction){
+		
+		//group raw activities by time 
+		var increment = 30;
+		var iterDateTime = startDateTime;
+		var activityAverages = [];
+
+		/* need number of unique days accross ALL data points in ALL time buckets
+			, not just all data points within a certain time bucket. Might have activity
+			at 7pm on Monday but not Tuesday, but need to include both days to calc 
+			average activity duration at 7pm
+		*/
+		var totalUniqueDays = _.uniq(rawActivityObjects, function(activityObj){
+			var activityDate = new Date(activityObj.startDate.replace(/-/g, "/"));
+			var dateString = activityDate.getMonth()+1 + "/" + activityDate.getDate();
+			return dateString;
+		});
+
+		var numUniqueDays = totalUniqueDays.length;
+		while (dateTimeUtil.secondTimeGreaterThanFirst(iterDateTime, endDateTime)){
+			var activitiesInRange = getRawActivitiesBeforeDateTime(iterDateTime, rawActivityObjects);
+
+			//apply additional filters if any (i.e. weekday or weekend)
+			if (filterFunction == null){}
+			else{
+				activitiesInRange = _.filter(activitiesInRange, filterFunction);
+			}
+			var timeString = (iterDateTime.getHours() < 10? '0': '') + iterDateTime.getHours() + ":" + (iterDateTime.getMinutes() < 10 ? '0': '') + iterDateTime.getMinutes();
+
+			activityAverages.push({
+				"time": timeString,
+				"averageDuration": calculateAverageDurationPerDay(activitiesInRange, numUniqueDays)
+			});
+
+			//increment iterDateTime by set interval
+			iterDateTime = new Date(iterDateTime.getTime() + increment*60000);
+		}
+
+		return activityAverages;
+	}
+
+
+	//get activities before the time of day of given datetime
+	function getRawActivitiesBeforeDateTime(dateTime, rawActivityObjects){
+		var activitiesInRange = _.filter(rawActivityObjects, function(rawActivityObject){
+			var rawActivityDateTime = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
+
+			var beforeIterTime = dateTimeUtil.secondTimeGreaterThanFirst(rawActivityDateTime, dateTime);
+			return beforeIterTime;
+		});
+
+		return activitiesInRange;
+	}
+
+	//feed in activities from different dates, calculate average duration per day
+	function calculateAverageDurationPerDay(rawActivityObjects, numUniqueDays){
+		// iterate thru activities, sum up durations, and count days
+		var durationSum = 0;
+		for(var ii=0; ii<rawActivityObjects.length; ii++){
+			var rawActivityObject = rawActivityObjects[ii];
+			var activityDuration = dateTimeUtil.getDurationInSeconds(rawActivityObject.startDate, rawActivityObject.endDate);
+			var activityDate = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
+			var dateString = activityDate.getMonth()+1 + "/" + activityDate.getDate();
+			durationSum += activityDuration;
+		}
+
+		if (numUniqueDays == 0){
+			return 0;
+		}
+
+		return durationSum/numUniqueDays;
+	}
+
+	// get activity data points in seconds
 	function getActivityDataPoints(startDateTime, endDateTime, rawActivityObjects){
 		var iterDateTime = startDateTime;
 		var dataPoints = [];
@@ -40,10 +116,7 @@ angular.module('app.utils')
 		var increment = 30;
 		while (iterDateTime < endDateTime){
 			// get raw activities that fall bewteen startDateTime and iterDateTime
-			var activitiesInRange = _.filter(rawActivityObjects, function(rawActivityObject){
-				var rawActivityDateTime = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
-				return rawActivityDateTime < iterDateTime;
-			});
+			var activitiesInRange = getRawActivitiesBeforeDateTime(iterDateTime, rawActivityObjects);
 
 			//iterate through activities in range and sum up their durations
 			var totalDuration = 0;
@@ -188,12 +261,12 @@ angular.module('app.utils')
 		return groupedActivities;
 	}
 
-  	function sortByStartDate(workoutA, workoutB){
+	function sortByStartDate(workoutA, workoutB){
 		var workoutADate = new Date(workoutA.startDate.replace(/-/g, "/"));
-    	var workoutBDate = new Date(workoutB.startDate.replace(/-/g, "/"));
+		var workoutBDate = new Date(workoutB.startDate.replace(/-/g, "/"));
 
-    	return workoutBDate - workoutADate;
-    }
+		return workoutBDate - workoutADate;
+	}
 
 	function filterGroupedActivities(groupedActivity){
 		//need to externalize the lower limit to a config
@@ -208,7 +281,7 @@ angular.module('app.utils')
 		var kph = groupedActivity.distance/durationInHours;
 		var weight = 60;
 		var calories = (0.0215 * Math.pow(kph, 3) - 0.1765 * Math.pow(kph, 2) 
-						+ 0.8710 * kph + 1.4577) * weight * durationInHours;
+			+ 0.8710 * kph + 1.4577) * weight * durationInHours;
 		var roundedCalories = Math.ceil(calories);
 		return roundedCalories;
 	}
@@ -218,6 +291,7 @@ angular.module('app.utils')
 		calculateTodaysTotalDuration: calculateTodaysTotalDuration,
 		calculateDailyAverageDuration: calculateDailyAverageDuration,
 		calculateWeekdayWeekendAverages: calculateWeekdayWeekendAverages,
-		getActivityDataPoints: getActivityDataPoints
+		getActivityDataPoints: getActivityDataPoints,
+		getAverageActivityDataPoints: getAverageActivityDataPoints
 	}
 }]);

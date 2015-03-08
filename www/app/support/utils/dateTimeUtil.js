@@ -18,6 +18,17 @@ angular.module('app.utils')
         return date.substring(0, 10);//.toJSON().substring(0,10)
     }
 
+    function secondTimeGreaterThanFirst(firstDateTime, secondDateTime){
+        var firstTimeDateTimeObj = new Date();
+        firstTimeDateTimeObj.setHours(firstDateTime.getHours());
+        firstTimeDateTimeObj.setMinutes(firstDateTime.getMinutes());
+
+        var secondTimeDateTimeObj = new Date();
+        secondTimeDateTimeObj.setHours(secondDateTime.getHours());
+        secondTimeDateTimeObj.setMinutes(secondDateTime.getMinutes());
+        return secondTimeDateTimeObj > firstTimeDateTimeObj;
+    }
+
     function getMonthDay(date){
         var dateObj = new Date(date.toString().replace(/-/g, "/"));
         return dateObj.getMonth() + 1 + "-" + dateObj.getDate();
@@ -82,6 +93,7 @@ angular.module('app.utils')
         getDurationInHours: getDurationInHours,
         getDurationInSeconds: getDurationInSeconds,
         getDurationStringFromSeconds: getDurationStringFromSeconds,
-        getMonthDay: getMonthDay
+        getMonthDay: getMonthDay,
+        secondTimeGreaterThanFirst: secondTimeGreaterThanFirst
     };
 });

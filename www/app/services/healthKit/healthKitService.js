@@ -27,6 +27,19 @@ angular.module('app.services.healthKit')
 
         }
 
+        function getAverageActivityDataPoints(startDateTime, endDateTime){
+			var deferred = $q.defer();
+			healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+                console.log("calculating");
+        		var dataPoints = workoutProcessor.getAverageActivityDataPoints(startDateTime, endDateTime, walkRunActivities);
+        		//console.log("avg data points: " + JSON.stringify(dataPoints));
+                //alert(JSON.stringify(dataPoints));
+        		deferred.resolve(dataPoints);
+        	});
+
+        	return deferred.promise;
+        }
+
         function getActivityDataPoints(startDateTime, endDateTime){
         	var deferred = $q.defer();
 			healthKitApi.getWalkingAndRunningDistanceByDateTime(startDateTime, endDateTime).then(function(walkRunActivities){
@@ -79,24 +92,6 @@ angular.module('app.services.healthKit')
 				getTodaysDurationSum: getTodaysDurationSum,
 				getMostRecentActivity: getMostRecentActivity,
 				getActivityDataPoints: getActivityDataPoints,
-				saveWorkouts: function(){
-					$cordovaHealthKit.saveWorkout(
-					{
-						'activityType': 'HKWorkoutActivityTypeCycling',
-						'quantityType': 'HKQuantityTypeIdentifierDistanceCycling',
-			            'startDate': new Date(), // now
-			            'endDate': null, // not needed when using duration
-			            'duration': 6000, //in seconds
-			            'energy': 400, //
-			            'energyUnit': 'kcal', // J|cal|kcal
-			            'distance': 5, // optional
-			            'distanceUnit': 'km'
-			        }
-			        ).then(function(v) {
-			        //alert(JSON.stringify(v));
-			    }, function(err) {
-			    	console.log(err);
-			    });
-			    }
+				getAverageActivityDataPoints: getAverageActivityDataPoints
 			}}]
 			);
