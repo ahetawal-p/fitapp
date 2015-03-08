@@ -32,37 +32,63 @@ angular.module('app.services.healthKit')
 
             healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
                 
-            function weekdayFilter(rawActivityObject){
-                var rawActivityDateObj = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
-                var isWeekday = rawActivityDateObj.getDay() > 0 && rawActivityDateObj.getDay() < 6;
+                function weekdayFilter(rawActivityObject){
+                    var rawActivityDateObj = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
+                    var isWeekday = rawActivityDateObj.getDay() > 0 && rawActivityDateObj.getDay() < 6;
 
-                return isWeekday;
-            }
+                    return isWeekday;
+                }
 
-                var morningStartDateTime = new Date("1/1/1900 05:00");
-                var morningEndDateTime = new Date("1/1/1900 12:00");
-                var weekdayMorningAverage = workoutProcessor.getAverageActivityDuration(morningStartDateTime, morningEndDateTime, walkRunActivities, weekdayFilter);
-                
-                var afternoonStartDateTime = new Date("1/1/1900 12:00");
-                var afternoonEndDateTime = new Date("1/1/1900 17:00");
-                var weekdayAfternoonAverage = workoutProcessor.getAverageActivityDuration(afternoonStartDateTime, afternoonEndDateTime, walkRunActivities, weekdayFilter);
-                
-                var eveningStartDateTime = new Date("1/1/1900 17:00");
-                var eveningEndDateTime = new Date("1/1/1900 23:59");
-                var weekdayEveningAverage = workoutProcessor.getAverageActivityDuration(eveningStartDateTime, eveningEndDateTime, walkRunActivities, weekdayFilter);
-                
-                var timesOfDayAverages = {
-                    "morning": weekdayMorningAverage,
-                    "afternoon": weekdayAfternoonAverage,
-                    "evening": weekdayEveningAverage
-                };
-
+                var timesOfDayAverages = getTimesOfDayAverages(walkRunActivities, weekdayFilter);
                 console.log(JSON.stringify(timesOfDayAverages));
 
                 deferred.resolve(timesOfDayAverages);
             });
 
             return deferred.promise;
+        }
+
+        function getWeekendTimesOfDayAverages(){
+            var deferred = $q.defer();
+
+            healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+                
+                function weekdayFilter(rawActivityObject){
+                    var rawActivityDateObj = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
+                    var isWeekday = rawActivityDateObj.getDay() > 0 && rawActivityDateObj.getDay() < 6;
+
+                    return !isWeekday;
+                }
+
+                var timesOfDayAverages = getTimesOfDayAverages(walkRunActivities, weekdayFilter);
+                console.log(JSON.stringify(timesOfDayAverages));
+
+                deferred.resolve(timesOfDayAverages);
+            });
+
+            return deferred.promise;
+        }
+
+        function getTimesOfDayAverages(rawActivityObjects, filterFunction){
+            var morningStartDateTime = new Date("1/1/1900 05:00");
+            var morningEndDateTime = new Date("1/1/1900 12:00");
+            var weekdayMorningAverage = workoutProcessor.getAverageActivityDuration(morningStartDateTime, morningEndDateTime, rawActivityObjects, filterFunction);
+            
+            var afternoonStartDateTime = new Date("1/1/1900 12:00");
+            var afternoonEndDateTime = new Date("1/1/1900 17:00");
+            var weekdayAfternoonAverage = workoutProcessor.getAverageActivityDuration(afternoonStartDateTime, afternoonEndDateTime, rawActivityObjects, filterFunction);
+            
+            var eveningStartDateTime = new Date("1/1/1900 17:00");
+            var eveningEndDateTime = new Date("1/1/1900 23:59");
+            var weekdayEveningAverage = workoutProcessor.getAverageActivityDuration(eveningStartDateTime, eveningEndDateTime, rawActivityObjects, filterFunction);
+            
+            var timesOfDayAverages = {
+                "morning": weekdayMorningAverage,
+                "afternoon": weekdayAfternoonAverage,
+                "evening": weekdayEveningAverage
+            };
+
+            return timesOfDayAverages;
         }
 
         function getAverageActivityDataPoints(startDateTime, endDateTime){
@@ -128,6 +154,7 @@ angular.module('app.services.healthKit')
 				getMostRecentActivity: getMostRecentActivity,
 				getActivityDataPoints: getActivityDataPoints,
 				getAverageActivityDataPoints: getAverageActivityDataPoints,
-                getWeekdayTimesOfDayAverages: getWeekdayTimesOfDayAverages
+                getWeekdayTimesOfDayAverages: getWeekdayTimesOfDayAverages,
+                getWeekendTimesOfDayAverages: getWeekendTimesOfDayAverages
 			}}]
 			);
