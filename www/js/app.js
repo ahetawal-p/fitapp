@@ -12,7 +12,8 @@ angular.module('fitapp', [
             'app.conversation',
             'app.settings',
             'ngCordova',
-            'underscore'
+            'underscore',
+            'chart.js'
 ])
 
 .run(function($ionicPlatform, $cordovaHealthKit) {
@@ -29,11 +30,9 @@ angular.module('fitapp', [
     //Ask/set user permissions for Healthkit data
     $cordovaHealthKit.isAvailable().then(function(yes) {
     // HK is available
-        var permissions = ['HKWorkoutTypeIdentifier', 'HKQuantityTypeIdentifierActiveEnergyBurned', 
+        var permissions = [
         'HKQuantityTypeIdentifierDistanceWalkingRunning',
-        'HKQuantityTypeIdentifierDistanceCycling',
-        'HKCategoryValueSleepAnalysisAsleep',
-        'HKQuantityTypeIdentifierHeight'];
+        'HKCategoryValueSleepAnalysisAsleep'];
      
         $cordovaHealthKit.requestAuthorization(
             permissions, // Read permission

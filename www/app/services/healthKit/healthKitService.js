@@ -16,15 +16,10 @@ angular.module('app.services.healthKit')
         function getWeekdayWeekendAverages(){
         	var deferred = $q.defer();
         	healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
-                var dataPoints = workoutProcessor.getAverageActivityDataPoints(startDateTime, endDateTime, walkRunActivities);
+                var weekdayWeekendAverages = workoutProcessor.calculateWeekdayWeekendAverages(walkRunActivities);
         		deferred.resolve(weekdayWeekendAverages);
         	});
         	return deferred.promise;
-        	// var averages = {
-	        // 	weekdayAverage: "25 seconds",
-	        // 	weekendAverage: "40 seconds"
-         //    };
-
         }
 
         function getWeekdayTimesOfDayAverages(){
@@ -91,25 +86,114 @@ angular.module('app.services.healthKit')
             return timesOfDayAverages;
         }
 
+        /* get today's data points vs average */
+        function getTodayVsAverageDataPoints(startDateTime, endDateTime){
+            var deferred = $q.defer();
+            var labels = [];
+            var data = [];
+            getActivityDataPoints(startDateTime, endDateTime).then(function(response){
+                labels = response.times;
+                console.log("response durations: " + response.durations);
+                data.push(response.durations);
+
+            })
+            .then(function(){
+                return getAverageActivityDataPoints(startDateTime, endDateTime);
+            })
+            .then(function(response){
+                data.push(response.durations);
+                var plot = {
+                    labels: labels,
+                    data: data
+                };
+
+                deferred.resolve(plot);
+            });
+
+            return deferred.promise;
+        }
+
         function getAverageActivityDataPoints(startDateTime, endDateTime){
 			var deferred = $q.defer();
 			healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+                console.log("then");
         		var dataPoints = workoutProcessor.getAverageActivityDataPoints(startDateTime, endDateTime, walkRunActivities);
-        		deferred.resolve(dataPoints);
+        		console.log(dataPoints);
+                var times = [];
+                var durations = [];
+                var index = 0;
+                console.log("3");
+                _.each(dataPoints, function(dataPoint){
+                    if (index == 0){
+                        times.push(dataPoint.time);
+                    }else if (index == dataPoints.length-1){
+                        times.push("Now");
+                    }else{
+                        times.push("");
+                    }
+
+                    durations.push(dataPoint.averageDuration);
+                    index ++;
+                });
+                console.log("4");
+                var dataPointsObject = {
+                    times: times,
+                    durations: durations
+                };
+                deferred.resolve(dataPointsObject);
         	});
 
         	return deferred.promise;
         }
 
+
+
         function getActivityDataPoints(startDateTime, endDateTime){
         	var deferred = $q.defer();
 			healthKitApi.getWalkingAndRunningDistanceByDateTime(startDateTime, endDateTime).then(function(walkRunActivities){
-        		var dataPoints = workoutProcessor.getActivityDataPoints(startDateTime, endDateTime, walkRunActivities);
-        		console.log("data points: " + JSON.stringify(dataPoints));
-        		deferred.resolve(dataPoints);
+        		
+                console.log("dataPoints");
+                var dataPoints = workoutProcessor.getActivityDataPoints(startDateTime, endDateTime, walkRunActivities);
+
+                var times = [];
+                var durations = [];
+                var index = 0;
+                _.each(dataPoints, function(dataPoint){
+                    if (index == 0){
+                        times.push(dataPoint.dateTime);
+                    }else if (index == dataPoints.length-1){
+                        times.push("Now");
+                    }else{
+                        times.push("");
+                    }
+                    durations.push(dataPoint.durationTillNow);
+                    index ++;
+                });
+
+                var dataPointsObject = {
+                    times: times,
+                    durations: durations
+                };
+                deferred.resolve(dataPointsObject);
         	});
 
         	return deferred.promise;
+        }
+
+        function getDailyAverageVsAllUsers(){
+            var deferred = $q.defer();
+            getDailyAverageDuration().then(function(response){
+                var labels = ["You", "Other users"];
+                var data = [[response], [50]];
+                var plotNumbers = {
+                    labels: labels,
+                    data: data
+                };
+
+                deferred.resolve(plotNumbers);
+            });
+
+            return deferred.promise;
         }
 
         //calc avg over N days (depends on what data has)
@@ -155,6 +239,8 @@ angular.module('app.services.healthKit')
 				getActivityDataPoints: getActivityDataPoints,
 				getAverageActivityDataPoints: getAverageActivityDataPoints,
                 getWeekdayTimesOfDayAverages: getWeekdayTimesOfDayAverages,
-                getWeekendTimesOfDayAverages: getWeekendTimesOfDayAverages
+                getWeekendTimesOfDayAverages: getWeekendTimesOfDayAverages,
+                getTodayVsAverageDataPoints: getTodayVsAverageDataPoints,
+                getDailyAverageVsAllUsers: getDailyAverageVsAllUsers
 			}}]
 			);

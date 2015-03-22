@@ -10,7 +10,6 @@ angular.module('app.utils')
 
 		//filter group activities less than 0.2 km
 		groupedActivities = groupedActivities.filter(filterGroupedActivities);
-
 		var processedActivities = [];
 		for (var ii=0; ii<groupedActivities.length; ii++){
 			var groupedActivity = groupedActivities[ii];
@@ -58,30 +57,40 @@ angular.module('app.utils')
 	function getAverageActivityDataPoints(startDateTime, endDateTime, rawActivityObjects, filterFunction){
 		
 		//group raw activities by time 
-		var increment = 30;
+		var increment = 60;
 		var iterDateTime = startDateTime;
 		var activityAverages = [];
-
 		/* need number of unique days accross ALL data points in ALL time buckets
 			, not just all data points within a certain time bucket. Might have activity
 			at 7pm on Monday but not Tuesday, but need to include both days to calc 
 			average activity duration at 7pm
 		*/
-		var totalUniqueDays = _.uniq(rawActivityObjects, function(activityObj){
+
+		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+ 		//filter out activities under 0.2km
+
+		groupedActivities = groupedActivities.filter(filterGroupedActivities);
+		var totalUniqueDays = _.uniq(groupedActivities, function(activityObj){
 			var activityDate = new Date(activityObj.startDate.replace(/-/g, "/"));
 			var dateString = activityDate.getMonth()+1 + "/" + activityDate.getDate();
 			return dateString;
 		});
 
 		var numUniqueDays = totalUniqueDays.length;
-		while (dateTimeUtil.secondTimeGreaterThanFirst(iterDateTime, endDateTime)){
-			var activitiesInRange = getRawActivitiesBeforeDateTime(iterDateTime, rawActivityObjects);
+		while (iterDateTime.getHours() < endDateTime.getHours()){
+			// get raw activities that fall bewteen startDateTime and iterDateTime
+			var activitiesInRange = _.filter(groupedActivities, function(groupedActivityObj){
+				var groupedActivityDateTime = new Date(groupedActivityObj.startDate.replace(/-/g, "/"));
+				var beforeIterTime = dateTimeUtil.secondTimeGreaterThanFirst(groupedActivityDateTime, iterDateTime);
+				return beforeIterTime;
+			});		
 
 			//apply additional filters if any (i.e. weekday or weekend)
 			if (filterFunction == null){}
 			else{
 				activitiesInRange = _.filter(activitiesInRange, filterFunction);
 			}
+
 			var timeString = (iterDateTime.getHours() < 10? '0': '') + iterDateTime.getHours() + ":" + (iterDateTime.getMinutes() < 10 ? '0': '') + iterDateTime.getMinutes();
 
 			activityAverages.push({
@@ -100,7 +109,7 @@ angular.module('app.utils')
 	function getTotalDurationBetweenDateTimes(startDateTime, endDateTime, rawActivityObjects){
 		var activitiesInRange = _.filter(rawActivityObjects, function(rawActivityObject){
 			var rawActivityDateTime = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
-
+			console.log("getTotalDurationBetweenDateTimes");
 			var afterStartTime = dateTimeUtil.secondTimeGreaterThanFirst(startDateTime, rawActivityDateTime);
 			var beforeEndTime = dateTimeUtil.secondTimeGreaterThanFirst(rawActivityDateTime, endDateTime);
 
@@ -122,7 +131,6 @@ angular.module('app.utils')
 	function getRawActivitiesBeforeDateTime(dateTime, rawActivityObjects){
 		var activitiesInRange = _.filter(rawActivityObjects, function(rawActivityObject){
 			var rawActivityDateTime = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
-
 			var beforeIterTime = dateTimeUtil.secondTimeGreaterThanFirst(rawActivityDateTime, dateTime);
 			return beforeIterTime;
 		});
@@ -153,11 +161,21 @@ angular.module('app.utils')
 	function getActivityDataPoints(startDateTime, endDateTime, rawActivityObjects){
 		var iterDateTime = startDateTime;
 		var dataPoints = [];
+		//get grouped activities between startDateTime adn iterDateTime
+		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+
 		//increment by 30 minutes
-		var increment = 30;
+		var increment = 60;
 		while (iterDateTime < endDateTime){
 			// get raw activities that fall bewteen startDateTime and iterDateTime
-			var activitiesInRange = getRawActivitiesBeforeDateTime(iterDateTime, rawActivityObjects);
+			var activitiesInRange = _.filter(groupedActivities, function(groupedActivityObj){
+				var groupedActivityDateTime = new Date(groupedActivityObj.startDate.replace(/-/g, "/"));
+				var beforeIterTime = dateTimeUtil.secondTimeGreaterThanFirst(groupedActivityDateTime, iterDateTime);
+				return beforeIterTime;
+			});		
+
+		 	//filter out activities under 0.2km
+		 	activitiesInRange = activitiesInRange.filter(filterGroupedActivities);
 
 			//iterate through activities in range and sum up their durations
 			var totalDuration = 0;
@@ -197,11 +215,10 @@ angular.module('app.utils')
 		//average out activities on weekdays
 		var weekdayActivities = activities.weekday;
 		var weekdayAverageSeconds = calculateProcessedDailyAverageDuration(weekdayActivities);
-		//var weekdayAvgString = dateTimeUtil.getDurationStringFromSeconds(weekdayAverageSeconds);
-
+		
+		//average out activities on weekend days
 		var weekendActivities = activities.weekend;
 		var weekendAverageSeconds = calculateProcessedDailyAverageDuration(weekendActivities);
-		//var weekendAvgString = dateTimeUtil.getDurationStringFromSeconds(weekendAverageSeconds);
 
 		return {
 			"weekdayAverage": weekdayAverageSeconds,
@@ -227,8 +244,8 @@ angular.module('app.utils')
 	}
 
 	function calculateDailyAverageDuration(rawActivityObjects){
-		console.log("raw: "+rawActivityObjects);
 		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+		groupedActivities = groupedActivities.filter(filterGroupedActivities);
 		//calculate summed duration of all activities
 		var totalDuration = 0;
 		for(var ii=0; ii<groupedActivities.length; ii++){
@@ -244,8 +261,8 @@ angular.module('app.utils')
 
 		days = days.filter(function(v,i) { return i==days.lastIndexOf(v); });
 		var avgSeconds = totalDuration/(days.length);
-		console.log("avg duration string: " + dateTimeUtil.getDurationStringFromSeconds(avgSeconds));
-		return dateTimeUtil.getDurationStringFromSeconds(avgSeconds);
+		console.log("avg duration string: " + dateTimeUtil.getMinutesFromSeconds(avgSeconds));
+		return dateTimeUtil.getMinutesFromSeconds(avgSeconds);
 	}
 
 	function calculateTodaysTotalDuration(rawActivityObjects){
@@ -262,7 +279,6 @@ angular.module('app.utils')
 		for(var ii=0; ii<groupedActivities.length; ii++){
 			totalDuration += dateTimeUtil.getDurationInSeconds(groupedActivities[ii].startDate, groupedActivities[ii].endDate);
 		}
-		console.log("total duration: " + dateTimeUtil.getDurationStringFromSeconds(totalDuration));
 		return dateTimeUtil.getDurationStringFromSeconds(totalDuration);
 	}
 
@@ -276,8 +292,7 @@ angular.module('app.utils')
 				groupedActivityBuilder.createGroupedActivity(rawActivityObject.startDate);
 			}
 
-			var workoutStartDate = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
-
+			var workoutEndDate = new Date(rawActivityObject.endDate.replace(/-/g, "/"));
 			var nextWorkout = rawActivityObjects[ii + 1];
 			if (nextWorkout == null){
 				groupedActivities.push(groupedActivityBuilder.getGroupedActivity(rawActivityObject.endDate));
@@ -285,11 +300,13 @@ angular.module('app.utils')
 			else{
 				var nextWorkoutStartDateString = nextWorkout.startDate.replace(/-/g, "/");
 				var nextWorkoutStartDate = new Date(nextWorkoutStartDateString);
-				var timeDiff = Math.abs(nextWorkoutStartDate - workoutStartDate);
+				var timeDiff = Math.abs(nextWorkoutStartDate - workoutEndDate);
 				var timeDiffInMins = Math.floor((timeDiff/1000)/60);
 				if (timeDiffInMins > 1){
+					groupedActivityBuilder.addDistance(rawActivityObject.quantity);
 					groupedActivities.push(groupedActivityBuilder.getGroupedActivity(rawActivityObject.endDate));
 					groupedActivityBuilder.clearGroupedActivity();
+
 					groupedActivityBuilder.createGroupedActivity(nextWorkout.startDate);
 				}else{
 					groupedActivityBuilder.addDistance(rawActivityObject.quantity);
@@ -334,7 +351,6 @@ angular.module('app.utils')
 		calculateWeekdayWeekendAverages: calculateWeekdayWeekendAverages,
 		getActivityDataPoints: getActivityDataPoints,
 		getAverageActivityDataPoints: getAverageActivityDataPoints,
-		getAverageActivityDuration: getAverageActivityDuration,
 		getTotalDurationBetweenDateTimes: getTotalDurationBetweenDateTimes,
 		getAverageActivityDuration: getAverageActivityDuration
 	}
