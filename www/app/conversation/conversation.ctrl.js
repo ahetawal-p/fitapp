@@ -1,14 +1,14 @@
 angular.module('app.conversation')
 
 .controller('ConversationCtrl', [
-		'$rootScope',
-		'$scope',
-		'$state',
-		'talky',
-		'$ionicScrollDelegate',
-		'$timeout',
-		'$parse',
-		function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse) {
+	'$rootScope',
+	'$scope',
+	'$state',
+	'talky',
+	'$ionicScrollDelegate',
+	'$timeout',
+	'$parse',
+	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse) {
 
 			// upper limit constant to fake the  for waiting time after user input
 			// Only in effect for normal text node.
@@ -52,10 +52,10 @@ angular.module('app.conversation')
 					&& message.evalInfo.type == "string"){
 					
 					var evaluatedMsg = $scope.$eval(message.text);
-					console.log("evaluated as >> " + evaluatedMsg);
-					message.text = evaluatedMsg;	
-				}
-			};
+				console.log("evaluated as >> " + evaluatedMsg);
+				message.text = evaluatedMsg;	
+			}
+		};
 
 			/**
 			* Method used for adding the current node to the 
@@ -69,20 +69,20 @@ angular.module('app.conversation')
 			var performAddToConversationList = function(message, waitLimit) {
 				$scope.waitIndicator = true;
 				message.wait = true;	  		
-	  			$scope.messages.push(angular.extend({}, message));
-	  			lastNodePushed = message;
+				$scope.messages.push(angular.extend({}, message));
+				lastNodePushed = message;
 				console.log(message);
 				
 				// Need to retrieve the message from actual list, in order to 
 				// update it after the random wait period.
 				var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
 				return $timeout( function() { 
-									lastMsgInListOnUi.wait = false;
-									$scope.waitIndicator = false;
-									evalTypeStringProcessing(lastMsgInListOnUi);
-									$ionicScrollDelegate.scrollBottom(true);
-									}, 
-								getRandom(waitLimit));
+					lastMsgInListOnUi.wait = false;
+					$scope.waitIndicator = false;
+					evalTypeStringProcessing(lastMsgInListOnUi);
+					$ionicScrollDelegate.scrollBottom(true);
+				}, 
+				getRandom(waitLimit));
 
 			};
 
@@ -95,10 +95,22 @@ angular.module('app.conversation')
 					&& node.evalInfo.type == "func") {
 
 					return true;
-				}
-				return false;
+			}
+			return false;
 
-			};
+		};
+
+
+		var isThisChartNode = function(node) {
+			if(typeof node.type != "undefined" 
+				&& node.type == "chart") {
+
+				return true;
+		}
+		return false;
+
+	};
+
 
 			/**
 			* Method used for calling the actual evaluation function 
@@ -117,8 +129,8 @@ angular.module('app.conversation')
 				var evaluatedNode = $parse(node.evalInfo.method)($scope.user.minutes);
 
 				// evaluate string in the message text
-	    		evalTypeStringProcessing(evaluatedNode);
-	    		
+				evalTypeStringProcessing(evaluatedNode);
+
 	    		// remove the temporary wait node now
 	    		$scope.messages.pop();
 
@@ -130,23 +142,48 @@ angular.module('app.conversation')
 	    	};
 
 
+	    	var handleChartNode = function(node){
+	    		$scope.messages.push(angular.extend({}, root['skeletonWaitNode']));
+
+	    		console.log(node.method);
+
+	    		var promise = $parse(node.method)('test');
+	    		promise.then(function(response){
+	    			console.log("back in then");
+		    		node.labels = response.labels;
+					//node.series = ['Series A', 'Series B'];
+					node.data = response.data;
+										// evaluate string in the message text
+		    		//evalTypeStringProcessing(evaluatedNode);
+		    		
+		    		// remove the temporary wait node now
+		    		$scope.messages.pop();
+
+		    		// add the new evaluated node to the conversation list
+		    		$scope.messages.push(angular.extend({}, node));
+
+		    		lastNodePushed = node;
+		    		$ionicScrollDelegate.scrollBottom(true);
+		    		evaluateNextNode();
+		    	});
+	    	}
 	    	/**
 	    		* Adding the very first node to the conversation
 	    		* STARTING POINT OF THE APP *
-	    	**/
-	  		performAddToConversationList(root['onboarding'], SYSTEM_INPUT_DELAY_MAX)
-	  										.then(function(){ 
-	  											evaluateNextNode();
-	  										});
+	    		**/
+	    		performAddToConversationList(root['onboarding'], SYSTEM_INPUT_DELAY_MAX)
+	    		.then(function(){ 
+	    			evaluateNextNode();
+	    		});
 
-	  		
+
 	  		//TODO: To be set when we first load the data or get user input
-			$scope.user = {
-    				name: 'Amit',
-    				minutes: 50
-  			};
+	  		$scope.user = {
+	  			name: 'Amit',
+	  			minutes: 50
+	  		};
 
-  			$scope.options = [];
+	  		$scope.options = [];
   			/**
   			* Core method to evaluate and add nodes to the conversation, based on the 
   			* config tree which gets loaded in the current scope.
@@ -154,30 +191,37 @@ angular.module('app.conversation')
   			* given current node are of type == "user" they get added to a new list of 
   			* userOptions list property for the given node
   			**/
-			var evaluateNextNode = function() {
+  			var evaluateNextNode = function() {
 
-				var currentNodeToBeAdded = null;
+  				var currentNodeToBeAdded = null;
 
-				if(lastNodePushed.children.length > 0){
-					var nextNode = root[lastNodePushed.children[0]];
+  				if(lastNodePushed.children.length > 0){
+  					var nextNode = root[lastNodePushed.children[0]];
     				// check for evaluation type nodes
     				if(isThisEvaluationNode(nextNode)){
-						handleEvaluationNode(nextNode);
-						evaluateNextNode();
-						return;
+    					handleEvaluationNode(nextNode);
+    					evaluateNextNode();
+    					return;
 
-					} else {
+    				} else if(isThisChartNode(nextNode)){
+    					handleChartNode(nextNode);
+    					
+    					return;
+    				} else {
 						// Processing standard text nodes and their user options
-    					currentNodeToBeAdded = nextNode;
-    					currentNodeToBeAdded['userOptions'] = [];
+						currentNodeToBeAdded = nextNode;
+						currentNodeToBeAdded['userOptions'] = [];
 						var childLen = currentNodeToBeAdded.children.length;
-						if(childLen >= 1 && root[currentNodeToBeAdded.children[0]].type != null){
+						if(childLen >= 1 && 
+							root[currentNodeToBeAdded.children[0]].type != null && 
+							root[currentNodeToBeAdded.children[0]].type != 'chart'
+							){
 							for(i in currentNodeToBeAdded.children){
-			    				var msg = root[currentNodeToBeAdded.children[i]];
-			    				msg.isClickDisabled = false;
-			    				currentNodeToBeAdded['userOptions'].push(angular.extend({}, msg));
-			    				$scope.options.push(angular.extend({}, msg));
-			    			}
+								var msg = root[currentNodeToBeAdded.children[i]];
+								msg.isClickDisabled = false;
+								currentNodeToBeAdded['userOptions'].push(angular.extend({}, msg));
+								$scope.options.push(angular.extend({}, msg));
+							}
 						}
 						var addToListPromise = performAddToConversationList(currentNodeToBeAdded, SYSTEM_INPUT_DELAY_MAX);
 						/*
@@ -185,12 +229,12 @@ angular.module('app.conversation')
 						move to the next system node from the config
 						*/
 						if(currentNodeToBeAdded.userOptions.length < 1){
-		    				addToListPromise.then(function(){evaluateNextNode();});
-			    		}
-			    	}
-		    	}
+							addToListPromise.then(function(){evaluateNextNode();});
+						}
+					}
+				}
 
-	   		};
+			};
 
 	   		/**
 	   		* Scope level method which gets called when a user clicks on 
@@ -214,13 +258,13 @@ angular.module('app.conversation')
 	   					evaluateNextNode();
 	   				} else {
 	   					performAddToConversationList(currentNodeToBeAdded, USER_INPUT_DELAY_MAX)
-	   												.then(function(){
-	   													evaluateNextNode();
-	   												});
+	   					.then(function(){
+	   						evaluateNextNode();
+	   					});
 	   				}
 	   			}
 
 	   		};
 
-		}
-	]);
+	   	}
+	   	]);

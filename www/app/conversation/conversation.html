@@ -27,6 +27,21 @@
               </div>
         </div>
         
+        <div  class="systemMsg" ng-if="message.type == 'chart' && !message.wait">
+           <div class="innerDiv">
+                 THIs is a test
+              </div>
+
+          <div>
+          <canvas class="chart chart-line" data="message.data"
+            labels="message.labels" legend="true" series="message.series" 
+            click="onClick">
+          </canvas> 
+          </div>
+        </div>
+
+
+
         <div class="userMsg" ng-if="message.type == 'user' &&  !message.wait">
               
           <span>  {{message.text}} </span>
