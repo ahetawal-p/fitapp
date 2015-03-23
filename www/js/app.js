@@ -16,7 +16,7 @@ angular.module('fitapp', [
             'chart.js'
 ])
 
-.run(function($ionicPlatform, $cordovaHealthKit) {
+.run(function($ionicPlatform, $cordovaHealthKit, $rootScope) {
   $ionicPlatform.ready(function() {
     // // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // // for form inputs)
@@ -28,8 +28,11 @@ angular.module('fitapp', [
     // }
 
     //Ask/set user permissions for Healthkit data
+    try{
     $cordovaHealthKit.isAvailable().then(function(yes) {
     // HK is available
+        $rootScope.healthkitExists = true;
+
         var permissions = [
         'HKQuantityTypeIdentifierDistanceWalkingRunning',
         'HKCategoryValueSleepAnalysisAsleep'];
@@ -47,6 +50,9 @@ angular.module('fitapp', [
         }, function(no) {
             // No HK available
         }); 
+  }catch (exception){
+    $rootScope.healthkitExists = false;
+  }
   });
 })
 

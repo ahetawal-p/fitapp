@@ -1,11 +1,20 @@
 angular.module('app.services.healthKit')
 
-.factory('healthKitService', ['healthKitApi', 'workoutProcessor', '$q',
-	function(healthKitApi, workoutProcessor, $q) {
+.factory('healthKitService', ['healthKitApi', 'healthKitStubApi', 'workoutProcessor', '$q', '$rootScope',
+	function(healthKitApi, healthKitStubApi, workoutProcessor, $q, $rootScope) {
+        var api = {};
+
+        if ($rootScope.healthkitExists){
+            api = healthKitApi;
+        }else{
+            api = healthKitStubApi;
+        }
+
+        //api = healthKitStubApi;
 
         function getActivities(){
         	var deferred = $q.defer();
-        	healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+        	api.getWalkingAndRunningDistance().then(function(walkRunActivities){
         		var processedActivities = workoutProcessor.processWorkouts(walkRunActivities);
         		deferred.resolve(processedActivities);
         	});
@@ -15,7 +24,7 @@ angular.module('app.services.healthKit')
 
         function getWeekdayWeekendAverages(){
         	var deferred = $q.defer();
-        	healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+        	api.getWalkingAndRunningDistance().then(function(walkRunActivities){
                 var weekdayWeekendAverages = workoutProcessor.calculateWeekdayWeekendAverages(walkRunActivities);
         		deferred.resolve(weekdayWeekendAverages);
         	});
@@ -25,7 +34,7 @@ angular.module('app.services.healthKit')
         function getWeekdayTimesOfDayAverages(){
             var deferred = $q.defer();
 
-            healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+            api.getWalkingAndRunningDistance().then(function(walkRunActivities){
                 
                 function weekdayFilter(rawActivityObject){
                     var rawActivityDateObj = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
@@ -46,7 +55,7 @@ angular.module('app.services.healthKit')
         function getWeekendTimesOfDayAverages(){
             var deferred = $q.defer();
 
-            healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+            api.getWalkingAndRunningDistance().then(function(walkRunActivities){
                 
                 function weekdayFilter(rawActivityObject){
                     var rawActivityDateObj = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
@@ -115,14 +124,11 @@ angular.module('app.services.healthKit')
 
         function getAverageActivityDataPoints(startDateTime, endDateTime){
 			var deferred = $q.defer();
-			healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
-                console.log("then");
+			api.getWalkingAndRunningDistance().then(function(walkRunActivities){
         		var dataPoints = workoutProcessor.getAverageActivityDataPoints(startDateTime, endDateTime, walkRunActivities);
-        		console.log(dataPoints);
                 var times = [];
                 var durations = [];
                 var index = 0;
-                console.log("3");
                 _.each(dataPoints, function(dataPoint){
                     if (index == 0){
                         times.push(dataPoint.time);
@@ -135,7 +141,6 @@ angular.module('app.services.healthKit')
                     durations.push(dataPoint.averageDuration);
                     index ++;
                 });
-                console.log("4");
                 var dataPointsObject = {
                     times: times,
                     durations: durations
@@ -150,9 +155,8 @@ angular.module('app.services.healthKit')
 
         function getActivityDataPoints(startDateTime, endDateTime){
         	var deferred = $q.defer();
-			healthKitApi.getWalkingAndRunningDistanceByDateTime(startDateTime, endDateTime).then(function(walkRunActivities){
+			api.getWalkingAndRunningDistanceByDateTime(startDateTime, endDateTime).then(function(walkRunActivities){
         		
-                console.log("dataPoints");
                 var dataPoints = workoutProcessor.getActivityDataPoints(startDateTime, endDateTime, walkRunActivities);
 
                 var times = [];
@@ -199,7 +203,7 @@ angular.module('app.services.healthKit')
         //calc avg over N days (depends on what data has)
         function getDailyAverageDuration(){
 			var deferred = $q.defer();
-			healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+			api.getWalkingAndRunningDistance().then(function(walkRunActivities){
         		var total = workoutProcessor.calculateDailyAverageDuration(walkRunActivities);
         		console.log("avg duration: " + total);
         		deferred.resolve(total);
@@ -210,7 +214,7 @@ angular.module('app.services.healthKit')
 
         function getTodaysDurationSum(){
         	var deferred = $q.defer();
-			healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+			api.getWalkingAndRunningDistance().then(function(walkRunActivities){
         		var total = workoutProcessor.calculateTodaysTotalDuration(walkRunActivities);
         		deferred.resolve(total);
         	});
@@ -220,7 +224,7 @@ angular.module('app.services.healthKit')
 
         function getMostRecentActivity(){
         	var deferred = $q.defer();
-			healthKitApi.getWalkingAndRunningDistance().then(function(walkRunActivities){
+			api.getWalkingAndRunningDistance().then(function(walkRunActivities){
         		var processedActivities = workoutProcessor.processWorkouts(walkRunActivities);
         		var mostRecentActivity = processedActivities[0];
         		console.log("most recent: " + JSON.stringify(mostRecentActivity));

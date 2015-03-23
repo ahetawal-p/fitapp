@@ -24,6 +24,8 @@ angular.module('app.conversation')
 
 			var lastNodePushed = {};
 
+			console.log('root scope: ' + $rootScope.healthkitExists);
+
 			// actual message list which serves as the model for UI
 			$scope.messages = [];
 
