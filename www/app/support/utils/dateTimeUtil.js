@@ -19,6 +19,7 @@ angular.module('app.utils')
     }
 
     function secondTimeGreaterThanFirst(firstDateTime, secondDateTime){
+        /* old logic
         var firstTimeDateTimeObj = new Date();
         firstTimeDateTimeObj.setHours(firstDateTime.getHours());
         firstTimeDateTimeObj.setMinutes(firstDateTime.getMinutes());
@@ -26,7 +27,20 @@ angular.module('app.utils')
         var secondTimeDateTimeObj = new Date();
         secondTimeDateTimeObj.setHours(secondDateTime.getHours());
         secondTimeDateTimeObj.setMinutes(secondDateTime.getMinutes());
+        console.log("secondTimeGreaterThanFirst");
+        console.log("endDateTime: " + secondTimeDateTimeObj);
+        console.log("iterDateTime: " + firstTimeDateTimeObj);
+
         return secondTimeDateTimeObj > firstTimeDateTimeObj;
+        */
+
+        var firstTimeInMinutes = firstDateTime.getHours() * 60 + firstDateTime.getMinutes();
+        var secondTimeInMinutes = secondDateTime.getHours() * 60 + secondDateTime.getMinutes();
+
+        // console.log("endHours: " + secondDateTime.getHours());
+        // console.log("iterHours: " + firstDateTime.getHours());
+        // console.log("return: " + secondTimeInMinutes > firstTimeInMinutes);
+        return secondTimeInMinutes > firstTimeInMinutes;
     }
 
     function getMonthDay(date){
@@ -86,6 +100,11 @@ angular.module('app.utils')
         return durationString;
     }
 
+    function getMinutesFromSeconds(durationInSeconds){
+        var totalMinutes = Math.ceil(durationInSeconds/60);
+        return totalMinutes;
+    }
+
     return {
         getFormattedDateString: getFormattedDateString,
         getTimeStamp: getTimeStamp,
@@ -94,6 +113,7 @@ angular.module('app.utils')
         getDurationInSeconds: getDurationInSeconds,
         getDurationStringFromSeconds: getDurationStringFromSeconds,
         getMonthDay: getMonthDay,
-        secondTimeGreaterThanFirst: secondTimeGreaterThanFirst
+        secondTimeGreaterThanFirst: secondTimeGreaterThanFirst,
+        getMinutesFromSeconds: getMinutesFromSeconds
     };
 });

@@ -9,13 +9,153 @@ angular.module('app.activity.parent')
 
 		var vm = this;
 		healthKitService.getActivities().then(function(response){
+			//console.log(JSON.stringify(response));
 			vm.activities = response;
 		});
 
 		//TEST METHODS FOR HEALTHKIT ENDPOINTS
-		//healthKitService.getAverageActivityDataPoints(new Date("3/5/2015 7:00"), new Date("3/5/2015 20:00"));
+		// healthKitService.getAverageActivityDataPoints(new Date("3/5/2015 5:00"), new Date("3/5/2015 20:00"));
 		//healthKitService.getWeekdayTimesOfDayAverages();
 		//healthKitService.getWeekendTimesOfDayAverages();
+
+		/* testing charts */
+		var startDate = new Date("3/20/2015");
+		startDate.setHours(5);
+		startDate.setMinutes(0);
+
+		var endDate = new Date("3/20/2015");
+		endDate.setHours(19);
+		endDate.setMinutes(0);
+
+		vm.todayVsAvg = {};
+		console.log("before getTodayVsAverageDataPoints");
+		healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(function(response){
+			console.log("getTodayVsAverageDataPoints");
+			vm.todayVsAvg.labels = response.labels;
+			vm.todayVsAvg.data = response.data;
+
+			/* total duration is last index of array, since array has cumulative duration
+			   also need to convert seconds to minuts */
+			var todaysTotalDuration = Math.ceil(_.last(vm.todayVsAvg.data[0])/60);
+			var avgTotalDuration = Math.ceil(_.last(vm.todayVsAvg.data[1])/60);
+
+			vm.todayVsAvg.todaysDuration = todaysTotalDuration + " min";
+			vm.todayVsAvg.averageDuration = avgTotalDuration + " min";
+
+			if (todaysTotalDuration > avgTotalDuration){
+				vm.todayVsAvg.todaysDurationMarginTop = 50;
+				vm.todayVsAvg.averageDurationMarginTop = 27;
+			}else{
+				vm.todayVsAvg.todaysDurationMarginTop = 27;
+				vm.todayVsAvg.averageDurationMarginTop = 50;
+			}
+		});
+vm.todayVsAvg.pointDot = [
+false, false]
+
+		vm.todayVsAvg.colors = ['#FD1F5E','#1EF9A1'];
+
+
+		vm.todayVsAvg.options = {
+			pointDot:false, 
+			scaleShowGridLines:false, 
+			showTooltips:false, 
+			responsive:true, 
+			scaleShowLabels: false,
+			    pointDotRadius: 1
+
+		};
+
+		// vm.todayVsAvg.options = [{
+		// 	pointDot:false, 
+		// 	scaleShowGridLines:false, 
+		// 	showTooltips:false, 
+		// 	responsive:true, 
+		// 	scaleShowLabels: false,
+		// 	pointDotRadius: 1
+		// }, {
+		// 	pointDot:false, 
+		// 	scaleShowGridLines:false, 
+		// 	showTooltips:false, 
+		// 	responsive:false, 
+		// 	scaleShowLabels: false,
+		// 	pointDotRadius: 1
+		// }];
+
+		// vm.test = {};
+		// vm.test.data = {
+  //   labels: ["January", "February", "March", "April", "May", "June", "July"],
+  //   datasets: [
+  //       {
+  //           label: "My First dataset",
+  //           fillColor: "rgba(220,220,220,0.2)",
+  //           strokeColor: "rgba(220,220,220,1)",
+  //           pointColor: "rgba(220,220,220,1)",
+  //           pointStrokeColor: "#fff",
+  //           pointHighlightFill: "#fff",
+  //           pointHighlightStroke: "rgba(220,220,220,1)",
+  //           data: [65, 59, 80, 81, 56, 55, 40]
+  //       },
+  //       {
+  //           label: "My Second dataset",
+  //           fillColor: "rgba(151,187,205,0.2)",
+  //           strokeColor: "rgba(151,187,205,1)",
+  //           pointColor: "rgba(151,187,205,1)",
+  //           pointStrokeColor: "#fff",
+  //           pointHighlightFill: "#fff",
+  //           pointHighlightStroke: "rgba(151,187,205,1)",
+  //           data: [28, 48, 40, 19, 86, 27, 90]
+  //       }
+  //   ]
+//};
+
+		vm.youVsOthers = {};
+		healthKitService.getDailyAverageVsAllUsers().then(
+			function(response){
+				console.log(response.labels);
+				vm.youVsOthers.labels = [""];
+				vm.youVsOthers.series = response.labels;
+				vm.youVsOthers.data = response.data;
+				vm.youVsOthers.yourDuration = vm.youVsOthers.data[0] + "min";
+				vm.youVsOthers.othersDuration = vm.youVsOthers.data[1] + "min";
+				vm.youVsOthers.yourDurationPaddingLeft = 20;
+				vm.youVsOthers.othersDurationPaddingLeft = 66;
+			}
+		);
+
+		// healthKitService.getActivityDataPoints(startDate, new Date()).then(function(response){
+			
+		// 	//console.log(JSON.stringify(response));
+		// 	vm.labels = response.times;
+		// 	  //vm.series = ['Series A', 'Series B'];
+		// 	 vm.data = [response.durations];
+		// });
+
+
+		// .then(function(){
+		// 		return healthKitService.getAverageActivityDataPoints(new Date("3/5/2015 5:00"), new Date());
+		// })
+		// .then(function(response){
+		// 	vm.data.push(response.durations);
+		// });
+		
+
+
+
+
+
+		// healthKitService.getActivityDataPoints(startDate, new Date()).then(function(response){
+			
+
+			// vm.labels = ["7am", "", "", "", "", "", "now"];
+			//   //vm.series = ['Series A', 'Series B'];
+			//   vm.data = [
+			//     [65, 59, 80, 81, 56, 55, 40]
+			//     //,[28, 48, 40, 19, 86, 27, 90]
+			//   ];
+		// });
+		
+		/* end */
 
 		vm.openEditActivityModal = function(activity){
 			vm.selectedActivity = activity;

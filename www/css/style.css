@@ -7,8 +7,9 @@ body {
 	display:inline-block;
 	white-space: normal;
 	max-width:70%;
-	margin:0 0 1rem 0;
-	padding:.6875rem;
+	margin:0 0 0.4rem 0;
+	/*padding:.6875rem;*/
+padding:.4rem;
   border-radius:.75rem;
   background:#e6e5eb;
   color:#383641;

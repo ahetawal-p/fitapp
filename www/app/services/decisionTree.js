@@ -3,7 +3,7 @@ angular.module('app.services')
 /**
  * A simple example service that returns tree data for conversation
  */
-.factory('talky', function() {
+.factory('talky', ['healthKitService', '$q', function(healthKitService, $q) {
 
 	// Sample method to show how can we provide the 
 	// runtime decision making in the conversation UI
@@ -18,6 +18,35 @@ angular.module('app.services')
 			return treeData['belowAverage'];
 		}
 
+	};
+
+	var getChartData = function(type) {
+		console.log("Running data here...");
+
+		var deferred = $q.defer();
+		var startDate = new Date("3/20/2015");
+		startDate.setHours(5);
+		startDate.setMinutes(0);
+
+		var endDate = new Date("3/20/2015");
+		endDate.setHours(19);
+		endDate.setMinutes(0);
+		healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(
+			function(response){
+				var responseDataObj = {
+					data: response.data,
+					labels: response.labels
+				};
+
+				deferred.resolve(responseDataObj);
+			},
+			function(error){
+				deferred.reject(error);
+			}
+		);
+		console.log("1 Running data here...");
+		
+        return deferred.promise;
 	};
 
 
@@ -56,7 +85,8 @@ angular.module('app.services')
 		},
 		'lookData':{
 			text: "Let's get started by taking a look at your existing data.",
-			children: ['includeHApp']
+			//children: ['includeHApp']
+			children: ['testChart']
 		},
 		'includeHApp':{
 			text: "In my analysis, I can include data from your iPhone's Healthapp.",
@@ -120,6 +150,11 @@ angular.module('app.services')
 		'moreActiveTip': {
 			text: "Consider this",
 			children:[]
+		},
+		'testChart': {
+			type: "chart",
+			method: getChartData,
+			children:['userAgree']
 		}
 
 	};
@@ -131,4 +166,4 @@ angular.module('app.services')
       return treeData;
     }
   }
-});
+}]);
