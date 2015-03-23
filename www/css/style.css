@@ -29,7 +29,20 @@ body {
 	margin:0 0 1rem 0;
 	padding:.6875rem;
 	float: right;
-	
+	font-size:.875rem;
+}
+
+.innerUser {
+  font-size:.875rem;
+  right: 0;
+  overflow: auto;
+  border-radius:.75rem;
+  background:#49b245;
+  color:#383641;
+  padding:.6875rem;
+  margin-right:5px;
+  font-size:.875rem;
+
 }
 
 .userMsg span {

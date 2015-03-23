@@ -13,6 +13,7 @@ angular.module('fitapp', [
             'app.settings',
             'ngCordova',
             'underscore'
+            
 ])
 
 .run(function($ionicPlatform, $cordovaHealthKit) {

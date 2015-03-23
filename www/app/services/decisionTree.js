@@ -29,6 +29,11 @@ angular.module('app.services')
 			wait : true,
 		},
 
+		'userInputPlaceHolder' : {
+			type: "user",
+			wait : false
+		},
+
 		'onboarding' : {
 			text: "Hi There I am wall-e",
 			children: ['askName']

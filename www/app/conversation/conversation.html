@@ -11,9 +11,9 @@
     
     
     <ion-list class="messages">
-      <ion-item ng-repeat="message in messages" style="border-style:none; padding:4px;">
+      <ion-item  ng-repeat="message in messages" style="border-style:none; padding:4px;">
         
-        <div class="systemMsg" ng-if="message.wait">
+        <div class="systemMsg" ng-if="message.type == null && message.wait">
             <div class="wrapper">
               <span class="dot"></span>
               <span class="dot"></span>
@@ -28,18 +28,10 @@
         </div>
         
         <div class="userMsg" ng-if="message.type == 'user' &&  !message.wait">
-              
-          <span>  {{message.text}} </span>
-              
+          <div class="innerUser" ng-if="message.showMeNow"> 
+              {{message.text}} 
+            </div>
         </div>
-
-       <!--  <div class="userMsg" ng-if="(message.userOptions.length > 0) && !message.wait">
-            <br/>
-            <br/>
-            <span ng-repeat="usermsg in message.userOptions">
-              {{usermsg.text}}
-            </span> 
-        </div> -->
 
       </ion-item>
 
@@ -48,7 +40,7 @@
   </ion-content>
      <ion-footer-bar align-title="center" class="footerOverride">
        <div class="userMsgFooter" ng-if="!waitIndicator">
-            <span ng-click="userInput(msg)" ng-repeat="msg in options">
+            <span ng-click="userInput(msg, $event)" ng-repeat="msg in options">
               {{msg.text}}
             </span> 
         </div>
