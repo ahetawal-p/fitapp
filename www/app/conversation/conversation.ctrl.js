@@ -18,6 +18,11 @@ angular.module('app.conversation')
 			// Only in effect for normal text node.
 			var SYSTEM_INPUT_DELAY_MAX = 2000;
 
+
+			var USER_RESPONSE_ANIMATION = 'animated fadeInDown';
+			var ANIMATION_END_EVENTS = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+
+
 			// CURRENT TREE IN PROCESSING...
 			var root = talky.getOnboarding('onboarding');
 
@@ -31,6 +36,7 @@ angular.module('app.conversation')
 
 			$scope.waitIndicator = false;
 
+			var userOptionPlaceHolder = null;
 			/**
 			* Method to generate a random nunmber 
 			* between 0 and given limit, to simulate a wait 
@@ -68,16 +74,24 @@ angular.module('app.conversation')
 			* NOTE: This method is mainly used for simple TEXT nodes, for 
 			* nodes with evaluation logic look at handleEvaluationNode()
 			**/
-			var performAddToConversationList = function(message, waitLimit) {
+			var performAddToConversationList = function(message, waitLimit, isUserNodePresent) {
 				$scope.waitIndicator = true;
 				message.wait = true;	  		
 				$scope.messages.push(angular.extend({}, message));
 				lastNodePushed = message;
 				console.log(message);
 				
+				
 				// Need to retrieve the message from actual list, in order to 
 				// update it after the random wait period.
 				var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
+
+				if(isUserNodePresent){
+					userOptionPlaceHolder = root['userInputPlaceHolder'];
+					$scope.messages.push(angular.extend({}, userOptionPlaceHolder));
+
+				}
+
 				return $timeout( function() { 
 					lastMsgInListOnUi.wait = false;
 					$scope.waitIndicator = false;
@@ -97,21 +111,19 @@ angular.module('app.conversation')
 					&& node.evalInfo.type == "func") {
 
 					return true;
-			}
-			return false;
+				}
+				return false;
+			};
 
-		};
 
+			var isThisChartNode = function(node) {
+				if(typeof node.type != "undefined" 
+					&& node.type == "chart") {
 
-		var isThisChartNode = function(node) {
-			if(typeof node.type != "undefined" 
-				&& node.type == "chart") {
-
-				return true;
-		}
-		return false;
-
-	};
+					return true;
+				}
+				return false;
+			};
 
 
 			/**
@@ -169,15 +181,16 @@ angular.module('app.conversation')
 		    		evaluateNextNode();
 		    	});
 	    	}
+
+
 	    	/**
 	    		* Adding the very first node to the conversation
 	    		* STARTING POINT OF THE APP *
-	    		**/
-	    		performAddToConversationList(root['onboarding'], SYSTEM_INPUT_DELAY_MAX)
-	    		.then(function(){ 
-	    			evaluateNextNode();
-	    		});
-
+	    	**/
+	  		performAddToConversationList(root['onboarding'], SYSTEM_INPUT_DELAY_MAX, false)
+	  										.then(function(){ 
+	  											evaluateNextNode();
+	  										});
 
 	  		//TODO: To be set when we first load the data or get user input
 	  		$scope.user = {
@@ -195,7 +208,8 @@ angular.module('app.conversation')
   			**/
   			var evaluateNextNode = function() {
 
-  				var currentNodeToBeAdded = null;
+				var currentNodeToBeAdded = null;
+				var isUserNodeRequired = false;
 
   				if(lastNodePushed.children.length > 0){
   					var nextNode = root[lastNodePushed.children[0]];
@@ -216,8 +230,8 @@ angular.module('app.conversation')
 						var childLen = currentNodeToBeAdded.children.length;
 						if(childLen >= 1 && 
 							root[currentNodeToBeAdded.children[0]].type != null && 
-							root[currentNodeToBeAdded.children[0]].type != 'chart'
-							){
+							root[currentNodeToBeAdded.children[0]].type != 'chart' ){
+							isUserNodeRequired = true;
 							for(i in currentNodeToBeAdded.children){
 								var msg = root[currentNodeToBeAdded.children[i]];
 								msg.isClickDisabled = false;
@@ -225,7 +239,7 @@ angular.module('app.conversation')
 								$scope.options.push(angular.extend({}, msg));
 							}
 						}
-						var addToListPromise = performAddToConversationList(currentNodeToBeAdded, SYSTEM_INPUT_DELAY_MAX);
+						var addToListPromise = performAddToConversationList(currentNodeToBeAdded, SYSTEM_INPUT_DELAY_MAX, isUserNodeRequired);
 						/*
 						If no child node of user type present, 
 						move to the next system node from the config
@@ -244,27 +258,46 @@ angular.module('app.conversation')
 	   		*
 	   		* TODO: Need to handle the UNDO functionality for the last user input
 	   		**/
-	   		$scope.userInput = function(message) {
+	   		$scope.userInput = function(message, event) {
 	   			console.log("User Input Msg ");
 	   			console.log(message);
-	   			$scope.messages.push(angular.extend({}, message));
 	   			
-	   			if(message.children != null && message.children.length > 0){
-	   				$scope.options = [];
-	   				// disable click after clicked once, might need to update again for undo
-	   				message.isClickDisabled = true;
-	   				var currentNodeToBeAdded = root[message.children[0]];
+	   			$timeout(function(){
+        			$scope.waitIndicator = true;
+        		}, 10);
 
-	   				if(isThisEvaluationNode(currentNodeToBeAdded)){
-	   					handleEvaluationNode(currentNodeToBeAdded);
-	   					evaluateNextNode();
-	   				} else {
-	   					performAddToConversationList(currentNodeToBeAdded, USER_INPUT_DELAY_MAX)
-	   					.then(function(){
-	   						evaluateNextNode();
-	   					});
-	   				}
-	   			}
+	   			var recentlyAddedUserElement =  jQuery(".userMsg" ).last();
+				
+	   			var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
+	   			angular.copy(message, lastMsgInListOnUi);
+	   			
+	   			lastMsgInListOnUi.showMeNow = true;
+
+	   			recentlyAddedUserElement.addClass(USER_RESPONSE_ANIMATION);
+	   			recentlyAddedUserElement.one(ANIMATION_END_EVENTS, 
+					function(){
+						lastMsgInListOnUi.wait = false;
+			   			if(lastMsgInListOnUi.children != null && lastMsgInListOnUi.children.length > 0){
+			   				$scope.options = [];
+			   				// disable click after clicked once, might need to update again for undo
+			   				lastMsgInListOnUi.isClickDisabled = true;
+			   				var currentNodeToBeAdded = root[lastMsgInListOnUi.children[0]];
+
+			   				if(isThisEvaluationNode(currentNodeToBeAdded)){
+			   					handleEvaluationNode(currentNodeToBeAdded);
+			   					evaluateNextNode();
+			   				} else {
+			   					$timeout(function(){
+        								performAddToConversationList(currentNodeToBeAdded, USER_INPUT_DELAY_MAX, false)
+			   								.then(function(){
+			   										evaluateNextNode();
+			   								});
+        						}, 100);
+			   				}
+			   			}
+
+	   			});
+
 
 	   		};
 

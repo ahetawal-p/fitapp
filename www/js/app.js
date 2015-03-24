@@ -28,9 +28,9 @@ angular.module('fitapp', [
     // }
 
     //Ask/set user permissions for Healthkit data
-    try{
-    $cordovaHealthKit.isAvailable().then(function(yes) {
-    // HK is available
+    try {
+      $cordovaHealthKit.isAvailable().then(function(yes) {
+        // HK is available
         $rootScope.healthkitExists = true;
 
         var permissions = [
@@ -50,8 +50,8 @@ angular.module('fitapp', [
         }, function(no) {
             // No HK available
         }); 
-  }catch (exception){
-    $rootScope.healthkitExists = false;
+    } catch (exception){
+      $rootScope.healthkitExists = false;
   }
   });
 })

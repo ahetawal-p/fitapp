@@ -1,77 +1,62 @@
 <ion-view view-title="Wall-e" title="Wall-e" ng-controller="ConversationCtrl">
-<ion-header-bar align-title="center" class="headerOverride">
-  <h1 class="title">Wall-e</h1>
-  <div class="buttons">
-    <button class="button button-clear">
-      <i class="icon ion-share icon-accessory"></i>
-    </button>
-  </div>
-</ion-header-bar>
+  <ion-header-bar align-title="center" class="headerOverride">
+    <h1 class="title">Wall-e</h1>
+    <div class="buttons">
+      <button class="button button-clear">
+        <i class="icon ion-share icon-accessory"></i>
+      </button>
+    </div>
+    </ion-header-bar>
   <ion-content class="has-header">
-    
-    
     <ion-list class="messages">
-      <ion-item ng-repeat="message in messages" style="border-style:none; padding:4px;">
-        
-        <div class="systemMsg" ng-if="message.wait">
-            <div class="wrapper">
-              <span class="dot"></span>
-              <span class="dot"></span>
-              <span class="dot"></span>
-            </div>
+      <ion-item  ng-repeat="message in messages" style="border-style:none; padding:4px; background-color:transparent;">
+
+        <div class="systemMsg" ng-if="message.type == null && message.wait">
+          <div class="wrapper">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
         </div>
-        
+
         <div class="systemMsg" ng-if="message.type == null && !message.wait">
-              <div class="innerDiv">
-                 {{message.text}} 
-              </div>
+          <div class="innerDiv">
+           {{message.text}} 
+         </div>
         </div>
-        
+
         <div  class="systemMsg" ng-if="message.type == 'chart' && !message.wait">
            <div class="innerDiv">
-              </div>
-          <div>
-          <canvas class="chart chart-line" data="message.data"
+           </div>
+           <div>
+            <canvas class="chart chart-line" data="message.data"
             labels="message.labels" legend="true" series="message.series" 
             click="onClick" options="{scaleShowGridLines:false, scaleShowLabels:false, pointDot:false}">
           </canvas> 
           </div>
         </div>
 
-
-
         <div class="userMsg" ng-if="message.type == 'user' &&  !message.wait">
-              
-          <span>  {{message.text}} </span>
-              
+          <div class="innerUser" ng-if="message.showMeNow"> 
+            {{message.text}} 
+          </div>
         </div>
-
-       <!--  <div class="userMsg" ng-if="(message.userOptions.length > 0) && !message.wait">
-            <br/>
-            <br/>
-            <span ng-repeat="usermsg in message.userOptions">
-              {{usermsg.text}}
-            </span> 
-        </div> -->
 
       </ion-item>
 
     </ion-list>
   </ion-content>
-      <div class="fixed-outside">
-       <div class="test">
-            <span ng-click="userInput(msg)" ng-repeat="msg in options">
-              {{msg.text}}
-            </span> 
-        </div> 
-           </div>
-<!--      <ion-footer-bar align-title="center" class="footerOverride">
-       <div class="userMsgFooter" ng-if="!waitIndicator">
-            <span ng-click="userInput(msg)" ng-repeat="msg in options">
-              {{msg.text}}
-            </span> 
-        </div>
-  </ion-footer-bar> -->
+  <div class="userMsgOptionsContainer">
+    <table width="100%">
+       <tr>
+         <td align="center">
+          <span class="userMsgOption" ng-click="userInput(msg)" ng-repeat="msg in options">
+            {{msg.text}}
+          </span> 
+        </td>
+      </tr>
+    </table>
+  </div>
 </ion-view>
 
 

@@ -3,19 +3,38 @@ body {
   cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
 
+
+/** For Background color **/
+.scroll-content{
+    color: #f35626;
+    background-image: -webkit-linear-gradient(92deg,#f35626,#feab3a);
+    -webkit-animation: hue 40s infinite linear;
+}
+
+@-webkit-keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+  }
+
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+  }
+}
+
+/** END background color **/
+
+
+
 .systemMsg {
 	display:inline-block;
 	white-space: normal;
 	max-width:70%;
-	margin:0.2rem 0 0.4rem 0;
-	/*padding:.6875rem;*/
-padding:.9rem;
+	margin:0 0 0.8rem 0;
+	padding:.4rem;
   border-radius:.75rem;
   background:#e6e5eb;
   color:#383641;
-  
-  
-}
+ }
 
 .innerDiv {
   font-size:.875rem;
@@ -30,18 +49,20 @@ padding:.9rem;
 	margin:0 0 1rem 0;
 	padding:.6875rem;
 	float: right;
-	
-}
-
-.userMsg span {
-	border-radius:.75rem;
-	background:#49b245;
-	color:#383641;
-	padding:.6875rem;
-	margin-right:5px;
 	font-size:.875rem;
 }
 
+.innerUser {
+  font-size:.875rem;
+  right: 0;
+  overflow: auto;
+  border-radius:.75rem;
+  background:#33C507;
+  color:white;
+  padding:.6875rem;
+  margin-right:5px;
+  font-size:.875rem;
+}
 
 .wrapper {
   width: 50px;
@@ -92,11 +113,7 @@ padding:.9rem;
     }
 }
 
-.scroll-content{
-  /*top: 0 !important; 
-  bottom: 50px !important;*/
 
-}
 
 .footerOverride {
   background: none;
@@ -106,7 +123,7 @@ padding:.9rem;
   left:40%;
   position: absolute;
   padding-top: 10px;
-  /*padding-bottom: 10px;*/
+  padding-bottom: 10px;
   white-space: nowrap;
   padding:0;
  }
@@ -115,30 +132,28 @@ padding:.9rem;
   
   position: relative;
   border-radius:.75rem;
-  background:#49b245;
-  color:#383641;
+  background:#33C507;
+  color:white;
   padding:.6875rem;
   margin-right:1px;
   font-size:.875rem;
 }
 
-.fixed-outside{
+.userMsgOptionsContainer{
   position: absolute;
   bottom: 49px;
-  opacity:1;
-  z-index:100;
   width: 100%;
-  height: 60px;
-  text-align:center;
 }
 
-.fixed-outside span {
-    position: relative;
-  border-radius:.75rem;
-  background:#49b245;
-  color:#383641;
-  padding:.6875rem;
-  margin-right:1px;
-  font-size:.875rem;
-  opacity:1;
+.userMsgOption {
+    margin:5px;
+    display:inline-block;
+    background:#e0e0e0;
+    height:30px;
+    background:#33C507;
+    color:#fff;
+    border-radius:.75rem;
+    padding: .3rem .65rem 0 .65rem;
+    margin-right:1px;
+    font-size:.875rem;
 }
