@@ -7,9 +7,9 @@ body {
 	display:inline-block;
 	white-space: normal;
 	max-width:70%;
-	margin:0 0 0.4rem 0;
+	margin:0.2rem 0 0.4rem 0;
 	/*padding:.6875rem;*/
-padding:.4rem;
+padding:.9rem;
   border-radius:.75rem;
   background:#e6e5eb;
   color:#383641;
@@ -92,7 +92,11 @@ padding:.4rem;
     }
 }
 
+.scroll-content{
+  /*top: 0 !important; 
+  bottom: 50px !important;*/
 
+}
 
 .footerOverride {
   background: none;
@@ -102,7 +106,7 @@ padding:.4rem;
   left:40%;
   position: absolute;
   padding-top: 10px;
-  padding-bottom: 10px;
+  /*padding-bottom: 10px;*/
   white-space: nowrap;
   padding:0;
  }
@@ -118,3 +122,23 @@ padding:.4rem;
   font-size:.875rem;
 }
 
+.fixed-outside{
+  position: absolute;
+  bottom: 49px;
+  opacity:1;
+  z-index:100;
+  width: 100%;
+  height: 60px;
+  text-align:center;
+}
+
+.fixed-outside span {
+    position: relative;
+  border-radius:.75rem;
+  background:#49b245;
+  color:#383641;
+  padding:.6875rem;
+  margin-right:1px;
+  font-size:.875rem;
+  opacity:1;
+}

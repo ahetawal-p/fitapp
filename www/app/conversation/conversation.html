@@ -29,13 +29,11 @@
         
         <div  class="systemMsg" ng-if="message.type == 'chart' && !message.wait">
            <div class="innerDiv">
-                 THIs is a test
               </div>
-
           <div>
           <canvas class="chart chart-line" data="message.data"
             labels="message.labels" legend="true" series="message.series" 
-            click="onClick">
+            click="onClick" options="{scaleShowGridLines:false, scaleShowLabels:false, pointDot:false}">
           </canvas> 
           </div>
         </div>
@@ -59,15 +57,21 @@
       </ion-item>
 
     </ion-list>
-
   </ion-content>
-     <ion-footer-bar align-title="center" class="footerOverride">
+      <div class="fixed-outside">
+       <div class="test">
+            <span ng-click="userInput(msg)" ng-repeat="msg in options">
+              {{msg.text}}
+            </span> 
+        </div> 
+           </div>
+<!--      <ion-footer-bar align-title="center" class="footerOverride">
        <div class="userMsgFooter" ng-if="!waitIndicator">
             <span ng-click="userInput(msg)" ng-repeat="msg in options">
               {{msg.text}}
             </span> 
         </div>
-  </ion-footer-bar>
+  </ion-footer-bar> -->
 </ion-view>
 
 
