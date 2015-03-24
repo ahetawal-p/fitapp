@@ -20,7 +20,6 @@ angular.module('app.conversation')
 
 
 			var USER_RESPONSE_ANIMATION = 'animated fadeInDown';
-
 			var ANIMATION_END_EVENTS = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
 
 
@@ -29,6 +28,8 @@ angular.module('app.conversation')
 
 
 			var lastNodePushed = {};
+
+			console.log('root scope: ' + $rootScope.healthkitExists);
 
 			// actual message list which serves as the model for UI
 			$scope.messages = [];
@@ -110,21 +111,19 @@ angular.module('app.conversation')
 					&& node.evalInfo.type == "func") {
 
 					return true;
-			}
-			return false;
+				}
+				return false;
+			};
 
-		};
 
+			var isThisChartNode = function(node) {
+				if(typeof node.type != "undefined" 
+					&& node.type == "chart") {
 
-		var isThisChartNode = function(node) {
-			if(typeof node.type != "undefined" 
-				&& node.type == "chart") {
-
-				return true;
-		}
-		return false;
-
-	};
+					return true;
+				}
+				return false;
+			};
 
 
 			/**
@@ -182,10 +181,11 @@ angular.module('app.conversation')
 		    		evaluateNextNode();
 		    	});
 	    	}
+
+
 	    	/**
 	    		* Adding the very first node to the conversation
 	    		* STARTING POINT OF THE APP *
-<<<<<<< HEAD
 	    	**/
 	  		performAddToConversationList(root['onboarding'], SYSTEM_INPUT_DELAY_MAX, false)
 	  										.then(function(){ 
@@ -266,7 +266,7 @@ angular.module('app.conversation')
         			$scope.waitIndicator = true;
         		}, 10);
 
-	   			var recentlyAddedUserElement =  $( ".userMsg" ).last();
+	   			var recentlyAddedUserElement =  jQuery(".userMsg" ).last();
 				
 	   			var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
 	   			angular.copy(message, lastMsgInListOnUi);
@@ -287,10 +287,12 @@ angular.module('app.conversation')
 			   					handleEvaluationNode(currentNodeToBeAdded);
 			   					evaluateNextNode();
 			   				} else {
-			   					performAddToConversationList(currentNodeToBeAdded, USER_INPUT_DELAY_MAX, false)
-			   												.then(function(){
-			   													evaluateNextNode();
-			   												});
+			   					$timeout(function(){
+        								performAddToConversationList(currentNodeToBeAdded, USER_INPUT_DELAY_MAX, false)
+			   								.then(function(){
+			   										evaluateNextNode();
+			   								});
+        						}, 100);
 			   				}
 			   			}
 

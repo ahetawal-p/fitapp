@@ -3,19 +3,38 @@ body {
   cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
 
+
+/** For Background color **/
+.scroll-content{
+    color: #f35626;
+    background-image: -webkit-linear-gradient(92deg,#f35626,#feab3a);
+    -webkit-animation: hue 40s infinite linear;
+}
+
+@-webkit-keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+  }
+
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+  }
+}
+
+/** END background color **/
+
+
+
 .systemMsg {
 	display:inline-block;
 	white-space: normal;
 	max-width:70%;
-	margin:0 0 0.4rem 0;
-	/*padding:.6875rem;*/
-padding:.4rem;
+	margin:0 0 0.8rem 0;
+	padding:.4rem;
   border-radius:.75rem;
   background:#e6e5eb;
   color:#383641;
-  
-  
-}
+ }
 
 .innerDiv {
   font-size:.875rem;
@@ -45,16 +64,6 @@ padding:.4rem;
   font-size:.875rem;
 
 }
-
-.userMsg span {
-	border-radius:.75rem;
-	background:#49b245;
-	color:#383641;
-	padding:.6875rem;
-	margin-right:5px;
-	font-size:.875rem;
-}
-
 
 .wrapper {
   width: 50px;

@@ -12,7 +12,7 @@ angular.module('fitapp', [
             'app.conversation',
             'app.settings',
             'ngCordova',
-            'underscore'
+            'underscore',
             'chart.js'
 ])
 
