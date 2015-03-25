@@ -28,15 +28,22 @@ angular.module('app.conversation')
 
 
 			var lastNodePushed = {};
-
-			console.log('root scope: ' + $rootScope.healthkitExists);
-
 			// actual message list which serves as the model for UI
 			$scope.messages = [];
-
 			$scope.waitIndicator = false;
-
 			var userOptionPlaceHolder = null;
+			
+
+
+			var addNodeHelper = function(message, doAnimation) {
+				$scope.messages.push(angular.extend({}, message));
+				lastNodePushed =  message;
+
+				console.log(message);
+				
+				$ionicScrollDelegate.scrollBottom(doAnimation);
+			};
+
 			/**
 			* Method to generate a random nunmber 
 			* between 0 and given limit, to simulate a wait 
@@ -77,23 +84,20 @@ angular.module('app.conversation')
 			var performAddToConversationList = function(message, waitLimit, isUserNodePresent) {
 				$scope.waitIndicator = true;
 				message.wait = true;	  		
-				$scope.messages.push(angular.extend({}, message));
-				lastNodePushed = message;
-				console.log(message);
 				
+				addNodeHelper(message, true);
 				
 				// Need to retrieve the message from actual list, in order to 
 				// update it after the random wait period.
 				var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
 
 				if(isUserNodePresent){
-					
 					userOptionPlaceHolder = root['userInputPlaceHolder'];
 					userOptionPlaceHolder.bufferClass = "buffer";
-					$scope.messages.push(angular.extend({}, userOptionPlaceHolder));
-
+					addNodeHelper(userOptionPlaceHolder, false);
 				}
 
+				
 				return $timeout( function() { 
 					lastMsgInListOnUi.wait = false;
 					$scope.waitIndicator = false;
@@ -137,8 +141,8 @@ angular.module('app.conversation')
 
 				// adding a temporary wait node, until the actual evluation is completed.
 				// The evaluation can be query to healthkit or drawing graphs
-				$scope.messages.push(angular.extend({}, root['skeletonWaitNode']));
-
+				addNodeHelper(root['skeletonWaitNode'], true);
+				
 				// evalaute the method for the node, using $parse service, 
 				// NOTE: Make sure the eval method always returns the next node which 
 				// need to be displayed
@@ -151,16 +155,15 @@ angular.module('app.conversation')
 	    		$scope.messages.pop();
 
 	    		// add the new evaluated node to the conversation list
-	    		$scope.messages.push(angular.extend({}, evaluatedNode));
-
-	    		lastNodePushed = evaluatedNode;
-	    		$ionicScrollDelegate.scrollBottom(true);
+	    		addNodeHelper(evaluatedNode, true);
+	    		
 	    	};
 
 
 	    	var handleChartNode = function(node){
-	    		$scope.messages.push(angular.extend({}, root['skeletonWaitNode']));
 
+	    		addNodeHelper(root['skeletonWaitNode'], true);
+	    		
 	    		console.log(node.method);
 
 	    		var promise = $parse(node.method)('test');
@@ -176,10 +179,8 @@ angular.module('app.conversation')
 		    		$scope.messages.pop();
 
 		    		// add the new evaluated node to the conversation list
-		    		$scope.messages.push(angular.extend({}, node));
-
-		    		lastNodePushed = node;
-		    		$ionicScrollDelegate.scrollBottom(true);
+		    		addNodeHelper(node, true);
+		    
 		    		evaluateNextNode();
 		    	});
 	    	}
@@ -305,4 +306,4 @@ angular.module('app.conversation')
 	   		};
 
 	   	}
-	   	]);
+	]);

@@ -9,7 +9,7 @@
     </ion-header-bar>
   <ion-content class="has-header">
     <ion-list class="messages">
-      <ion-item  ng-repeat="message in messages" style="border-style:none; padding:4px; background-color:transparent;">
+      <ion-item  ng-repeat="message in messages" class="convoTree">
 
         <div class="systemMsg" ng-if="message.type == null && message.wait">
           <div class="wrapper">
