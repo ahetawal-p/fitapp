@@ -3,14 +3,6 @@ angular.module('app.activity.parent', ['app.services.healthKit', 'chart.js'])
 .config(['$stateProvider',
 		function ($stateProvider) {
 			$stateProvider
-				// .state('tab.activity', {
-    // 						url: '/activity',
-    // 						views: {
-    //   							'tab-activity': {
-    //     							templateUrl: 'app/activity/parent/activity.html'
-    //   							}
-    // 						}
-  		// 			})
         .state('tab.activity', {
           url: "/activity",
           abstract: true,

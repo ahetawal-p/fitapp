@@ -29,10 +29,10 @@ body {
 .systemMsg {
 	display:inline-block;
 	white-space: normal;
-	max-width:70%;
-	margin:0 0 0.8rem 0;
-	padding:.4rem;
-  border-radius:.75rem;
+	max-width:90%;
+	margin:0 0 0.2rem 0.8rem;
+	padding: .5rem 1rem .5rem 1rem ;
+  border-radius:.75rem 0 .75rem 0;
   background:#e6e5eb;
   color:#383641;
  }
@@ -61,10 +61,10 @@ body {
   font-size:.875rem;
   right: 0;
   overflow: auto;
-  border-radius:.75rem;
+  border-radius:.75rem 0 .75rem 0;
   background:#33C507;
   color:white;
-  padding:.6875rem;
+    padding: .3rem .65rem .3rem .65rem;
   margin-right:5px;
   font-size:.875rem;
 }
@@ -124,6 +124,7 @@ body {
   background: none;
 }
 
+/*
 .userMsgFooter {
   left:40%;
   position: absolute;
@@ -143,6 +144,7 @@ body {
   margin-right:1px;
   font-size:.875rem;
 }
+*/
 
 .userMsgOptionsContainer{
   position: absolute;
@@ -157,7 +159,7 @@ body {
     height:30px;
     background:#33C507;
     color:#fff;
-    border-radius:.75rem;
+    border-radius:.75rem 0 .75rem 0;
     padding: .3rem .65rem 0 .65rem;
     margin-right:1px;
     font-size:.875rem;
