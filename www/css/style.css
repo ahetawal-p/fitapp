@@ -18,7 +18,7 @@ body {
   }
 
   to {
-    -webkit-filter: hue-rotate(-180deg);
+    -webkit-filter: hue-rotate(-360deg);
   }
 }
 
