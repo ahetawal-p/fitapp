@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div class="userMsg" ng-if="message.type == 'user' &&  !message.wait">
+        <div class="userMsg" ng-if="message.type == 'user' &&  !message.wait" ng-class="message.bufferClass">
           <div class="innerUser" ng-if="message.showMeNow"> 
             {{message.text}} 
           </div>
@@ -50,7 +50,7 @@
     <table width="100%">
        <tr>
          <td align="center">
-          <span class="userMsgOption" ng-click="userInput(msg)" ng-repeat="msg in options">
+          <span class="userMsgOption" ng-click="userInput(msg)" ng-repeat="msg in options" ng-if="!waitIndicator">
             {{msg.text}}
           </span> 
         </td>

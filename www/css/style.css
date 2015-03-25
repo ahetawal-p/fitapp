@@ -6,10 +6,11 @@ body {
 
 /** For Background color **/
 .scroll-content{
-    color: #f35626;
-    background-image: -webkit-linear-gradient(92deg,#f35626,#feab3a);
+    background: -webkit-linear-gradient(92deg,#f35626,#feab3a);
     -webkit-animation: hue 40s infinite linear;
 }
+
+
 
 @-webkit-keyframes hue {
   from {
@@ -17,7 +18,7 @@ body {
   }
 
   to {
-    -webkit-filter: hue-rotate(-360deg);
+    -webkit-filter: hue-rotate(-180deg);
   }
 }
 
@@ -35,6 +36,10 @@ body {
   background:#e6e5eb;
   color:#383641;
  }
+
+.buffer {
+  height:75px;
+}
 
 .innerDiv {
   font-size:.875rem;

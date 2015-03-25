@@ -87,7 +87,9 @@ angular.module('app.conversation')
 				var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
 
 				if(isUserNodePresent){
+					
 					userOptionPlaceHolder = root['userInputPlaceHolder'];
+					userOptionPlaceHolder.bufferClass = "buffer";
 					$scope.messages.push(angular.extend({}, userOptionPlaceHolder));
 
 				}
@@ -272,6 +274,7 @@ angular.module('app.conversation')
 	   			angular.copy(message, lastMsgInListOnUi);
 	   			
 	   			lastMsgInListOnUi.showMeNow = true;
+				lastMsgInListOnUi.bufferClass = null;
 
 	   			recentlyAddedUserElement.addClass(USER_RESPONSE_ANIMATION);
 	   			recentlyAddedUserElement.one(ANIMATION_END_EVENTS, 
