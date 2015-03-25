@@ -7,7 +7,7 @@ body {
 /** For Background color **/
 .scroll-content{
     padding: 5px;
-    background: -webkit-linear-gradient(92deg,  #CCFFFF, #feab3a);
+    background: -webkit-linear-gradient(92deg,  #f35626, #feab3a);
     -webkit-animation: hue 40s infinite linear;
 }
 
@@ -15,7 +15,7 @@ body {
 
 @-webkit-keyframes hue {
   from {
-    -webkit-filter: hue-rotate(40deg);
+    -webkit-filter: hue-rotate(0deg);
   }
 
   to {
@@ -28,18 +28,17 @@ body {
 
 .convoTree {
   border-style:none; 
-  padding:4px; 
+  padding: 4px; 
   background-color:transparent;
 }
 
 
 .systemMsg {
-	display:inline-block;
-	white-space: normal;
-	max-width:85%;
-	margin:0 0 0.8rem 0;
-	padding:.4rem;
-  border-radius:.75rem;
+  display:inline-block;
+  white-space: normal;
+  max-width:85%;
+  margin:0 0 0.8rem 0;
+  border-radius:.75rem 0 .75rem 0;
   padding:.6875rem;
   background:#e6e5eb;
   color:#383641;
@@ -57,23 +56,22 @@ body {
 
 
 .userMsg {
-	display:block;
-	max-width:50%;
-	margin:0 0 .8rem 0;
-	padding-bottom: .6875rem;
-	float: right;
-	font-size:.875rem;
+  display:block;
+  max-width:50%;
+  margin:0 0 .8rem 0;
+  padding-bottom: .6875rem;
+  float: right;
+  font-size:.875rem;
 }
 
 .innerUser {
   font-size:.875rem;
   right: 0;
   overflow: auto;
-  border-radius:.75rem;
+  border-radius:.75rem 0 .75rem 0;
   background:#33C507;
   color:white;
   padding:.6875rem;
-  margin-right:5px;
   font-size:.875rem;
 }
 
@@ -126,31 +124,6 @@ body {
     }
 }
 
-
-
-.footerOverride {
-  background: none;
-}
-
-.userMsgFooter {
-  left:40%;
-  position: absolute;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  white-space: nowrap;
-  padding:0;
- }
-
-.userMsgFooter span {
-  
-  position: relative;
-  border-radius:.75rem;
-  background:#33C507;
-  color:white;
-  padding:.6875rem;
-  margin-right:1px;
-  font-size:.875rem;
-}
 
 .userMsgOptionsContainer{
   position: absolute;
