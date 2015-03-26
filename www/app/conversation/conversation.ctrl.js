@@ -16,10 +16,10 @@ angular.module('app.conversation')
 
 			// upper limit constant to fake the waiting time after system input
 			// Only in effect for normal text node.
-			var SYSTEM_INPUT_DELAY_MAX = 2000;
+			var SYSTEM_INPUT_DELAY_MAX = 3000;
 
 
-			var USER_RESPONSE_ANIMATION = 'animated fadeInDown';
+			var USER_RESPONSE_ANIMATION = 'animated fadeInUp';
 			var ANIMATION_END_EVENTS = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
 
 
@@ -66,7 +66,7 @@ angular.module('app.conversation')
 				if(message.evalInfo != null 
 					&& message.evalInfo.type == "string"){
 					
-					var evaluatedMsg = $scope.$eval(message.text);
+				var evaluatedMsg = $scope.$eval(message.text);
 				console.log("evaluated as >> " + evaluatedMsg);
 				message.text = evaluatedMsg;	
 			}
@@ -132,6 +132,21 @@ angular.module('app.conversation')
 			};
 
 
+			var triggerDigestHelper = function(node, doAnimation){
+				// remove later when actual promise is returned
+				$timeout(function() {
+					// remove the temporary wait node now
+	    			$scope.messages.pop();
+
+	    			// add the new evaluated node to the conversation list
+	    			addNodeHelper(node, doAnimation);
+
+	    			evaluateNextNode();
+				}, 10);
+
+
+			};
+
 			/**
 			* Method used for calling the actual evaluation function 
 			* for a node. It can be any type of decision making or query to 
@@ -151,39 +166,24 @@ angular.module('app.conversation')
 				// evaluate string in the message text
 				evalTypeStringProcessing(evaluatedNode);
 
-	    		// remove the temporary wait node now
-	    		$scope.messages.pop();
-
-	    		// add the new evaluated node to the conversation list
-	    		addNodeHelper(evaluatedNode, true);
-	    		
-	    	};
+				triggerDigestHelper(evaluatedNode, true);
+			};
 
 
 	    	var handleChartNode = function(node){
 
 	    		addNodeHelper(root['skeletonWaitNode'], true);
 	    		
-	    		console.log(node.method);
-
 	    		var promise = $parse(node.method)('test');
 	    		promise.then(function(response){
 	    			console.log("back in then");
 		    		node.labels = response.labels;
 					//node.series = ['Series A', 'Series B'];
 					node.data = response.data;
-										// evaluate string in the message text
-		    		//evalTypeStringProcessing(evaluatedNode);
-		    		
-		    		// remove the temporary wait node now
-		    		$scope.messages.pop();
-
-		    		// add the new evaluated node to the conversation list
-		    		addNodeHelper(node, true);
-		    
-		    		evaluateNextNode();
+										
+		    		triggerDigestHelper(node, true);
 		    	});
-	    	}
+	    	};
 
 
 	    	/**
@@ -219,28 +219,26 @@ angular.module('app.conversation')
     				// check for evaluation type nodes
     				if(isThisEvaluationNode(nextNode)){
     					handleEvaluationNode(nextNode);
-    					evaluateNextNode();
     					return;
 
     				} else if(isThisChartNode(nextNode)){
     					handleChartNode(nextNode);
-    					
-    					return;
+						return;
     				} else {
 						// Processing standard text nodes and their user options
 						currentNodeToBeAdded = nextNode;
 						currentNodeToBeAdded['userOptions'] = [];
 						var childLen = currentNodeToBeAdded.children.length;
-						if(childLen >= 1 && 
-							root[currentNodeToBeAdded.children[0]].type != null && 
-							root[currentNodeToBeAdded.children[0]].type != 'chart' ){
-							isUserNodeRequired = true;
-							for(i in currentNodeToBeAdded.children){
-								var msg = root[currentNodeToBeAdded.children[i]];
-								msg.isClickDisabled = false;
-								currentNodeToBeAdded['userOptions'].push(angular.extend({}, msg));
-								$scope.options.push(angular.extend({}, msg));
-							}
+						if(childLen >= 1 
+							&& root[currentNodeToBeAdded.children[0]].type == 'user'){
+								
+								isUserNodeRequired = true;
+								for(i in currentNodeToBeAdded.children){
+									var msg = root[currentNodeToBeAdded.children[i]];
+									msg.isClickDisabled = false;
+									currentNodeToBeAdded['userOptions'].push(angular.extend({}, msg));
+									$scope.options.push(angular.extend({}, msg));
+								}
 						}
 						var addToListPromise = performAddToConversationList(currentNodeToBeAdded, SYSTEM_INPUT_DELAY_MAX, isUserNodeRequired);
 						/*
@@ -269,7 +267,7 @@ angular.module('app.conversation')
         			$scope.waitIndicator = true;
         		}, 10);
 
-	   			var recentlyAddedUserElement =  jQuery(".userMsg" ).last();
+	   			var recentlyAddedUserElement = jQuery(".userMsg").last();
 				
 	   			var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
 	   			angular.copy(message, lastMsgInListOnUi);
@@ -280,28 +278,28 @@ angular.module('app.conversation')
 	   			recentlyAddedUserElement.addClass(USER_RESPONSE_ANIMATION);
 	   			recentlyAddedUserElement.one(ANIMATION_END_EVENTS, 
 					function(){
-						lastMsgInListOnUi.wait = false;
-			   			if(lastMsgInListOnUi.children != null && lastMsgInListOnUi.children.length > 0){
+						// need to eval async to run it inside angular scope instead of jquery scope
+						$scope.$evalAsync(function(){
+							lastMsgInListOnUi.wait = false;
+			   				if(lastMsgInListOnUi.children != null && lastMsgInListOnUi.children.length > 0){
 			   				$scope.options = [];
 			   				// disable click after clicked once, might need to update again for undo
 			   				lastMsgInListOnUi.isClickDisabled = true;
 			   				var currentNodeToBeAdded = root[lastMsgInListOnUi.children[0]];
 
 			   				if(isThisEvaluationNode(currentNodeToBeAdded)){
-			   					handleEvaluationNode(currentNodeToBeAdded);
-			   					evaluateNextNode();
+			   						handleEvaluationNode(currentNodeToBeAdded);
 			   				} else {
-			   					$timeout(function(){
-        								performAddToConversationList(currentNodeToBeAdded, USER_INPUT_DELAY_MAX, false)
+			   					performAddToConversationList(currentNodeToBeAdded, USER_INPUT_DELAY_MAX, false)
 			   								.then(function(){
 			   										evaluateNextNode();
-			   								});
-        						}, 100);
+			   						});
+        						
 			   				}
 			   			}
 
-	   			});
-
+					});
+				});
 
 	   		};
 

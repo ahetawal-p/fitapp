@@ -86,7 +86,6 @@ angular.module('app.services')
 		'lookData':{
 			text: "Let's get started by taking a look at your existing data.",
 			children: ['includeHApp']
-			
 		},
 		'includeHApp':{
 			text: "In my analysis, I can include data from your iPhone's Healthapp.",
@@ -149,7 +148,7 @@ angular.module('app.services')
 		},
 		'moreActiveTip': {
 			text: "Consider this",
-			children: ['testChart']
+			children:['testChart']
 		},
 		'testChart': {
 			type: "chart",

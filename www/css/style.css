@@ -26,7 +26,7 @@ body {
 /** END background color **/
 
 
-.convoTree {
+.conversationBase {
   border-style:none; 
   padding: 4px; 
   background-color:transparent;
