@@ -41,7 +41,7 @@ angular.module('app.conversation')
 
 				console.log(message);
 				
-				$ionicScrollDelegate.scrollBottom(doAnimation);
+				$ionicScrollDelegate.scrollBottom(true);
 			};
 
 			/**
@@ -50,9 +50,10 @@ angular.module('app.conversation')
 			* functionality on UI
 			**/
 			var getRandom = function(limit){
-				var randomWait = Math.floor((Math.random() * limit) + 1);
-				console.log("Random wait for limit: " + limit + " is " + randomWait);
-				return randomWait;
+				//var randomWait = Math.floor((Math.random() * limit) + 1);
+				//console.log("Random wait for limit: " + limit + " is " + randomWait);
+				// MIGHT HAVE TO FIX THIS...
+				return 1800;
 
 			};
 
@@ -263,11 +264,13 @@ angular.module('app.conversation')
 	   			console.log("User Input Msg ");
 	   			console.log(message);
 	   			
-	   			$timeout(function(){
-        			$scope.waitIndicator = true;
-        		}, 10);
 
 	   			var recentlyAddedUserElement = jQuery(".userMsg").last();
+				
+				// TODO: Refactor to use directive since, we shld not 
+				// make dom updates in controller directly
+				var userOptions = jQuery(".userMsgOptionsContainer");
+				userOptions.hide();
 				
 	   			var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
 	   			angular.copy(message, lastMsgInListOnUi);
@@ -280,6 +283,7 @@ angular.module('app.conversation')
 					function(){
 						// need to eval async to run it inside angular scope instead of jquery scope
 						$scope.$evalAsync(function(){
+							$scope.waitIndicator = false;
 							lastMsgInListOnUi.wait = false;
 			   				if(lastMsgInListOnUi.children != null && lastMsgInListOnUi.children.length > 0){
 			   				$scope.options = [];

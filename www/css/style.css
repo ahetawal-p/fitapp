@@ -6,7 +6,10 @@ body {
 
 /** For Background color **/
 .scroll-content{
-    padding: 5px;
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
     background: -webkit-linear-gradient(92deg,  #f35626, #feab3a);
     -webkit-animation: hue 40s infinite linear;
 }
@@ -33,7 +36,21 @@ body {
 }
 
 
+.systemMsgAnimated {
+  -webkit-animation-duration: .5s;
+  -webkit-animation-delay: 0s;
+  display:inline-block;
+  white-space: normal;
+  max-width:85%;
+  margin:0 0 0.8rem 0;
+  border-radius:.75rem 0 .75rem 0;
+  padding:.6875rem;
+  background:#e6e5eb;
+  color:#383641;
+ }
+
 .systemMsg {
+   
   display:inline-block;
   white-space: normal;
   max-width:85%;
@@ -45,7 +62,7 @@ body {
  }
 
 .buffer {
-  height:90px;
+  height:100px;
 }
 
 .innerDiv {
@@ -56,6 +73,8 @@ body {
 
 
 .userMsg {
+  -webkit-animation-duration: .5s;
+  -webkit-animation-delay: 0s;
   display:block;
   max-width:50%;
   margin:0 0 .8rem 0;
@@ -125,7 +144,9 @@ body {
 }
 
 
-.userMsgOptionsContainer{
+.userMsgOptionsContainer {
+  -webkit-animation-duration: .5s;
+  -webkit-animation-delay: 0s;
   position: absolute;
   bottom: 49px;
   width: 100%;
@@ -134,12 +155,10 @@ body {
 .userMsgOption {
     margin:5px;
     display:inline-block;
-    background:#e0e0e0;
-    height:30px;
     background:#33C507;
     color:#fff;
-    border-radius:.75rem;
-    padding: .3rem .65rem 0 .65rem;
+    border-radius:.75rem 0 .75rem 0;
+    padding: .5rem;
     margin-right:1px;
     font-size:.875rem;
 }

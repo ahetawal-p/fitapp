@@ -19,13 +19,13 @@
           </div>
         </div>
 
-        <div class="systemMsg" ng-if="message.type == null && !message.wait">
+        <div class="systemMsgAnimated animated pulse" ng-if="message.type == null && !message.wait">
           <div class="innerDiv">
            {{message.text}} 
          </div>
         </div>
 
-        <div  class="systemMsg" ng-if="message.type == 'chart' && !message.wait">
+        <div class="systemMsgAnimated animated fadeInDown" ng-if="message.type == 'chart' && !message.wait">
            <div class="innerDiv">
            </div>
            <div>
@@ -46,11 +46,11 @@
 
     </ion-list>
   </ion-content>
-  <div class="userMsgOptionsContainer">
+  <div class="userMsgOptionsContainer animated fadeInUp" ng-if="!waitIndicator">
     <table width="100%">
        <tr>
          <td align="center">
-          <span class="userMsgOption" ng-click="userInput(msg)" ng-repeat="msg in options" ng-if="!waitIndicator">
+          <span class="userMsgOption" ng-click="userInput(msg)" ng-repeat="msg in options" >
             {{msg.text}}
           </span> 
         </td>
