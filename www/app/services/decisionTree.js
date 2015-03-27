@@ -86,90 +86,90 @@ angular.module('app.services')
 		},
 
 		'onboarding' : {
-			text: "Hi There I am wall-e",
+			text: ['0'],
 			children: ['askName']
 		},
 		'askName': {
-			text: "What is your name?",
+			text: ['0'],
 			children: ['userName']
 		},
 		'userName': {
-			text: "My Name is User",
+			text: "TODO UPDATE > My Name is User",
 			type: "user",
 			children: ['greetUser']
 		},
 		'greetUser': {
-			text: '"Hi " + user.name + "! Nice to meet you"',
+			text: ['0'],
 			evalInfo : {
 				type : "string",
 			},
 			children: ['lookData']
 		},
 		'lookData':{
-			text: "Let's get started by taking a look at your existing data.",
+			text: ['0'],
 			children: ['includeHApp']
 		},
 		'includeHApp':{
-			text: "In my analysis, I can include data from your iPhone's Healthapp.",
+			text: ['0'],
 			children:['askWouldLike']
 		},
 		'askWouldLike': {
-			text: "Would you like that",
+			text: ['0'],
 			children:['userAgree', 'userExplain']
 		},
 		'userAgree': {
-			text:"Sounds Great",
+			text: ['0'],
 			type: "user",
 			children: ['onboardingInfo']
 		},
 		'userExplain':{
-			text:"Please explain",
+			text: ['0'],
 			type: "user",
 			children: ['onboardingInfo']
 		},
 		'onboardingInfo': {
-			text: "Your device will be personalized based on your workout, sleep, and nutrition data…",
+			text: ['0'],
 			children:['moreOnboardingInfo']
 		},
 		'moreOnboardingInfo': {
-			text: "Plus your height, weight, age and gender",
+			text: ['0'],
 			children: ['furtherOnboardingInfo']
 		},
 		'furtherOnboardingInfo': {
-			text: "Your data is safe, and will never be shared with anyone",
+			text: ['0'],
 			children: ['onboardingInfoUserConfirm','onboardingInfoUserNo']
 		},
 		'onboardingInfoUserConfirm': {
-			text: "Sounds great",
+			text: ['0'],
 			type: "user",
 			//children: ['dummyAnalyzer']
 			children : ['openHealthApp']
 		},
 		'onboardingInfoUserNo': {
-			text: "No Thanks",
+			text: ['0'],
 			type: "user",
 			children: ['collectInfo']
 		},
 
 		'collectInfo': {
-			text: "Pokkifit will need to collet your data for analysis",
+			text: ['0'],
 			children: ['whenReady']
 		},
 		'whenReady': {
-			text: "Let me know when you are ready",
+			text: ['0'],
 			children: ['gotoSettings']
 		},
 		'gotoSettings': {
-			text: "You can go to settings and edit Health app permissions",
+			text: ['0'],
 			children: ['gotoSettingsOk']
 		},
 		'gotoSettingsOk': {
-			text: "Ok",
+			text: ['0'],
 			type: "user",
 			children: ['lookingForward']
 		},
 		'lookingForward': {
-			text: "Looking forward to that",
+			text: ['0'],
 			children: []
 		},
 
@@ -178,68 +178,62 @@ angular.module('app.services')
 			children: ['addDataHApp']
 		},
 		'addDataHApp': {
-			text: "Great. I'll add your Health data to my stats",
+			text: ['0'],
 			children: ['addDataOk']
 		},
 		'addDataOk': {
-			text: "Ok",
+			text: ['0'],
 			type: "user",
 			children: ['activityOnPhone']
 		},
 		'activityOnPhone': {
-			text: "Let's take a look at the activity data stored on your iPhone",
+			text: ['0'],
 			children: []
 		},
 		'activityOnPhoneOk': {
-			text: "Ok",
+			text: ['0'],
 			type: "user",
 			children: ['dummyAnalyzer']
 		},
 		
 		'activityOnPhone?': {
-			text: "Stored on my phone?",
+			text: ['0'],
 			type: "user",
 			children: ['activityOnPhoneExplain']
 		},
 
 		'activityOnPhoneExplain': {
-			text: "All iPhone have a motion sensor that detects and stores up to 7 days of your activities and sleep data",
+			text: ['0'],
 			children: ['activityOnPhoneExplainMore']
 		},
 
 		'activityOnPhoneExplainMore': {
-			text: "No one can see this info until you give permission, like you did with Po.",
+			text: ['0'],
 			children: ['activityOnPhoneIsee']
 		},
 
 		'activityOnPhoneIsee': {
-			text: "I see",
+			text: ['0'],
 			type: "user",
 			children: ['activityOnPhoneLookData']
 		},
 
 		'activityOnPhoneLookData?': {
-			text: "Would you like to take a look at your data?",
+			text: ['0'],
 			children: ['activityOnPhoneSure', 'activityOnPhoneNotNow']
 		},
 
 		'activityOnPhoneSure': {
-			text: "Sure",
+			text: ['0'],
 			type: "user",
 			children: []
 		},
 		'activityOnPhoneNotNow': {
-			text: "Not Now",
+			text: ['0'],
 			type: "user",
 			children: ['']
 		},
 		
-
-		
-		
-
-
-
 		'dummyAnalyzer' : {
 			evalInfo : {
 				type : "func",
@@ -248,19 +242,19 @@ angular.module('app.services')
 			children:[]
 		},
 		'aboveAverage':{
-			text: "It beats the daily average for an average Joe",
+			text: ['0'],
 			children:['moreActiveTip']
 		},
 		'onParAverage':{
-			text: "You are on par with the average of Fitapp users",
+			text: ['0'],
 			children:['moreActiveTip']
 		},
 		'belowAverage': {
-			text: "It is slightly under the average of a typical Fitapp user.",
+			text: ['0'],
 			children:['moreActiveTip']
 		},
 		'moreActiveTip': {
-			text: "Consider this",
+			text: ['0'],
 			children:['testChart']
 		},
 		'testChart': {
