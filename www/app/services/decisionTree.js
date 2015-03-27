@@ -55,12 +55,7 @@ angular.module('app.services')
 		endDate.setMinutes(0);
 		healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(
 			function(response){
-				var responseDataObj = {
-					data: response.data,
-					labels: response.labels
-				};
-
-				deferred.resolve(responseDataObj);
+				deferred.resolve(response);
 			},
 			function(error){
 				deferred.reject(error);

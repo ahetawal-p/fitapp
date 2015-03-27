@@ -5,7 +5,8 @@ angular.module('app.activity.parent')
 	'$state',
 	'$ionicModal',
 	'healthKitService',
-	function ($scope, $state, $ionicModal, healthKitService) {
+	'chartConfigFactory',
+	function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
 
 		var vm = this;
 		healthKitService.getActivities().then(function(response){
@@ -18,37 +19,6 @@ angular.module('app.activity.parent')
 		//healthKitService.getWeekdayTimesOfDayAverages();
 		//healthKitService.getWeekendTimesOfDayAverages();
 
-//This is not a highcharts object. It just looks a little like one!
-vm.chartConfig = {
-
-  options: {
-      //This is the Main Highcharts chart config. Any Highchart options are valid here.
-      //will be overriden by values specified below.
-      chart: {
-          type: 'line'
-      },
-      tooltip: {
-          style: {
-              padding: 10,
-              fontWeight: 'bold'
-          }
-      }
-  },
-  //The below properties are watched separately for changes.
-
-  //Series object (optional) - a list of series using normal highcharts series options.
-  series: [{
-     data: [10, 15, 12, 8, 7],
-     dashStyle: 'longdash'
-  }],
-  //Configuration for the xAxis (optional). Currently only one x axis can be dynamically controlled.
-  //properties currentMin and currentMax provied 2-way binding to the chart's maximimum and minimum
-  xAxis: {
-  currentMin: 0,
-  currentMax: 20,
-  title: {text: 'values'}
-  },
-};
 
 		/* testing charts */
 		var startDate = new Date("3/20/2015");
@@ -63,54 +33,42 @@ vm.chartConfig = {
 		console.log("before getTodayVsAverageDataPoints");
 		healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(function(response){
 			console.log("getTodayVsAverageDataPoints");
-			vm.todayVsAvg.labels = response.labels;
-			vm.todayVsAvg.data = response.data;
+
+			vm.chartConfig = chartConfigFactory.createChartConfig(response, "line");
+			// vm.todayVsAvg.labels = response.labels;
+			// vm.todayVsAvg.data = response.data;
 
 			/* total duration is last index of array, since array has cumulative duration
-			   also need to convert seconds to minuts */
-			var todaysTotalDuration = Math.ceil(_.last(vm.todayVsAvg.data[0])/60);
-			var avgTotalDuration = Math.ceil(_.last(vm.todayVsAvg.data[1])/60);
+			also need to convert seconds to minuts */
+			// var todaysTotalDuration = Math.ceil(_.last(vm.todayVsAvg.data[0])/60);
+			// var avgTotalDuration = Math.ceil(_.last(vm.todayVsAvg.data[1])/60);
 
-			vm.todayVsAvg.todaysDuration = todaysTotalDuration + " min";
-			vm.todayVsAvg.averageDuration = avgTotalDuration + " min";
+			// vm.todayVsAvg.todaysDuration = todaysTotalDuration + " min";
+			// vm.todayVsAvg.averageDuration = avgTotalDuration + " min";
 
-			if (todaysTotalDuration > avgTotalDuration){
-				vm.todayVsAvg.todaysDurationMarginTop = 50;
-				vm.todayVsAvg.averageDurationMarginTop = 27;
-			}else{
-				vm.todayVsAvg.todaysDurationMarginTop = 27;
-				vm.todayVsAvg.averageDurationMarginTop = 50;
-			}
+			// if (todaysTotalDuration > avgTotalDuration){
+			// 	vm.todayVsAvg.todaysDurationMarginTop = 50;
+			// 	vm.todayVsAvg.averageDurationMarginTop = 27;
+			// }else{
+			// 	vm.todayVsAvg.todaysDurationMarginTop = 27;
+			// 	vm.todayVsAvg.averageDurationMarginTop = 50;
+			// }
 		});
-vm.todayVsAvg.pointDot = [
-false, false]
-
-		vm.todayVsAvg.colors = ['#FD1F5E','#1EF9A1'];
 
 
-		vm.todayVsAvg.options = {
-			pointDot:false, 
-			scaleShowGridLines:false, 
-			showTooltips:false, 
-			responsive:true, 
-			scaleShowLabels: false,
-			    pointDotRadius: 1
-
-		};
-
-		vm.youVsOthers = {};
-		healthKitService.getDailyAverageVsAllUsers().then(
-			function(response){
-				console.log(response.labels);
-				vm.youVsOthers.labels = [""];
-				vm.youVsOthers.series = response.labels;
-				vm.youVsOthers.data = response.data;
-				vm.youVsOthers.yourDuration = vm.youVsOthers.data[0] + "min";
-				vm.youVsOthers.othersDuration = vm.youVsOthers.data[1] + "min";
-				vm.youVsOthers.yourDurationPaddingLeft = 20;
-				vm.youVsOthers.othersDurationPaddingLeft = 66;
-			}
-		);
+vm.youVsOthers = {};
+healthKitService.getDailyAverageVsAllUsers().then(
+	function(response){
+		console.log(response.labels);
+		vm.youVsOthers.labels = [""];
+		vm.youVsOthers.series = response.labels;
+		vm.youVsOthers.data = response.data;
+		vm.youVsOthers.yourDuration = vm.youVsOthers.data[0] + "min";
+		vm.youVsOthers.othersDuration = vm.youVsOthers.data[1] + "min";
+		vm.youVsOthers.yourDurationPaddingLeft = 20;
+		vm.youVsOthers.othersDurationPaddingLeft = 66;
+	}
+	);
 
 		// healthKitService.getActivityDataPoints(startDate, new Date()).then(function(response){
 			
@@ -127,7 +85,7 @@ false, false]
 		// .then(function(response){
 		// 	vm.data.push(response.durations);
 		// });
-		
+
 
 
 
@@ -143,34 +101,34 @@ false, false]
 			//     //,[28, 48, 40, 19, 86, 27, 90]
 			//   ];
 		// });
-		
-		/* end */
 
-		vm.openEditActivityModal = function(activity){
-			vm.selectedActivity = activity;
-			$scope.openEditActivityModal();
-		};
-		
-		vm.createActivity = function(){
-			$scope.openSelectActivityTypeModal();
-		};
+/* end */
 
-		vm.selectActivityType = function(activityType){
-			$scope.selectedActivity = buildNewActivity(activityType);
-			$scope.openCreateActivityModal();
-		};
+vm.openEditActivityModal = function(activity){
+	vm.selectedActivity = activity;
+	$scope.openEditActivityModal();
+};
 
-		$scope.demo = 'ios';
-		$scope.setPlatform = function(p) {
-			document.body.classList.remove('platform-ios');
-			document.body.classList.remove('platform-android');
-			document.body.classList.add('platform-' + p);
-			$scope.demo = p;
-		}
+vm.createActivity = function(){
+	$scope.openSelectActivityTypeModal();
+};
 
-		buildNewActivity = function(activityType){
-			var activity = {activityType:activityType
-				, icon: activityType.icon};
+vm.selectActivityType = function(activityType){
+	$scope.selectedActivity = buildNewActivity(activityType);
+	$scope.openCreateActivityModal();
+};
+
+$scope.demo = 'ios';
+$scope.setPlatform = function(p) {
+	document.body.classList.remove('platform-ios');
+	document.body.classList.remove('platform-android');
+	document.body.classList.add('platform-' + p);
+	$scope.demo = p;
+}
+
+buildNewActivity = function(activityType){
+	var activity = {activityType:activityType
+		, icon: activityType.icon};
       // activity.activityType = activityType;
       // activity.icon = activityType.icon;
       var currentTime = new Date();

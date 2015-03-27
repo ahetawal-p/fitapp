@@ -99,24 +99,32 @@ angular.module('app.services.healthKit')
         function getTodayVsAverageDataPoints(startDateTime, endDateTime){
             var deferred = $q.defer();
             var labels = [];
-            var data = [];
+            var dataSets = [];
             getActivityDataPoints(startDateTime, endDateTime).then(function(response){
                 labels = response.times;
                 console.log("response durations: " + response.durations);
-                data.push(response.durations);
+                dataSets.push({
+                    name: "today",
+                    data: response.durations
+                });
 
             })
             .then(function(){
                 return getAverageActivityDataPoints(startDateTime, endDateTime);
             })
             .then(function(response){
-                data.push(response.durations);
-                var plot = {
+                dataSets.push(
+                    {
+                        name: "average",
+                        data: response.durations
+                    });
+
+                var chartDataContainer = {
                     labels: labels,
-                    data: data
+                    dataSets: dataSets
                 };
 
-                deferred.resolve(plot);
+                deferred.resolve(chartDataContainer);
             });
 
             return deferred.promise;
