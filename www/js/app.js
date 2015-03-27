@@ -13,7 +13,8 @@ angular.module('fitapp', [
             'app.settings',
             'ngCordova',
             'underscore',
-            'chart.js'
+            'chart.js',
+            'highcharts-ng'
 ])
 
 .run(function($ionicPlatform, $cordovaHealthKit, $rootScope) {

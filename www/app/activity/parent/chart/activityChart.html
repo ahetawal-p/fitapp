@@ -1,7 +1,13 @@
 <ion-view title="Activity Chart" ng-controller="ActivityParentCtrl as vm">
     <ion-content class="padding has-tabs-top">
-    	You vs Other Users
-         <canvas id="line" class="chart chart-bar" data="vm.youVsOthers.data"
+	<!-- charts with highCharts -->
+	<highchart id="lineChart" config="vm.chartConfig"></highchart>
+
+
+    <!-- angular-charts version -->
+      <!--   
+          	You vs Other Users
+ <canvas id="line" class="chart chart-bar" data="vm.youVsOthers.data"
 		  labels="vm.youVsOthers.labels" legend="false" series="vm.youVsOthers.series" options="{pointDot:false, scaleShowGridLines:false, showTooltips:false, responsive:true, scaleShowLabels: false}"
 		  click="onClick">
 		</canvas> 
@@ -12,16 +18,16 @@
 		  labels="vm.todayVsAvg.labels" legend="true" series="vm.todayVsAvg.series" options="vm.todayVsAvg.options" colours="vm.todayVsAvg.colors"
 		  click="onClick">
 		</canvas> 
-<!--         <canvas id="line" class="chart chart-line" data="vm.todayVsAvg.data"
+        <canvas id="line" class="chart chart-line" data="vm.todayVsAvg.data"
 		  labels="vm.todayVsAvg.labels" legend="true" series="vm.todayVsAvg.series" options="{pointDot:true, pointDotRadius: 1, scaleShowGridLines:false, showTooltips:false, responsive:true, scaleShowLabels: false, datasetStroke : true}"
 		  click="onClick">
-		</canvas>  -->
+		</canvas> 
 		<div id="todaysDurationLabel" style="position:absolute;padding-left: 80%; margin-top:-{{vm.todayVsAvg.todaysDurationMarginTop}}%;" ng-bind="vm.todayVsAvg.todaysDuration"></div>
 		<div id="averageDurationLabel" style="position:absolute;padding-left: 80%; margin-top:-{{vm.todayVsAvg.averageDurationMarginTop}}%;" ng-bind="vm.todayVsAvg.averageDuration"></div>
 		<canvas id="test" class="chart chart-line" data="vm.test.datasets"
 		  labels="vm.test.labels"
 		  click="onClick">
-		</canvas> 
+		</canvas>  -->
 
     </ion-content>
 </ion-view>
