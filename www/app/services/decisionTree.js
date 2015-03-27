@@ -8,7 +8,7 @@ angular.module('app.services')
 	
 	$ionicPlatform.ready(function() {
 		var colorConfig = {
-					"0" : ['92deg',  '#f35626', '#feab3a'],
+					"0" : ['120deg', '#FFCC99', '#CCCC99'],
 					"1" : ['-45deg', '#FFCC99', '#6633CC'],
 					"2" : ['-92deg', '#999900', '#6633FF'],
 					"3" : ['50deg',  '#33FFFF', '#006600'],
@@ -142,13 +142,104 @@ angular.module('app.services')
 		'onboardingInfoUserConfirm': {
 			text: "Sounds great",
 			type: "user",
-			children: ['dummyAnalyzer']
+			//children: ['dummyAnalyzer']
+			children : ['openHealthApp']
 		},
 		'onboardingInfoUserNo': {
 			text: "No Thanks",
 			type: "user",
+			children: ['collectInfo']
+		},
+
+		'collectInfo': {
+			text: "Pokkifit will need to collet your data for analysis",
+			children: ['whenReady']
+		},
+		'whenReady': {
+			text: "Let me know when you are ready",
+			children: ['gotoSettings']
+		},
+		'gotoSettings': {
+			text: "You can go to settings and edit Health app permissions",
+			children: ['gotoSettingsOk']
+		},
+		'gotoSettingsOk': {
+			text: "Ok",
+			type: "user",
+			children: ['lookingForward']
+		},
+		'lookingForward': {
+			text: "Looking forward to that",
 			children: []
 		},
+
+		'openHealthApp': {
+			text: "FIX ME : NEED TO OPEN Health App here...",
+			children: ['addDataHApp']
+		},
+		'addDataHApp': {
+			text: "Great. I'll add your Health data to my stats",
+			children: ['addDataOk']
+		},
+		'addDataOk': {
+			text: "Ok",
+			type: "user",
+			children: ['activityOnPhone']
+		},
+		'activityOnPhone': {
+			text: "Let's take a look at the activity data stored on your iPhone",
+			children: []
+		},
+		'activityOnPhoneOk': {
+			text: "Ok",
+			type: "user",
+			children: ['dummyAnalyzer']
+		},
+		
+		'activityOnPhone?': {
+			text: "Stored on my phone?",
+			type: "user",
+			children: ['activityOnPhoneExplain']
+		},
+
+		'activityOnPhoneExplain': {
+			text: "All iPhone have a motion sensor that detects and stores up to 7 days of your activities and sleep data",
+			children: ['activityOnPhoneExplainMore']
+		},
+
+		'activityOnPhoneExplainMore': {
+			text: "No one can see this info until you give permission, like you did with Po.",
+			children: ['activityOnPhoneIsee']
+		},
+
+		'activityOnPhoneIsee': {
+			text: "I see",
+			type: "user",
+			children: ['activityOnPhoneLookData']
+		},
+
+		'activityOnPhoneLookData?': {
+			text: "Would you like to take a look at your data?",
+			children: ['activityOnPhoneSure', 'activityOnPhoneNotNow']
+		},
+
+		'activityOnPhoneSure': {
+			text: "Sure",
+			type: "user",
+			children: []
+		},
+		'activityOnPhoneNotNow': {
+			text: "Not Now",
+			type: "user",
+			children: ['']
+		},
+		
+
+		
+		
+
+
+
 		'dummyAnalyzer' : {
 			evalInfo : {
 				type : "func",
