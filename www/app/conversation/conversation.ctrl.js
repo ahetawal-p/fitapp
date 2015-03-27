@@ -8,7 +8,8 @@ angular.module('app.conversation')
 	'$ionicScrollDelegate',
 	'$timeout',
 	'$parse',
-	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse) {
+	'chartConfigFactory',
+	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, chartConfigFactory) {
 
 			// upper limit constant to fake the  for waiting time after user input
 			// Only in effect for normal text node.
@@ -178,10 +179,7 @@ angular.module('app.conversation')
 	    		var promise = $parse(node.method)('test');
 	    		promise.then(function(response){
 	    			console.log("back in then");
-		    		node.labels = response.labels;
-					//node.series = ['Series A', 'Series B'];
-					node.data = response.data;
-										
+					node.chartConfig = 	chartConfigFactory.createChartConfig(response, "line");		
 		    		triggerDigestHelper(node, true);
 		    	});
 	    	};

@@ -29,10 +29,12 @@
            <div class="innerDiv">
            </div>
            <div>
-            <canvas class="chart chart-line" data="message.data"
+<!--             <canvas class="chart chart-line" data="message.data"
             labels="message.labels" legend="true" series="message.series" 
             click="onClick" options="{scaleShowGridLines:false, scaleShowLabels:false, pointDot:false}">
-          </canvas> 
+          </canvas>  -->
+            <highchart class="message-chart" style="height:30%;width:70%;" config="message.chartConfig"></highchart>
+
           </div>
         </div>
 
