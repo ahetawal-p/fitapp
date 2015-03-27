@@ -3,7 +3,29 @@ angular.module('app.services')
 /**
  * A simple example service that returns tree data for conversation
  */
-.factory('talky', ['healthKitService', '$q', function(healthKitService, $q) {
+.factory('talky', ['healthKitService', '$q', '$ionicPlatform', function(healthKitService, $q, $ionicPlatform) {
+
+	
+	$ionicPlatform.ready(function() {
+		var colorConfig = {
+					"0" : ['92deg',  '#f35626', '#feab3a'],
+					"1" : ['-45deg', '#FFCC99', '#6633CC'],
+					"2" : ['-92deg', '#999900', '#6633FF'],
+					"3" : ['50deg',  '#33FFFF', '#006600'],
+					"4" : ['-108deg', '#FF0066', '#00FF99']
+				};
+
+		var randomColor = Math.floor((Math.random() * 10)%5);
+		console.log(randomColor);
+		var stylingString = "-webkit-linear-gradient(" +
+					colorConfig[randomColor][0] + "," +
+					colorConfig[randomColor][1] + "," +
+					colorConfig[randomColor][2] + "" +  ")";
+
+		jQuery(".scroll-content").css('background', stylingString);
+
+	  });
+
 
 	// Sample method to show how can we provide the 
 	// runtime decision making in the conversation UI

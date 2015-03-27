@@ -6,11 +6,6 @@ body {
 
 /** For Background color **/
 .scroll-content{
-    padding-top: 10px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    background: -webkit-linear-gradient(92deg,  #f35626, #feab3a);
     -webkit-animation: hue 40s infinite linear;
 }
 
@@ -31,7 +26,11 @@ body {
 
 .conversationBase {
   border-style:none; 
-  padding: 4px; 
+  padding-top: 0px;
+  padding-right: 10px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  margin-top: 3px;
   background-color:transparent;
 }
 
@@ -81,6 +80,7 @@ body {
   padding-bottom: .6875rem;
   float: right;
   font-size:.875rem;
+  opacity: 1;
 }
 
 .innerUser {
@@ -92,6 +92,7 @@ body {
   color:white;
   padding:.6875rem;
   font-size:.875rem;
+  opacity: 1;
 }
 
 .wrapper {
