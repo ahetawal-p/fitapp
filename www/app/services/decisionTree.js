@@ -10,19 +10,28 @@ angular.module('app.services')
 		var colorConfig = {
 					"0" : ['120deg', '#FFCC99', '#CCCC99'],
 					"1" : ['-45deg', '#FFCC99', '#6633CC'],
-					"2" : ['-92deg', '#999900', '#6633FF'],
-					"3" : ['50deg',  '#33FFFF', '#006600'],
-					"4" : ['-108deg', '#FF0066', '#00FF99']
+					"2" : ['-92deg', '#CCCC99', '#6633FF'],
+					"3" : ['50deg',  '#33FFFF', '#9999CC'],
+					"4" : ['100deg', '#CC9999', '#CC99FF']
 				};
 
-		var randomColor = Math.floor((Math.random() * 10)%5);
-		console.log(randomColor);
-		var stylingString = "-webkit-linear-gradient(" +
+		var randomColor = Math.floor((Math.random() * 5));
+		var radomDirection = Math.floor((Math.random() * 2));
+		var stylingStringLinear = "-webkit-linear-gradient(" +
 					colorConfig[randomColor][0] + "," +
 					colorConfig[randomColor][1] + "," +
-					colorConfig[randomColor][2] + "" +  ")";
+					colorConfig[randomColor][2] +  ")";
+	
+		var stylingStringRadial = "-webkit-radial-gradient(" +
+					colorConfig[randomColor][1] + "," +
+					colorConfig[randomColor][2] + ")";
 
-		jQuery(".scroll-content").css('background', stylingString);
+		var styleConfig = [stylingStringLinear, stylingStringRadial];
+
+		console.log("Color: " + randomColor);
+		console.log("Dir: " + radomDirection);
+
+		jQuery(".scroll-content").css('background', styleConfig[radomDirection]);
 
 	  });
 
@@ -81,11 +90,11 @@ angular.module('app.services')
 		},
 
 		'onboarding' : {
-			text: ['0'],
+			text: [0],
 			children: ['askName']
 		},
 		'askName': {
-			text: ['0'],
+			text: ['1'],
 			children: ['userName']
 		},
 		'userName': {
@@ -94,77 +103,78 @@ angular.module('app.services')
 			children: ['greetUser']
 		},
 		'greetUser': {
-			text: ['0'],
+			text: ['2'],
 			evalInfo : {
 				type : "string",
 			},
 			children: ['lookData']
 		},
 		'lookData':{
-			text: ['0'],
+			text: ['3'],
 			children: ['includeHApp']
 		},
 		'includeHApp':{
-			text: ['0'],
+			text: ['4'],
 			children:['askWouldLike']
 		},
 		'askWouldLike': {
-			text: ['0'],
+			text: ['5'],
 			children:['userAgree', 'userExplain']
 		},
 		'userAgree': {
-			text: ['0'],
+			text: ['6'],
 			type: "user",
 			children: ['onboardingInfo']
 		},
 		'userExplain':{
-			text: ['0'],
+			text: ['7'],
 			type: "user",
 			children: ['onboardingInfo']
 		},
 		'onboardingInfo': {
-			text: ['0'],
+			text: ['8'],
 			children:['moreOnboardingInfo']
+			//children: ['aboveAverage']
 		},
 		'moreOnboardingInfo': {
-			text: ['0'],
+			text: ['9'],
 			children: ['furtherOnboardingInfo']
 		},
 		'furtherOnboardingInfo': {
-			text: ['0'],
+			text: ['10'],
 			children: ['onboardingInfoUserConfirm','onboardingInfoUserNo']
 		},
 		'onboardingInfoUserConfirm': {
-			text: ['0'],
+			text: ['6'],
 			type: "user",
 			//children: ['dummyAnalyzer']
 			children : ['openHealthApp']
 		},
 		'onboardingInfoUserNo': {
-			text: ['0'],
+			text: ['11'],
 			type: "user",
 			children: ['collectInfo']
 		},
 
 		'collectInfo': {
-			text: ['0'],
+			text: ['12'],
 			children: ['whenReady']
 		},
 		'whenReady': {
-			text: ['0'],
+			text: ['13'],
 			children: ['gotoSettings']
 		},
 		'gotoSettings': {
-			text: ['0'],
+			text: ['14'],
 			children: ['gotoSettingsOk']
 		},
 		'gotoSettingsOk': {
-			text: ['0'],
+			text: ['15'],
 			type: "user",
 			children: ['lookingForward']
 		},
 		'lookingForward': {
-			text: ['0'],
+			text: ['16'],
 			children: []
 		},
 
@@ -173,60 +183,60 @@ angular.module('app.services')
 			children: ['addDataHApp']
 		},
 		'addDataHApp': {
-			text: ['0'],
+			text: ['17'],
 			children: ['addDataOk']
 		},
 		'addDataOk': {
-			text: ['0'],
+			text: ['15'],
 			type: "user",
 			children: ['activityOnPhone']
 		},
 		'activityOnPhone': {
-			text: ['0'],
-			children: []
+			text: ['18'],
+			children: ['activityOnPhoneOk', 'activityOnPhone1']
 		},
 		'activityOnPhoneOk': {
-			text: ['0'],
+			text: ['15'],
 			type: "user",
 			children: ['dummyAnalyzer']
 		},
 		
-		'activityOnPhone?': {
-			text: ['0'],
+		'activityOnPhone1': {
+			text: ['19'],
 			type: "user",
 			children: ['activityOnPhoneExplain']
 		},
 
 		'activityOnPhoneExplain': {
-			text: ['0'],
+			text: ['20'],
 			children: ['activityOnPhoneExplainMore']
 		},
 
 		'activityOnPhoneExplainMore': {
-			text: ['0'],
+			text: ['21'],
 			children: ['activityOnPhoneIsee']
 		},
 
 		'activityOnPhoneIsee': {
-			text: ['0'],
+			text: ['22'],
 			type: "user",
 			children: ['activityOnPhoneLookData']
 		},
 
-		'activityOnPhoneLookData?': {
-			text: ['0'],
+		'activityOnPhoneLookData': {
+			text: ['23'],
 			children: ['activityOnPhoneSure', 'activityOnPhoneNotNow']
 		},
 
 		'activityOnPhoneSure': {
-			text: ['0'],
+			text: ['24'],
 			type: "user",
-			children: []
+			children: ['dummyAnalyzer']
 		},
 		'activityOnPhoneNotNow': {
-			text: ['0'],
+			text: ['25'],
 			type: "user",
-			children: ['']
+			children: []
 		},
 		
 		'dummyAnalyzer' : {
@@ -237,25 +247,25 @@ angular.module('app.services')
 			children:[]
 		},
 		'aboveAverage':{
-			text: ['0'],
+			text: ['26'],
 			children:['moreActiveTip']
 		},
 		'onParAverage':{
-			text: ['0'],
+			text: ['27'],
 			children:['moreActiveTip']
 		},
 		'belowAverage': {
-			text: ['0'],
+			text: ['28'],
 			children:['moreActiveTip']
 		},
 		'moreActiveTip': {
-			text: ['0'],
+			text: ['29'],
 			children:['testChart']
 		},
 		'testChart': {
 			type: "chart",
 			method: getChartData,
-			children:['userAgree']
+			children:[]
 		}
 
 	};

@@ -6,7 +6,7 @@ body {
 
 /** For Background color **/
 .scroll-content{
-    -webkit-animation: hue 40s infinite linear;
+    -webkit-animation: hue 60s infinite linear;
 }
 
 
@@ -17,7 +17,7 @@ body {
   }
 
   to {
-    -webkit-filter: hue-rotate(-360deg);
+    -webkit-filter: hue-rotate(-180deg);
   }
 }
 

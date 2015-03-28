@@ -9,15 +9,20 @@ angular.module('app.conversation')
 	'$timeout',
 	'$parse',
 	'chartConfigFactory',
-	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, chartConfigFactory) {
+	'lableManager',
+	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, chartConfigFactory, lableManager) {
 
-			// upper limit constant to fake the  for waiting time after user input
-			// Only in effect for normal text node.
-			var USER_INPUT_DELAY_MAX = 1000;
+			var ENGLISH = 0;
+
+			var CHINEESE = 1;
+
+			
+			// TODO : READ FROM SETTINGS...
+			$scope.language = ENGLISH;
 
 			// upper limit constant to fake the waiting time after system input
 			// Only in effect for normal text node.
-			var SYSTEM_INPUT_DELAY_MAX = 3000;
+			var SYSTEM_INPUT_DELAY_MAX = 1500;
 
 
 			var USER_RESPONSE_ANIMATION = 'animated fadeInUp';
@@ -37,12 +42,24 @@ angular.module('app.conversation')
 
 
 			var addNodeHelper = function(message, doAnimation) {
-				$scope.messages.push(angular.extend({}, message));
+				$scope.messages.push(angular.extend({}, getTextData(message)));
 				lastNodePushed =  message;
-
 				console.log(message);
-				
 				$ionicScrollDelegate.scrollBottom(true);
+			};
+
+			/*
+			* Fetch each nodes text value from the text file
+			* based on the current language in use.
+			* TODO: Need to add randomization for the nodes.
+			*/
+			var getTextData = function(message){
+				if(typeof message.text === 'object'){
+					var randomIndex = 0; // used for randomizing the text nodes in future
+					var lableIndex = message.text[randomIndex];
+					message.text = lableManager.getTextValue(lableIndex, $scope.language);
+				}
+				return message;
 			};
 
 			/**
@@ -54,7 +71,7 @@ angular.module('app.conversation')
 				//var randomWait = Math.floor((Math.random() * limit) + 1);
 				//console.log("Random wait for limit: " + limit + " is " + randomWait);
 				// MIGHT HAVE TO FIX THIS...
-				return 1800;
+				return SYSTEM_INPUT_DELAY_MAX;
 
 			};
 
@@ -227,6 +244,7 @@ angular.module('app.conversation')
 						// Processing standard text nodes and their user options
 						currentNodeToBeAdded = nextNode;
 						currentNodeToBeAdded['userOptions'] = [];
+						$scope.options = [];
 						var childLen = currentNodeToBeAdded.children.length;
 						if(childLen >= 1 
 							&& root[currentNodeToBeAdded.children[0]].type == 'user'){
@@ -235,6 +253,7 @@ angular.module('app.conversation')
 								for(i in currentNodeToBeAdded.children){
 									var msg = root[currentNodeToBeAdded.children[i]];
 									msg.isClickDisabled = false;
+									msg = getTextData(msg);
 									currentNodeToBeAdded['userOptions'].push(angular.extend({}, msg));
 									$scope.options.push(angular.extend({}, msg));
 								}
@@ -262,7 +281,8 @@ angular.module('app.conversation')
 	   			console.log("User Input Msg ");
 	   			console.log(message);
 	   			
-
+	   			var isUserNodeRequired = false;
+	   			var currentNodeToBeAdded = null;
 	   			var recentlyAddedUserElement = jQuery(".userMsg").last();
 				
 				// TODO: Refactor to use directive since, we shld not 
@@ -283,23 +303,9 @@ angular.module('app.conversation')
 						$scope.$evalAsync(function(){
 							$scope.waitIndicator = false;
 							lastMsgInListOnUi.wait = false;
-			   				if(lastMsgInListOnUi.children != null && lastMsgInListOnUi.children.length > 0){
-			   				$scope.options = [];
-			   				// disable click after clicked once, might need to update again for undo
-			   				lastMsgInListOnUi.isClickDisabled = true;
-			   				var currentNodeToBeAdded = root[lastMsgInListOnUi.children[0]];
-
-			   				if(isThisEvaluationNode(currentNodeToBeAdded)){
-			   						handleEvaluationNode(currentNodeToBeAdded);
-			   				} else {
-			   					performAddToConversationList(currentNodeToBeAdded, USER_INPUT_DELAY_MAX, false)
-			   								.then(function(){
-			   										evaluateNextNode();
-			   						});
-        						
-			   				}
-			   			}
-
+							lastNodePushed = lastMsgInListOnUi;
+							evaluateNextNode();
+			   				
 					});
 				});
 

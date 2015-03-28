@@ -6,6 +6,40 @@ angular.module('app.services')
 .factory('lableManager', [ function() {
 
 	var textNodes = {
+		
+/***** START : MOST COMMON USER RESPONSES ******/
+
+		'6' : [
+			  "Sounds Great", 
+			  ""],
+
+		'7' : [
+			  "Please explain", 
+			  ""],
+
+		'11' : [
+			  "No Thanks", 
+			  ""],
+
+		'15' : [
+			  "Ok", 
+			  ""],
+
+		'22' : [
+			  "I see", 
+			  ""],
+
+		'24' : [
+			  "Sure", 
+			  ""],
+
+		'25' : [
+			  "Not Now", 
+			  ""],
+			  
+/***** END : MOST COMMON USER RESPONSES ******/
+
+
 		'0' : [
 			  "Hi There I am Poki", 
 			  ""],
@@ -30,14 +64,6 @@ angular.module('app.services')
 			  "Would you like that", 
 			  ""],
 
-		'6' : [
-			  "Sounds Great", 
-			  ""],
-
-		'7' : [
-			  "Please explain", 
-			  ""],
-
 		'8' : [
 			  "Your device will be personalized based on your workout, sleep, and nutrition data…", 
 			  ""],
@@ -50,10 +76,6 @@ angular.module('app.services')
 			  "Your data is safe, and will never be shared with anyone", 
 			  ""],
 
-		'11' : [
-			  "No Thanks", 
-			  ""],
-
 		'12' : [
 			  "Pokifit will need to collet your data for analysis", 
 			  ""],
@@ -64,10 +86,6 @@ angular.module('app.services')
 
 		'14' : [
 			  "You can go to settings and edit Health app permissions", 
-			  ""],
-
-		'15' : [
-			  "Ok", 
 			  ""],
 
 		'16' : [
@@ -94,20 +112,8 @@ angular.module('app.services')
 			  "No one can see this info until you give permission, like you did with Poki", 
 			  ""],
 
-		'22' : [
-			  "I see", 
-			  ""],
-
 		'23' : [
 			  "Would you like to take a look at your data?", 
-			  ""],
-
-		'24' : [
-			  "Sure", 
-			  ""],
-
-		'25' : [
-			  "Not Now", 
 			  ""],
 
 		'26' : [
@@ -201,6 +207,13 @@ angular.module('app.services')
 
 	};
 
+	return {
+		getTextValue: function(id, language){
+			return textNodes[id][language];
+		}
+
+
+	}
 
 
 
