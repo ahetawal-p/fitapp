@@ -4,13 +4,12 @@
 	<div>
 	<highchart id="activityChart" config="vm.chartConfig" ></highchart>
 	</div>
-<!-- 	<highchart id="durationBarChart" style="height: 100px;" config="vm.durationBarChartConfig"></highchart> -->
 
 	<div class="transaction-list item-container" ng-repeat="durationByDateComposite in vm.durationByDateComposites | orderBy: '-date'">
-          <div class="row">
+          <div class="row barChartRow">
             <i class="icon {{activity.icon}}"></i>
             <div class="col col-80">
-              	<highchart class="durationBarChart" config="durationByDateComposite.chartConfig" style="height:50px"></highchart>
+              	<highchart class="durationBarChart" config="durationByDateComposite.chartConfig"></highchart>
             </div>
             <div class="col col-20" style="text-align:right;">
             	<div class="durationRowDateContainer">

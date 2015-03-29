@@ -47,6 +47,7 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
         vm.durationByDateComposites = [];
         _.each(durationBarChartConfigs, function(config){
             var durationByDateComposite = {
+                date: config.date,
                 chartConfig: config
             };
 

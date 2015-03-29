@@ -175,6 +175,14 @@ body {
   width: 100%;
 }
 
+.barChartRow{
+  height:50px;
+}
+
+.durationBarChart{
+  height:50px;
+}
+
 .durationRowDateContainer{
   margin: 3px 0 0;
 }

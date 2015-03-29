@@ -165,17 +165,23 @@ angular.module('app.factories')
 
         function createActivityChartBarChartConfigs(chartDataContainer) {
            var chartConfigs = [];
+           var maxDurationObject = _.max(chartDataContainer.dataSets, function(dataSet){
+                return dataSet.data;
+           });
+           var maxYValue = maxDurationObject.data;
+
            _.each(chartDataContainer.dataSets, function(dataSet){
-                chartConfigs.push(createBarChartConfig(dataSet));
+                chartConfigs.push(createBarChartConfig(dataSet, maxYValue));
            }); 
 
            return chartConfigs;
         }
 
-        function createBarChartConfig(dataSet) {
+        function createBarChartConfig(dataSet, maxYValue) {
             var seriesData = [];
            seriesData.push(dataSet.data);
            var chartConfig = {
+                date: dataSet.name,
                 dayOfMonth: dateTimeUtil.getDayOfMonth(dataSet.name),
                 dayOfWeekName: dateTimeUtil.getDayOfWeekName(dataSet.name),
                 title: {
@@ -193,6 +199,7 @@ angular.module('app.factories')
                 },
                 yAxis: {
                     min: 0,
+                    max: maxYValue,
                     title: {
                         text: ''
                     },
@@ -212,6 +219,9 @@ angular.module('app.factories')
                         enabled: true,
                         align: 'left',
                         color: '#FFFFFF',
+                        style: {
+                          textShadow: "none"
+                        },
                         x: -80,
                         formatter: function() {
                             var durationInSec = this.y;
