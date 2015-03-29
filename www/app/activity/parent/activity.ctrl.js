@@ -31,34 +31,7 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
     endDate.setHours(19);
     endDate.setMinutes(0);
 
-    vm.chartConfig = {
-        title: {
-            text: ""
-        },
-        options: {
-            legend: {
-                enabled: false
-            }
-        },
-
-        xAxis: {
-            minorTickLength: 0,
-            tickLength: 0,
-            labels: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: ''
-            },
-            gridLineWidth: 0,
-            labels: {
-                enabled: false
-            }
-        }
-    };
+    vm.chartConfig = chartConfigFactory.createPlaceholderChartConfig("line");
     vm.todayVsAvg = {};
     console.log("before getTodayVsAverageDataPoints");
     healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(function (response) {

@@ -3,6 +3,55 @@ angular.module('app.factories')
 .factory('chartConfigFactory', 
 	function() {
 
+    function createPlaceholderChartConfig(chartType){
+      var chartConfig = {};
+
+      if (chartType === "line"){
+        chartConfig = createPlaceholderLineChartConfig();
+      }else if (chartType === "bar"){
+        chartConfig = createPlaceholderBarChartConfig();
+      }
+
+      return chartConfig;
+    }
+
+    function createPlaceholderLineChartConfig(){
+      var placeholderChartConfig = {
+          title: {
+              text: ""
+          },
+          options: {
+              legend: {
+                  enabled: false
+              }
+          },
+
+          xAxis: {
+              minorTickLength: 0,
+              tickLength: 0,
+              labels: {
+                  enabled: false
+              }
+          },
+          yAxis: {
+              min: 0,
+              title: {
+                  text: ''
+              },
+              gridLineWidth: 0,
+              labels: {
+                  enabled: false
+              }
+          }
+      };
+
+      return placeholderChartConfig;
+    }
+
+    function createPlaceholderBarChartConfig(){
+      
+    }
+
     function createChartConfig(chartDataContainer, chartType){
         var chartConfig = {};
         if (chartType === "line"){
@@ -51,6 +100,7 @@ angular.module('app.factories')
     }
 
   return {
+    createPlaceholderChartConfig: createPlaceholderChartConfig,
     createChartConfig: createChartConfig
       };
 });
