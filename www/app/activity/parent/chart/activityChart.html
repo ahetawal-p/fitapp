@@ -1,20 +1,25 @@
 <ion-view title="Activity Chart" ng-controller="ActivityParentCtrl as vm">
     <ion-content class="padding has-tabs-top">
 	<!-- charts with highCharts -->
-	<highchart id="activityChart" config="vm.chartConfig"></highchart>
-	<highchart id="durationBarChart" config="vm.durationBarChartConfig"></highchart>
+	<div>
+	<highchart id="activityChart" config="vm.chartConfig" ></highchart>
+	</div>
+<!-- 	<highchart id="durationBarChart" style="height: 100px;" config="vm.durationBarChartConfig"></highchart> -->
 
-<!-- 	<div class="transaction-list item-container" ng-repeat="durationByDateComposite in vm.durationByDateComposites | orderBy: '-date'">
+	<div class="transaction-list item-container" ng-repeat="durationByDateComposite in vm.durationByDateComposites | orderBy: '-date'">
           <div class="row">
             <i class="icon {{activity.icon}}"></i>
-            <div class="col col-90">
-              <p>{{durationByDate.durationSum}}</p>
+            <div class="col col-80">
+              	<highchart class="durationBarChart" config="durationByDateComposite.chartConfig" style="height:50px"></highchart>
             </div>
-            <div class="col col-10" style="text-align:right;">
-              	<highchart class="durationBarChart" config="vm.durationBarChartConfig"></highchart>
+            <div class="col col-20" style="text-align:right;">
+            	<div class="durationRowDateContainer">
+            		<div class="dayOfMonth">{{durationByDateComposite.chartConfig.dayOfMonth}}</div>
+            		<div class="dayOfWeek">{{durationByDateComposite.chartConfig.dayOfWeekName}}</div>
+            	</div>
             </div>
           </div>
-    </div> -->
+    </div>
 
     </ion-content>
 </ion-view>

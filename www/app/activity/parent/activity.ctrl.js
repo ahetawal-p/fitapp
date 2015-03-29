@@ -31,19 +31,27 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
     endDate.setHours(19);
     endDate.setMinutes(0);
 
+
     vm.chartConfig = chartConfigFactory.createPlaceholderChartConfig("line");
     vm.todayVsAvg = {};
     healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(function (response) {
         vm.chartConfig = chartConfigFactory.createChartConfig(response, "line");
     });
 
+
+
     vm.durationBarChartConfig = chartConfigFactory.createPlaceholderChartConfig("bar");
-       vm.durationBarChartConfig2 = chartConfigFactory.createPlaceholderChartConfig("bar");
 
     healthKitService.getActivityDurationByDate().then(function(response){
-        vm.durationBarChartConfig = chartConfigFactory.createChartConfig(response, "bar");
-            vm.durationBarChartConfig2 = chartConfigFactory.createChartConfig(response, "bar");
+        var durationBarChartConfigs = chartConfigFactory.createActivityChartBarChartConfigs(response);
+        vm.durationByDateComposites = [];
+        _.each(durationBarChartConfigs, function(config){
+            var durationByDateComposite = {
+                chartConfig: config
+            };
 
+            vm.durationByDateComposites.push(durationByDateComposite);
+        });
     });
     // healthKitService.getActivityDataPoints(startDate, new Date()).then(function(response){
 
@@ -121,81 +129,81 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
         return activity;
     };
 
-    $ionicModal.fromTemplateUrl('app/activity/update/updateActivityModal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function (modal) {
-        $scope.editActivityModal = modal;
-    });
-    $scope.openEditActivityModal = function () {
-        $scope.editActivityModal.show();
-    };
-    $scope.closeEditActivityModal = function () {
-        $scope.editActivityModal.hide();
-    };
-    //Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function () {
-        $scope.editActivityModal.remove();
-    });
-    // Execute action on hide modal
-    $scope.$on('editActivityModal.hidden', function () {
-        // Execute action
-    });
-    // Execute action on remove modal
-    $scope.$on('editActivityModal.removed', function () {
-        // Execute action
-    });
+    // $ionicModal.fromTemplateUrl('app/activity/update/updateActivityModal.html', {
+    //     scope: $scope,
+    //     animation: 'slide-in-up'
+    // }).then(function (modal) {
+    //     $scope.editActivityModal = modal;
+    // });
+    // $scope.openEditActivityModal = function () {
+    //     $scope.editActivityModal.show();
+    // };
+    // $scope.closeEditActivityModal = function () {
+    //     $scope.editActivityModal.hide();
+    // };
+    // //Cleanup the modal when we're done with it!
+    // $scope.$on('$destroy', function () {
+    //     $scope.editActivityModal.remove();
+    // });
+    // // Execute action on hide modal
+    // $scope.$on('editActivityModal.hidden', function () {
+    //     // Execute action
+    // });
+    // // Execute action on remove modal
+    // $scope.$on('editActivityModal.removed', function () {
+    //     // Execute action
+    // });
 
 
-    $ionicModal.fromTemplateUrl('app/activity/create/createActivityModal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function (modal) {
-        $scope.createActivityModal = modal;
-    });
-    $scope.openCreateActivityModal = function () {
-        $scope.createActivityModal.show();
-    };
-    $scope.closeCreateActivityModal = function () {
-        $scope.createActivityModal.hide();
-    };
-    //Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function () {
-        $scope.createActivityModal.remove();
-    });
-    // Execute action on hide modal
-    $scope.$on('createActivityModal.hidden', function () {
-        // Execute action
-    });
-    // Execute action on remove modal
-    $scope.$on('createActivityModal.removed', function () {
-        // Execute action
-    });
+    // $ionicModal.fromTemplateUrl('app/activity/create/createActivityModal.html', {
+    //     scope: $scope,
+    //     animation: 'slide-in-up'
+    // }).then(function (modal) {
+    //     $scope.createActivityModal = modal;
+    // });
+    // $scope.openCreateActivityModal = function () {
+    //     $scope.createActivityModal.show();
+    // };
+    // $scope.closeCreateActivityModal = function () {
+    //     $scope.createActivityModal.hide();
+    // };
+    // //Cleanup the modal when we're done with it!
+    // $scope.$on('$destroy', function () {
+    //     $scope.createActivityModal.remove();
+    // });
+    // // Execute action on hide modal
+    // $scope.$on('createActivityModal.hidden', function () {
+    //     // Execute action
+    // });
+    // // Execute action on remove modal
+    // $scope.$on('createActivityModal.removed', function () {
+    //     // Execute action
+    // });
 
-    $ionicModal.fromTemplateUrl('app/activity/create/selectActivityTypeModal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function (modal) {
-        $scope.selectActivityTypeModal = modal;
-    });
-    $scope.openSelectActivityTypeModal = function () {
-        $scope.selectActivityTypeModal.show();
-    };
-    $scope.closeSelectActivityTypeModal = function () {
-        $scope.selectActivityTypeModal.hide();
-    };
-    //Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function () {
-        $scope.selectActivityTypeModal.remove();
-    });
-    // Execute action on hide modal
-    $scope.$on('selectActivityTypeModal.hidden', function () {
-        // Execute action
-    });
-    // Execute action on remove modal
-    $scope.$on('selectActivityTypeModal.removed', function () {
-        // Execute action
-    });
+    // $ionicModal.fromTemplateUrl('app/activity/create/selectActivityTypeModal.html', {
+    //     scope: $scope,
+    //     animation: 'slide-in-up'
+    // }).then(function (modal) {
+    //     $scope.selectActivityTypeModal = modal;
+    // });
+    // $scope.openSelectActivityTypeModal = function () {
+    //     $scope.selectActivityTypeModal.show();
+    // };
+    // $scope.closeSelectActivityTypeModal = function () {
+    //     $scope.selectActivityTypeModal.hide();
+    // };
+    // //Cleanup the modal when we're done with it!
+    // $scope.$on('$destroy', function () {
+    //     $scope.selectActivityTypeModal.remove();
+    // });
+    // // Execute action on hide modal
+    // $scope.$on('selectActivityTypeModal.hidden', function () {
+    //     // Execute action
+    // });
+    // // Execute action on remove modal
+    // $scope.$on('selectActivityTypeModal.removed', function () {
+    //     // Execute action
+    // });
 
 
 }

@@ -24,6 +24,7 @@ angular.module('app.activity.parent', ['app.services.healthKit', 'chart.js', 'ap
         
         .state('tab.activity.activityChart', {
             url: "/activityChart",
+            cache: false,
             views: {
                 'activity-page': {
                     templateUrl: "app/activity/parent/chart/activityChart.html"

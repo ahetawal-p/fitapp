@@ -57,7 +57,7 @@ angular.module('app.factories')
                     text: ''
                 },
                 xAxis: {
-                    minorTickLength: 0,
+             lineWidth: 0, 
                     tickLength: 0,
                     labels: {
                         enabled: false
@@ -108,8 +108,29 @@ angular.module('app.factories')
 
         function createLineChartConfig(chartDataContainer) {
             var chartConfig = {
+                title: {
+                    text: ""
+                },
+                xAxis: {
+                    minorTickLength: 0,
+                    tickLength: 0,
+                    labels: {
+                        enabled: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    gridLineWidth: 0,
+                    labels: {
+                        enabled: false
+                    }
+                },
                 options: {
                     chart: {
+                        renderTo: "container",
                         type: 'line'
                     },
                     legend: {
@@ -143,16 +164,20 @@ angular.module('app.factories')
         }
 
         function createActivityChartBarChartConfigs(chartDataContainer) {
-
-        }
-
-        function createBarChartConfig(chartDataContainer) {
-            var seriesData = [];
+           var chartConfigs = [];
            _.each(chartDataContainer.dataSets, function(dataSet){
-                seriesData.push(dataSet.data);
+                chartConfigs.push(createBarChartConfig(dataSet));
            }); 
 
+           return chartConfigs;
+        }
+
+        function createBarChartConfig(dataSet) {
+            var seriesData = [];
+           seriesData.push(dataSet.data);
            var chartConfig = {
+                dayOfMonth: dateTimeUtil.getDayOfMonth(dataSet.name),
+                dayOfWeekName: dateTimeUtil.getDayOfWeekName(dataSet.name),
                 title: {
                     text: ''
                 },
@@ -172,6 +197,8 @@ angular.module('app.factories')
                         text: ''
                     },
                     gridLineWidth: 0,
+                    lineWidth: 0,      
+
                     labels: {
                         enabled: false
                     }
@@ -180,6 +207,7 @@ angular.module('app.factories')
                     name: "test",
                     data: seriesData,
                     color: "#33C507",
+                    pointWidth: 30,
                     dataLabels: {
                         enabled: true,
                         align: 'left',
@@ -197,6 +225,9 @@ angular.module('app.factories')
                     },
                     tooltip: {
                         enabled: false
+                    },
+                    legend: {
+                        enabled: false
                     }
                 }
             };
@@ -209,39 +240,38 @@ angular.module('app.factories')
         //    _.each(chartDataContainer.dataSets, function(dataSet){
         //         seriesData.push(dataSet.data);
         //    }); 
-        //        // seriesData.push(chartDataContainer.dataSets[0].data);
 
         //    var chartConfig = {
-        //         chart: {
-        //             type: 'bar'
-        //         },
         //         title: {
         //             text: ''
         //         },
-        //         // xAxis: {
-        //         //     minorTickLength: 0,
-        //         //     tickLength: 0,
-        //         //     labels: {
-        //         //         enabled: false
-        //         //     },
-        //         //     title: {
-        //         //         text: null
-        //         //     }
-        //         // },
-        //         // yAxis: {
-        //         //     min: 0,
-        //         //     title: {
-        //         //         text: ''
-        //         //     },
-        //         //     gridLineWidth: 0,
-        //         //     labels: {
-        //         //         enabled: false
-        //         //     }
-        //         // },
+        //         xAxis: {
+        //             minorTickLength: 0,
+        //             tickLength: 0,
+        //             labels: {
+        //                 enabled: false
+        //             },
+        //             title: {
+        //                 text: null
+        //             }
+        //         },
+        //         yAxis: {
+        //             min: 0,
+        //             title: {
+        //                 text: ''
+        //             },
+        //             gridLineWidth: 0,
+        //             lineWidth: 0,      
+
+        //             labels: {
+        //                 enabled: false
+        //             }
+        //         },
         //         series: [{
         //             name: "test",
         //             data: seriesData,
         //             color: "#33C507",
+        //             pointWidth: 30,
         //             dataLabels: {
         //                 enabled: true,
         //                 align: 'left',
@@ -268,6 +298,7 @@ angular.module('app.factories')
 
         return {
             createPlaceholderChartConfig: createPlaceholderChartConfig,
-            createChartConfig: createChartConfig
+            createChartConfig: createChartConfig,
+            createActivityChartBarChartConfigs: createActivityChartBarChartConfigs
         };
     }]);

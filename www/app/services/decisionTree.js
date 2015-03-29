@@ -3,7 +3,8 @@ angular.module('app.services')
 /**
  * A simple example service that returns tree data for conversation
  */
-.factory('talky', ['healthKitService', '$q', '$ionicPlatform', function(healthKitService, $q, $ionicPlatform) {
+.factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory',
+function(healthKitService, $q, $ionicPlatform, chartConfigFactory) {
 
 	
 	$ionicPlatform.ready(function() {
@@ -62,6 +63,7 @@ angular.module('app.services')
 		var endDate = new Date("3/20/2015");
 		endDate.setHours(19);
 		endDate.setMinutes(0);
+
 		healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(
 			function(response){
 				deferred.resolve(response);

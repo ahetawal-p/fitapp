@@ -7,12 +7,22 @@ angular.module('app.utils')
     var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December' ];
 
-    var dayNames = ['Sun','Mon','Tues','Wed',
-    'Thurs','Fri','Sat'];
+    var dayNames = ['SUN','MON','TUE','WED',
+    'THU','FRI','SAT'];
 
     function getFormattedDateString(date){
 
         return date.substring(0, 10);//.toJSON().substring(0,10)
+    }
+
+    function getDayOfMonth(date){
+        var dateObj = new Date(date.toString().replace(/-/g, "/"));
+        return dateObj.getDate();
+    }
+
+    function getDayOfWeekName(date){
+        var dateObj = new Date(date.toString().replace(/-/g, "/"));
+        return dayNames[dateObj.getDay()];
     }
 
     function secondTimeGreaterThanFirst(firstDateTime, secondDateTime){
@@ -99,6 +109,8 @@ angular.module('app.utils')
         getMonthDay: getMonthDay,
         secondTimeGreaterThanFirst: secondTimeGreaterThanFirst,
         getMinutesFromSeconds: getMinutesFromSeconds,
-        getMonthDayYear: getMonthDayYear
+        getMonthDayYear: getMonthDayYear,
+        getDayOfWeekName: getDayOfWeekName,
+        getDayOfMonth: getDayOfMonth
     };
 });

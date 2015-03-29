@@ -190,9 +190,7 @@ angular.module('app.conversation')
 
 
 	    	var handleChartNode = function(node){
-
 	    		addNodeHelper(root['skeletonWaitNode'], true);
-	    		
 	    		var promise = $parse(node.method)('test');
 	    		promise.then(function(response){
 	    			console.log("back in then");
