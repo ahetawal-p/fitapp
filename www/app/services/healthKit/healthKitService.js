@@ -34,8 +34,23 @@ angular.module('app.services.healthKit')
         function getActivityDurationByDate(){
             var deferred = $q.defer();
             api.getWalkingAndRunningDistance().then(function(walkRunActivities){
-                var activitiyDurations = workoutProcessor.getActivityDurationByDate(walkRunActivities);
-                deferred.resolve(activitiyDurations);
+                var durationsByDate = workoutProcessor.getActivityDurationByDate(walkRunActivities);
+                var dataSets = [];
+                var labels = [];
+
+                _.each(durationsByDate, function(durationByDate){
+                    dataSets.push({
+                        name: durationByDate.date,
+                        data: durationByDate.durationSum
+                    });
+                });
+
+                var chartDataContainer = {
+                    labels: labels,
+                    dataSets = dataSets
+                }
+                
+                deferred.resolve(chartDataContainer);
             });
             return deferred.promise;
         }

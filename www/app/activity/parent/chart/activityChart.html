@@ -2,14 +2,13 @@
     <ion-content class="padding has-tabs-top">
 	<!-- charts with highCharts -->
 	<highchart id="activityChart" config="vm.chartConfig"></highchart>
-	<div class="transaction-list item-container" ng-repeat="durationByDate in vm.durationsByDate | orderBy: '-date'">
+	<div class="transaction-list item-container" ng-repeat="durationByDateComposite in vm.durationByDateComposites | orderBy: '-date'">
           <div class="row">
             <i class="icon {{activity.icon}}"></i>
             <div class="col col-90">
               <p>{{durationByDate.durationSum}}</p>
             </div>
             <div class="col col-10" style="text-align:right;">
-              <p>{{durationByDate.date | date:'EEE, MMM d'}}</p>
               	<highchart class="durationBarChart" config="vm.durationBarChartConfig"></highchart>
             </div>
           </div>

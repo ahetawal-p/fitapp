@@ -33,14 +33,12 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
 
     vm.chartConfig = chartConfigFactory.createPlaceholderChartConfig("line");
     vm.todayVsAvg = {};
-    console.log("before getTodayVsAverageDataPoints");
     healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(function (response) {
-        console.log("getTodayVsAverageDataPoints");
         vm.chartConfig = chartConfigFactory.createChartConfig(response, "line");
     });
 
     healthKitService.getActivityDurationByDate().then(function(response){
-        vm.durationsByDate = response;
+        vm.durationByDateComposites = response;
 
     });
     // healthKitService.getActivityDataPoints(startDate, new Date()).then(function(response){
