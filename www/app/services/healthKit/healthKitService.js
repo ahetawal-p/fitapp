@@ -47,9 +47,9 @@ angular.module('app.services.healthKit')
 
                 var chartDataContainer = {
                     labels: labels,
-                    dataSets = dataSets
+                    dataSets: dataSets
                 }
-                
+
                 deferred.resolve(chartDataContainer);
             });
             return deferred.promise;

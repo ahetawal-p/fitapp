@@ -2,7 +2,9 @@
     <ion-content class="padding has-tabs-top">
 	<!-- charts with highCharts -->
 	<highchart id="activityChart" config="vm.chartConfig"></highchart>
-	<div class="transaction-list item-container" ng-repeat="durationByDateComposite in vm.durationByDateComposites | orderBy: '-date'">
+	<highchart id="durationBarChart" config="vm.durationBarChartConfig"></highchart>
+
+<!-- 	<div class="transaction-list item-container" ng-repeat="durationByDateComposite in vm.durationByDateComposites | orderBy: '-date'">
           <div class="row">
             <i class="icon {{activity.icon}}"></i>
             <div class="col col-90">
@@ -12,7 +14,7 @@
               	<highchart class="durationBarChart" config="vm.durationBarChartConfig"></highchart>
             </div>
           </div>
-    </div>
+    </div> -->
 
     <!-- angular-charts version -->
       <!--   
