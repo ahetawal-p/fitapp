@@ -10,19 +10,28 @@ angular.module('app.services')
 		var colorConfig = {
 					"0" : ['120deg', '#FFCC99', '#CCCC99'],
 					"1" : ['-45deg', '#FFCC99', '#6633CC'],
-					"2" : ['-92deg', '#999900', '#6633FF'],
-					"3" : ['50deg',  '#33FFFF', '#006600'],
-					"4" : ['-108deg', '#FF0066', '#00FF99']
+					"2" : ['-92deg', '#CCCC99', '#6633FF'],
+					"3" : ['50deg',  '#33FFFF', '#9999CC'],
+					"4" : ['100deg', '#CC9999', '#CC99FF']
 				};
 
-		var randomColor = Math.floor((Math.random() * 10)%5);
-		console.log(randomColor);
-		var stylingString = "-webkit-linear-gradient(" +
+		var randomColor = Math.floor((Math.random() * 5));
+		var radomDirection = Math.floor((Math.random() * 2));
+		var stylingStringLinear = "-webkit-linear-gradient(" +
 					colorConfig[randomColor][0] + "," +
 					colorConfig[randomColor][1] + "," +
-					colorConfig[randomColor][2] + "" +  ")";
+					colorConfig[randomColor][2] +  ")";
+	
+		var stylingStringRadial = "-webkit-radial-gradient(" +
+					colorConfig[randomColor][1] + "," +
+					colorConfig[randomColor][2] + ")";
 
-		jQuery(".scroll-content").css('background', stylingString);
+		var styleConfig = [stylingStringLinear, stylingStringRadial];
+
+		console.log("Color: " + randomColor);
+		console.log("Dir: " + radomDirection);
+
+		jQuery(".scroll-content").css('background', styleConfig[radomDirection]);
 
 	  });
 
@@ -81,90 +90,91 @@ angular.module('app.services')
 		},
 
 		'onboarding' : {
-			text: "Hi There I am wall-e",
+			text: [0],
 			children: ['askName']
 		},
 		'askName': {
-			text: "What is your name?",
-			children: ['testChart','userName']
+			text: ['1'],
+			children: ['userName']
 		},
 		'userName': {
-			text: "My Name is User",
+			text: "TODO UPDATE > My Name is User",
 			type: "user",
 			children: ['greetUser']
 		},
 		'greetUser': {
-			text: '"Hi " + user.name + "! Nice to meet you"',
+			text: ['2'],
 			evalInfo : {
 				type : "string",
 			},
 			children: ['lookData']
 		},
 		'lookData':{
-			text: "Let's get started by taking a look at your existing data.",
+			text: ['3'],
 			children: ['includeHApp']
 		},
 		'includeHApp':{
-			text: "In my analysis, I can include data from your iPhone's Healthapp.",
+			text: ['4'],
 			children:['askWouldLike']
 		},
 		'askWouldLike': {
-			text: "Would you like that",
+			text: ['5'],
 			children:['userAgree', 'userExplain']
 		},
 		'userAgree': {
-			text:"Sounds Great",
+			text: ['6'],
 			type: "user",
 			children: ['onboardingInfo']
 		},
 		'userExplain':{
-			text:"Please explain",
+			text: ['7'],
 			type: "user",
 			children: ['onboardingInfo']
 		},
 		'onboardingInfo': {
-			text: "Your device will be personalized based on your workout, sleep, and nutrition data…",
+			text: ['8'],
 			children:['moreOnboardingInfo']
+			//children: ['aboveAverage']
 		},
 		'moreOnboardingInfo': {
-			text: "Plus your height, weight, age and gender",
+			text: ['9'],
 			children: ['furtherOnboardingInfo']
 		},
 		'furtherOnboardingInfo': {
-			text: "Your data is safe, and will never be shared with anyone",
+			text: ['10'],
 			children: ['onboardingInfoUserConfirm','onboardingInfoUserNo']
 		},
 		'onboardingInfoUserConfirm': {
-			text: "Sounds great",
+			text: ['6'],
 			type: "user",
 			//children: ['dummyAnalyzer']
 			children : ['openHealthApp']
 		},
 		'onboardingInfoUserNo': {
-			text: "No Thanks",
+			text: ['11'],
 			type: "user",
 			children: ['collectInfo']
 		},
 
 		'collectInfo': {
-			text: "Pokkifit will need to collet your data for analysis",
+			text: ['12'],
 			children: ['whenReady']
 		},
 		'whenReady': {
-			text: "Let me know when you are ready",
+			text: ['13'],
 			children: ['gotoSettings']
 		},
 		'gotoSettings': {
-			text: "You can go to settings and edit Health app permissions",
+			text: ['14'],
 			children: ['gotoSettingsOk']
 		},
 		'gotoSettingsOk': {
-			text: "Ok",
+			text: ['15'],
 			type: "user",
 			children: ['lookingForward']
 		},
 		'lookingForward': {
-			text: "Looking forward to that",
+			text: ['16'],
 			children: []
 		},
 
@@ -173,68 +183,62 @@ angular.module('app.services')
 			children: ['addDataHApp']
 		},
 		'addDataHApp': {
-			text: "Great. I'll add your Health data to my stats",
+			text: ['17'],
 			children: ['addDataOk']
 		},
 		'addDataOk': {
-			text: "Ok",
+			text: ['15'],
 			type: "user",
 			children: ['activityOnPhone']
 		},
 		'activityOnPhone': {
-			text: "Let's take a look at the activity data stored on your iPhone",
-			children: []
+			text: ['18'],
+			children: ['activityOnPhoneOk', 'activityOnPhone1']
 		},
 		'activityOnPhoneOk': {
-			text: "Ok",
+			text: ['15'],
 			type: "user",
 			children: ['dummyAnalyzer']
 		},
 		
-		'activityOnPhone?': {
-			text: "Stored on my phone?",
+		'activityOnPhone1': {
+			text: ['19'],
 			type: "user",
 			children: ['activityOnPhoneExplain']
 		},
 
 		'activityOnPhoneExplain': {
-			text: "All iPhone have a motion sensor that detects and stores up to 7 days of your activities and sleep data",
+			text: ['20'],
 			children: ['activityOnPhoneExplainMore']
 		},
 
 		'activityOnPhoneExplainMore': {
-			text: "No one can see this info until you give permission, like you did with Po.",
+			text: ['21'],
 			children: ['activityOnPhoneIsee']
 		},
 
 		'activityOnPhoneIsee': {
-			text: "I see",
+			text: ['22'],
 			type: "user",
 			children: ['activityOnPhoneLookData']
 		},
 
-		'activityOnPhoneLookData?': {
-			text: "Would you like to take a look at your data?",
+		'activityOnPhoneLookData': {
+			text: ['23'],
 			children: ['activityOnPhoneSure', 'activityOnPhoneNotNow']
 		},
 
 		'activityOnPhoneSure': {
-			text: "Sure",
+			text: ['24'],
+			type: "user",
+			children: ['dummyAnalyzer']
+		},
+		'activityOnPhoneNotNow': {
+			text: ['25'],
 			type: "user",
 			children: []
 		},
-		'activityOnPhoneNotNow': {
-			text: "Not Now",
-			type: "user",
-			children: ['']
-		},
 		
-
-		
-		
-
-
-
 		'dummyAnalyzer' : {
 			evalInfo : {
 				type : "func",
@@ -243,25 +247,25 @@ angular.module('app.services')
 			children:[]
 		},
 		'aboveAverage':{
-			text: "It beats the daily average for an average Joe",
+			text: ['26'],
 			children:['moreActiveTip']
 		},
 		'onParAverage':{
-			text: "You are on par with the average of Fitapp users",
+			text: ['27'],
 			children:['moreActiveTip']
 		},
 		'belowAverage': {
-			text: "It is slightly under the average of a typical Fitapp user.",
+			text: ['28'],
 			children:['moreActiveTip']
 		},
 		'moreActiveTip': {
-			text: "Consider this",
+			text: ['29'],
 			children:['testChart']
 		},
 		'testChart': {
 			type: "chart",
 			method: getChartData,
-			children:['userAgree']
+			children:[]
 		}
 
 	};
