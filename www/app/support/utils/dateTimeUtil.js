@@ -11,36 +11,20 @@ angular.module('app.utils')
     'Thurs','Fri','Sat'];
 
     function getFormattedDateString(date){
-        // var convertedDate = new Date(date.toString().replace(/-/g, "/"));
-        // var formattedDateString = dayNames[convertedDate.getDay()] + ", " + monthNames[convertedDate.getMonth()] + " " + convertedDate.getDate();
-        // console.log("asdf: " + date);
 
         return date.substring(0, 10);//.toJSON().substring(0,10)
     }
 
     function secondTimeGreaterThanFirst(firstDateTime, secondDateTime){
-        /* old logic
-        var firstTimeDateTimeObj = new Date();
-        firstTimeDateTimeObj.setHours(firstDateTime.getHours());
-        firstTimeDateTimeObj.setMinutes(firstDateTime.getMinutes());
-
-        var secondTimeDateTimeObj = new Date();
-        secondTimeDateTimeObj.setHours(secondDateTime.getHours());
-        secondTimeDateTimeObj.setMinutes(secondDateTime.getMinutes());
-        console.log("secondTimeGreaterThanFirst");
-        console.log("endDateTime: " + secondTimeDateTimeObj);
-        console.log("iterDateTime: " + firstTimeDateTimeObj);
-
-        return secondTimeDateTimeObj > firstTimeDateTimeObj;
-        */
-
         var firstTimeInMinutes = firstDateTime.getHours() * 60 + firstDateTime.getMinutes();
         var secondTimeInMinutes = secondDateTime.getHours() * 60 + secondDateTime.getMinutes();
 
-        // console.log("endHours: " + secondDateTime.getHours());
-        // console.log("iterHours: " + firstDateTime.getHours());
-        // console.log("return: " + secondTimeInMinutes > firstTimeInMinutes);
         return secondTimeInMinutes > firstTimeInMinutes;
+    }
+
+    function getMonthDayYear(date){
+        var dateObj = new Date(date);
+        return dateObj.getMonth() + 1 + "/" + dateObj.getDate() + "/" + dateObj.getFullYear();
     }
 
     function getMonthDay(date){
@@ -114,6 +98,7 @@ angular.module('app.utils')
         getDurationStringFromSeconds: getDurationStringFromSeconds,
         getMonthDay: getMonthDay,
         secondTimeGreaterThanFirst: secondTimeGreaterThanFirst,
-        getMinutesFromSeconds: getMinutesFromSeconds
+        getMinutesFromSeconds: getMinutesFromSeconds,
+        getMonthDayYear: getMonthDayYear
     };
 });

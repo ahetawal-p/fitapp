@@ -169,6 +169,8 @@ body {
   width: 70%;
 }
 
-.chart .highcharts-grid {
-   display: none;
+/* Activity Chart */
+#activityChart {
+  height: 150px;
+  width: 100%;
 }

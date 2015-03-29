@@ -9,51 +9,20 @@ angular.module('app.factories')
             chartConfig = createLineChartConfig(chartDataContainer);
         }
 
+        console.log(chartConfig);
         return chartConfig;
     }
 
 	function createLineChartConfig(chartDataContainer){
-
             var chartConfig = {
-                  title: {
-                    text: ''
-                  },
-                  legend: {
-                    enabled: false
-                  },
-                xAxis: {
-                   
-                   lineWidth: 0,
-                   minorGridLineWidth: 0,
-                   lineColor: 'transparent',
-                         
-                   labels: {
-                       enabled: false
-                   },
-                   minorTickLength: 0,
-                   tickLength: 0
-                },
-                yAxis: {
-                    labels: {
-                    enabled: false
-                }
-              },
-              //   options: {
-              //     //This is the Main Highcharts chart config. Any Highchart options are valid here.
-              //     //will be overriden by values specified below.
-              //     chart: {
-              //       type: 'series'
-              //     },
-              //     tooltip: {
-              //       style: {
-              //           padding: 10,
-              //           fontWeight: 'bold'
-              //       }
-              //     },
-              //     marker: {
-              //       enabled: false
-              //     }
-              // },
+                options: {
+                          chart: {
+                              type: 'line'
+                          },
+                          legend: {
+                              enabled: false   
+                          }
+                      },
 
               //Series object (optional) - a list of series using normal highcharts series options.
               series: [{

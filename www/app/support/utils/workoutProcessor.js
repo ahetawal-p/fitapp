@@ -32,6 +32,34 @@ angular.module('app.utils')
 		return processedActivities;
 	}
 
+	function getActivityDurationByDate(rawActivityObjects){
+		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+		groupedActivities = groupedActivities.filter(filterGroupedActivities);
+		var activitiesByDate = _.groupBy(groupedActivities, 
+				function(activity){ 
+					var monthDayYear = dateTimeUtil.getMonthDayYear(activity.startDate);
+					return monthDayYear;
+				});
+		
+		/* iterate through each date and sum up activities */
+		var durationSumByDate = [];
+		for (date in activitiesByDate){
+			var activities = activitiesByDate[date];
+			var durationSum = 
+					activities.reduce(function(memo, activity){
+						var duration = dateTimeUtil.getDurationInSeconds(activity.startDate, activity.endDate);
+						return memo + duration;
+					}, 0);
+
+			durationSumByDate.push({
+				durationSum: durationSum,
+				date: date
+			});
+		}
+
+		return durationSumByDate;
+	}
+
 	function getAverageActivityDuration(startDateTime, endDateTime, rawActivityObjects, filterFunction){
 		//pre filter rawActivityObjects, potentially by weekend or weekday
 		rawActivityObjects = rawActivityObjects.filter(filterFunction);
@@ -352,6 +380,6 @@ angular.module('app.utils')
 		getActivityDataPoints: getActivityDataPoints,
 		getAverageActivityDataPoints: getAverageActivityDataPoints,
 		getTotalDurationBetweenDateTimes: getTotalDurationBetweenDateTimes,
-		getAverageActivityDuration: getAverageActivityDuration
+		getActivityDurationByDate: getActivityDurationByDate
 	}
 }]);

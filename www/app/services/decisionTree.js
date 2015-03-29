@@ -86,7 +86,7 @@ angular.module('app.services')
 		},
 		'askName': {
 			text: "What is your name?",
-			children: ['userName']
+			children: ['testChart','userName']
 		},
 		'userName': {
 			text: "My Name is User",

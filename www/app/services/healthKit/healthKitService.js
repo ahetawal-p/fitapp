@@ -31,6 +31,15 @@ angular.module('app.services.healthKit')
         	return deferred.promise;
         }
 
+        function getActivityDurationByDate(){
+            var deferred = $q.defer();
+            api.getWalkingAndRunningDistance().then(function(walkRunActivities){
+                var activitiyDurations = workoutProcessor.getActivityDurationByDate(walkRunActivities);
+                deferred.resolve(activitiyDurations);
+            });
+            return deferred.promise;
+        }
+
         function getWeekdayTimesOfDayAverages(){
             var deferred = $q.defer();
 
@@ -253,6 +262,7 @@ angular.module('app.services.healthKit')
                 getWeekdayTimesOfDayAverages: getWeekdayTimesOfDayAverages,
                 getWeekendTimesOfDayAverages: getWeekendTimesOfDayAverages,
                 getTodayVsAverageDataPoints: getTodayVsAverageDataPoints,
-                getDailyAverageVsAllUsers: getDailyAverageVsAllUsers
+                getDailyAverageVsAllUsers: getDailyAverageVsAllUsers,
+                getActivityDurationByDate: getActivityDurationByDate
 			}}]
 			);
