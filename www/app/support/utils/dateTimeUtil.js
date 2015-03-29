@@ -23,7 +23,7 @@ angular.module('app.utils')
     }
 
     function getMonthDayYear(date){
-        var dateObj = new Date(date);
+        var dateObj = new Date(date.toString().replace(/-/g, "/"));
         return dateObj.getMonth() + 1 + "/" + dateObj.getDate() + "/" + dateObj.getFullYear();
     }
 

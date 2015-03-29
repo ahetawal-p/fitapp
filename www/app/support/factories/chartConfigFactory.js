@@ -1,7 +1,7 @@
 angular.module('app.factories')
 
-.factory('chartConfigFactory',
-    function() {
+.factory('chartConfigFactory',['dateTimeUtil',
+    function(dateTimeUtil) {
 
         function createPlaceholderChartConfig(chartType) {
             var chartConfig = {};
@@ -22,6 +22,9 @@ angular.module('app.factories')
                 },
                 options: {
                     legend: {
+                        enabled: false
+                    },
+                    tooltip: {
                         enabled: false
                     }
                 },
@@ -82,14 +85,9 @@ angular.module('app.factories')
                     },
                     legend: {
                         enabled: false
-                    }
-                },
-
-                plotOptions: {
-                    bar: {
-                        dataLabels: {
-                            enabled: true
-                        }
+                    },
+                    tooltip: {
+                        enabled: false
                     }
                 }
             };
@@ -154,19 +152,7 @@ angular.module('app.factories')
                 seriesData.push(dataSet.data);
            }); 
 
-            // var dataSetSeries = {
-            //     name: dataSet.name,
-            //     data: dataSet.data,
-            //     marker: {
-            //         enabled: false
-            //     },
-            //     color: "#BEBEBE"
-            // };
-
            var chartConfig = {
-                chart: {
-                    type: 'bar'
-                },
                 title: {
                     text: ''
                 },
@@ -192,33 +178,96 @@ angular.module('app.factories')
                 },
                 series: [{
                     name: "test",
-                    data: seriesData
+                    data: seriesData,
+                    color: "#33C507",
+                    dataLabels: {
+                        enabled: true,
+                        align: 'left',
+                        color: '#FFFFFF',
+                        x: -80,
+                        formatter: function() {
+                            var durationInSec = this.y;
+                            return dateTimeUtil.getDurationStringFromSeconds(durationInSec);
+                        }
+                    }
                 }],
-                tooltip: {
-                    enabled: false
-                },
                 options: {
                     chart: {
                         type: 'bar'
+                    },
+                    tooltip: {
+                        enabled: false
                     }
-                },
-                plotOptions: {
-                    bar: {
-                        dataLabels: {
-                            enabled: true
-                        }
-                    }
-                },
-                legend: {
-                    enabled: false
                 }
             };
 
             return chartConfig;
         }
 
+        // function createBarChartConfig(chartDataContainer) {
+        //     var seriesData = [];
+        //    _.each(chartDataContainer.dataSets, function(dataSet){
+        //         seriesData.push(dataSet.data);
+        //    }); 
+        //        // seriesData.push(chartDataContainer.dataSets[0].data);
+
+        //    var chartConfig = {
+        //         chart: {
+        //             type: 'bar'
+        //         },
+        //         title: {
+        //             text: ''
+        //         },
+        //         // xAxis: {
+        //         //     minorTickLength: 0,
+        //         //     tickLength: 0,
+        //         //     labels: {
+        //         //         enabled: false
+        //         //     },
+        //         //     title: {
+        //         //         text: null
+        //         //     }
+        //         // },
+        //         // yAxis: {
+        //         //     min: 0,
+        //         //     title: {
+        //         //         text: ''
+        //         //     },
+        //         //     gridLineWidth: 0,
+        //         //     labels: {
+        //         //         enabled: false
+        //         //     }
+        //         // },
+        //         series: [{
+        //             name: "test",
+        //             data: seriesData,
+        //             color: "#33C507",
+        //             dataLabels: {
+        //                 enabled: true,
+        //                 align: 'left',
+        //                 color: '#FFFFFF',
+        //                 x: -80,
+        //                 formatter: function() {
+        //                     var durationInSec = this.y;
+        //                     return dateTimeUtil.getDurationStringFromSeconds(durationInSec);
+        //                 }
+        //             }
+        //         }],
+        //         options: {
+        //             chart: {
+        //                 type: 'bar'
+        //             },
+        //             tooltip: {
+        //                 enabled: false
+        //             }
+        //         }
+        //     };
+
+        //     return chartConfig;
+        // }
+
         return {
             createPlaceholderChartConfig: createPlaceholderChartConfig,
             createChartConfig: createChartConfig
         };
-    });
+    }]);

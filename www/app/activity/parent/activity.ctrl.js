@@ -38,8 +38,12 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
     });
 
     vm.durationBarChartConfig = chartConfigFactory.createPlaceholderChartConfig("bar");
+       vm.durationBarChartConfig2 = chartConfigFactory.createPlaceholderChartConfig("bar");
+
     healthKitService.getActivityDurationByDate().then(function(response){
         vm.durationBarChartConfig = chartConfigFactory.createChartConfig(response, "bar");
+            vm.durationBarChartConfig2 = chartConfigFactory.createChartConfig(response, "bar");
+
     });
     // healthKitService.getActivityDataPoints(startDate, new Date()).then(function(response){
 
