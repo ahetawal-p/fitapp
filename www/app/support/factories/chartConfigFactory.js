@@ -22,7 +22,11 @@ angular.module('app.factories')
                 },
                 options: {
                     legend: {
-                        enabled: false
+                        enabled: true,
+                        layout: 'vertical',
+                        align: 'left',
+                        verticalAlign: 'top',
+                        floating: true
                     },
                     tooltip: {
                         enabled: false
@@ -107,6 +111,21 @@ angular.module('app.factories')
         }
 
         function createLineChartConfig(chartDataContainer) {
+
+            function getTotalDuration(durationsArray){
+                var totalDuration = _.max(durationsArray, function(dataPoint){
+                    return dataPoint;
+                });
+
+                return totalDuration;
+            }
+
+            var todayTotalDuration = getTotalDuration(chartDataContainer.dataSets[0].data);
+            var todayTotalDurationString = dateTimeUtil.getDurationStringFromSeconds(todayTotalDuration);
+
+            var avgTotalDuration = getTotalDuration(chartDataContainer.dataSets[1].data);
+            var avgTotalDurationString = dateTimeUtil.getDurationStringFromSeconds(avgTotalDuration);
+
             var chartConfig = {
                 title: {
                     text: ""
@@ -133,9 +152,53 @@ angular.module('app.factories')
                         renderTo: "container",
                         type: 'line'
                     },
+                    labels: {
+                        items: [{
+                            html: '<div id=""><span>TODAY</span><br><span>' + todayTotalDurationString + '</span></div>',
+                            style: {
+                                left: "10px",
+                                top: "5px",
+                                fontSize: "8px",
+                                margin: "0px",
+                                color: "#33C507",
+                                  itemMarginTop: 0,
+                                itemMarginBottom: 0
+                            }
+
+                        },
+                        {
+                            html: '<div id="averageDurationLabel"><span>AVG</span><br><span>' + avgTotalDurationString + '</span>',
+                            style: {
+                                left: "10px",
+                                top: "40px",
+                                fontSize: "8px",
+                                color: "#BEBEBE"
+                            }
+
+                        }]
+                    },  
                     legend: {
-                        enabled: false
+                        enabled: false,
+                        layout: 'vertical',
+                        align: 'left',
+                        verticalAlign: 'top',
+                        floating: true,
+                        labelFormatter: function(){
+                            var totalDurationSeconds = getTotalDuration(this.yData);
+                            return dateTimeUtil.getDurationStringFromSeconds(totalDurationSeconds);
+                        }
                     }
+                    // ,
+                    // labels: {
+                    //     items: [{
+                    //         html: "My custom laasdfbel",
+                    //         style: {
+                    //             left: "100px",
+                    //             top: "100px"
+                    //         }
+
+                    //     }]
+                    // }
                 },
 
                 //Series object (optional) - a list of series using normal highcharts series options.
@@ -155,9 +218,7 @@ angular.module('app.factories')
                     },
                     color: "#BEBEBE"
 
-                }],
-                //Configuration for the xAxis (optional). Currently only one x axis can be dynamically controlled.
-                //properties currentMin and currentMax provied 2-way binding to the chart's maximimum and minimum
+                }]
             };
 
             return chartConfig;

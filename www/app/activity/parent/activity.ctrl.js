@@ -11,9 +11,10 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
 
     var vm = this;
     healthKitService.getActivities().then(function (response) {
-        //console.log(JSON.stringify(response));
         vm.activities = response;
     });
+
+    /* set today's date */
     vm.todaysDate = new Date();
     //TEST METHODS FOR HEALTHKIT ENDPOINTS
     // healthKitService.getAverageActivityDataPoints(new Date("3/5/2015 5:00"), new Date("3/5/2015 20:00"));
@@ -30,17 +31,14 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
     endDate.setHours(19);
     endDate.setMinutes(0);
 
-
-    vm.chartConfig = chartConfigFactory.createPlaceholderChartConfig("line");
-    vm.todayVsAvg = {};
+    vm.chartConfigs = [];
     healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(function (response) {
-        vm.chartConfig = chartConfigFactory.createChartConfig(response, "line");
+        var chartConfig = chartConfigFactory.createChartConfig(response, "line");
+        vm.chartConfigs.push(chartConfig);
     });
 
 
-
-    vm.durationBarChartConfig = chartConfigFactory.createPlaceholderChartConfig("bar");
-
+    /* create bar charts */
     healthKitService.getActivityDurationByDate().then(function(response){
         var durationBarChartConfigs = chartConfigFactory.createActivityChartBarChartConfigs(response);
         vm.durationByDateComposites = [];

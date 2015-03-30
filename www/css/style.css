@@ -192,10 +192,19 @@ body {
   color:#BEBEBE;
 }
 
+#activityChartsPage .rowDateDisplay{
+    color:#BEBEBE;
+}
+
 #activityChartsPage .barChartRow{
   padding: 0;
 }
 
 #activityChartsPage .col {
   padding: 0;
+}
+
+#activityChartsPage #todayDurationLabel{
+  color:#BEBEBE;
+  font-size: 30px;
 }
