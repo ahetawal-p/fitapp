@@ -14,8 +14,7 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
         //console.log(JSON.stringify(response));
         vm.activities = response;
     });
-
-
+    vm.todaysDate = new Date();
     //TEST METHODS FOR HEALTHKIT ENDPOINTS
     // healthKitService.getAverageActivityDataPoints(new Date("3/5/2015 5:00"), new Date("3/5/2015 20:00"));
     //healthKitService.getWeekdayTimesOfDayAverages();

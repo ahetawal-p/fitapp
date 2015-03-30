@@ -1,8 +1,9 @@
-<ion-view title="Activity Chart" ng-controller="ActivityParentCtrl as vm">
+<ion-view id="activityChartsPage" title="Activity Chart" ng-controller="ActivityParentCtrl as vm">
     <ion-content class="padding has-tabs-top">
 	<!-- charts with highCharts -->
 	<div>
 	<highchart id="activityChart" config="vm.chartConfig" ></highchart>
+    <h5 id="todaysDateDisplay">TODAY {{vm.todaysDate | date:'MMM d' | uppercase}}</h5>
 	</div>
 
 	<div class="transaction-list item-container" ng-repeat="durationByDateComposite in vm.durationByDateComposites | orderBy: '-date'">

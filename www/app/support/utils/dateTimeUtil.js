@@ -25,6 +25,11 @@ angular.module('app.utils')
         return dayNames[dateObj.getDay()];
     }
 
+    function getMonthOfYear(date){
+        var dateObj = new Date(date.toString().replace(/-/g, "/"));
+        return monthNames[dateObj.getMonth()];
+    }
+
     function secondTimeGreaterThanFirst(firstDateTime, secondDateTime){
         var firstTimeInMinutes = firstDateTime.getHours() * 60 + firstDateTime.getMinutes();
         var secondTimeInMinutes = secondDateTime.getHours() * 60 + secondDateTime.getMinutes();
@@ -111,6 +116,7 @@ angular.module('app.utils')
         getMinutesFromSeconds: getMinutesFromSeconds,
         getMonthDayYear: getMonthDayYear,
         getDayOfWeekName: getDayOfWeekName,
-        getDayOfMonth: getDayOfMonth
+        getDayOfMonth: getDayOfMonth,
+        getMonthOfYear: getMonthOfYear
     };
 });

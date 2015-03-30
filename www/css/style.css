@@ -187,3 +187,15 @@ body {
   margin: 3px 0 0;
 }
 
+#activityChartsPage #todaysDateDisplay{
+  text-align:center;
+  color:#BEBEBE;
+}
+
+#activityChartsPage .barChartRow{
+  padding: 0;
+}
+
+#activityChartsPage .col {
+  padding: 0;
+}
