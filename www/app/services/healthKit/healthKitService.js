@@ -195,13 +195,8 @@ angular.module('app.services.healthKit')
                 var durations = [];
                 var index = 0;
                 _.each(dataPoints, function(dataPoint){
-                    if (index == 0){
-                        times.push(dataPoint.dateTime);
-                    }else if (index == dataPoints.length-1){
-                        times.push("Now");
-                    }else{
-                        times.push("");
-                    }
+                    times.push(dataPoint.dateTime);
+
                     durations.push(dataPoint.durationTillNow);
                     index ++;
                 });
