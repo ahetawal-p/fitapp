@@ -100,28 +100,155 @@ angular.module('app.factories')
             return placeholderChartConfig;
         }
 */
-
-        function createChartConfig(chartDataContainer, chartType) {
+        /* create charts for conversation page */
+        function createConversationChargConfig(chartDataContainer, chartType, chartTitle) {
             var chartConfig = {};
             if (chartType === "line") {
-                chartConfig = createLineChartConfig(chartDataContainer);
+                chartConfig = createConversationLineChartConfig(chartDataContainer, chartTitle);
             } else if (chartType === "bar") {
-                chartConfig = createBarChartConfig(chartDataContainer);
+                chartConfig = createConversationBarChartConfigs(chartDataContainer, chartTitle);
             }
 
             return chartConfig;
         }
 
-        function createLineChartConfig(chartDataContainer) {
+        function getTotalDuration(durationsArray){
+            var totalDuration = _.max(durationsArray, function(dataPoint){
+                return dataPoint;
+            });
 
-            function getTotalDuration(durationsArray){
-                var totalDuration = _.max(durationsArray, function(dataPoint){
-                    return dataPoint;
-                });
+            return totalDuration;
+        }
 
-                return totalDuration;
+        function createConversationLineChartConfig(chartDataContainer, chartTitle){
+            var todaysDurations = chartDataContainer.dataSets[0].data;
+            var todayTotalDuration = getTotalDuration(chartDataContainer.dataSets[0].data);
+            var todayTotalDurationString = dateTimeUtil.getDurationStringFromSeconds(todayTotalDuration);
+            var firstActivityIndex = _.findIndex(todaysDurations, function(dataPoint){
+                return dataPoint > 0;
+            });
+            var firstActivityTime = chartDataContainer.labels[firstActivityIndex];
+
+            var avgTotalDuration = getTotalDuration(chartDataContainer.dataSets[1].data);
+            var avgTotalDurationString = dateTimeUtil.getDurationStringFromSeconds(avgTotalDuration);
+            var chartConfig = {
+                title: {
+                    text: chartTitle,
+                    style: {
+                        fontSize: "12px"
+                    }
+                },
+                xAxis: {
+                    minorTickLength: 0,
+                    tickLength: 0,
+                    categories: chartDataContainer.labels,
+                    labels: {
+                        enabled: true,
+                        formatter: function(){
+                            if (this.value === firstActivityTime){
+                                return dateTimeUtil.getAmPm(this.value);
+                            } else if (this.isLast){
+                                return dateTimeUtil.getAmPm(this.value);
+                            }
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    gridLineWidth: 0,
+                    labels: {
+                        enabled: false
+                    }
+                },
+                options: {
+                    chart: {
+                        renderTo: "container",
+                        type: 'line'
+                    },
+                    labels: {
+                        items: [{
+                            html: '<span>' + todayTotalDurationString + '</span>',
+                            style: {
+                                left: "10px",
+                                top: "5px",
+                                fontSize: "10px",
+                                margin: "0px",
+                                color: "#33C507",
+                                  itemMarginTop: 0,
+                                itemMarginBottom: 0
+                            }
+
+                        },
+                        {
+                            html: '<span>' + avgTotalDurationString + '</span>',
+                            style: {
+                                left: "10px",
+                                top: "20px",
+                                fontSize: "10px",
+                                color: "#BEBEBE"
+                            }
+
+                        }]
+                    },  
+                    tooltip : {
+                        enabled: false
+                    },
+                    legend: {
+                        enabled: false,
+                        layout: 'vertical',
+                        align: 'left',
+                        verticalAlign: 'top',
+                        floating: true,
+                        labelFormatter: function(){
+                            var totalDurationSeconds = getTotalDuration(this.yData);
+                            return dateTimeUtil.getDurationStringFromSeconds(totalDurationSeconds);
+                        }
+                    }
+                },
+
+                //Series object (optional) - a list of series using normal highcharts series options.
+                series: [{
+                    name: chartDataContainer.dataSets[0].name,
+                    data: chartDataContainer.dataSets[0].data,
+                    marker: {
+                        enabled: false
+                    },
+                    color: "#33C507"
+                }, {
+                    name: chartDataContainer.dataSets[1].name,
+                    data: chartDataContainer.dataSets[1].data,
+                    dashStyle: 'shortdash',
+                    marker: {
+                        enabled: false
+                    },
+                    color: "#BEBEBE"
+
+                }]
+            };
+
+            return chartConfig;
+        }
+
+        function createConversationBarChartConfigs(chartDataContainer){
+
+        }
+
+        /* create charts for activity charts page */
+        function createActivityChartConfig(chartDataContainer, chartType) {
+            var chartConfig = {};
+            if (chartType === "line") {
+                chartConfig = createActivityLineChartConfig(chartDataContainer);
+            } else if (chartType === "bar") {
+                chartConfig = createActivityChartBarChartConfigs(chartDataContainer);
             }
 
+            return chartConfig;
+        }
+
+        function createActivityLineChartConfig(chartDataContainer) {
             var todayTotalDuration = getTotalDuration(chartDataContainer.dataSets[0].data);
             var todayTotalDurationString = dateTimeUtil.getDurationStringFromSeconds(todayTotalDuration);
 
@@ -206,7 +333,7 @@ angular.module('app.factories')
                 }, {
                     name: chartDataContainer.dataSets[1].name,
                     data: chartDataContainer.dataSets[1].data,
-                    dashStyle: 'longdash',
+                    dashStyle: 'shortdash',
                     marker: {
                         enabled: false
                     },
@@ -277,7 +404,7 @@ angular.module('app.factories')
                           textShadow: "none",
                           fontSize: "15px"
                         },
-                        x: -90,
+                        x: -100,
                         formatter: function() {
                             var durationInSec = this.y;
                             return dateTimeUtil.getDurationStringFromSeconds(durationInSec);
@@ -368,7 +495,7 @@ angular.module('app.factories')
         // }
 
         return {
-            createChartConfig: createChartConfig,
-            createActivityChartBarChartConfigs: createActivityChartBarChartConfigs
+            createActivityChartConfig: createActivityChartConfig,
+            createConversationChargConfig: createConversationChargConfig
         };
     }]);

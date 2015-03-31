@@ -10,6 +10,23 @@ angular.module('app.utils')
     var dayNames = ['SUN','MON','TUE','WED',
     'THU','FRI','SAT'];
 
+    function getAmPm(timeString){
+        var hour = timeString.substring(0, 2);
+        if (hour > 12){
+            hour = hour - 12;
+            hour += "pm";
+        } else if (hour == 12){
+            hour += "pm";
+        } else {
+            if (hour.substring(0, 1) == "0"){
+                hour = hour.substring(1, 2);
+            }
+            hour += "am";
+        }
+
+        return hour;
+    }
+
     function getFormattedDateString(date){
 
         return date.substring(0, 10);//.toJSON().substring(0,10)
@@ -117,6 +134,7 @@ angular.module('app.utils')
         getMonthDayYear: getMonthDayYear,
         getDayOfWeekName: getDayOfWeekName,
         getDayOfMonth: getDayOfMonth,
-        getMonthOfYear: getMonthOfYear
+        getMonthOfYear: getMonthOfYear,
+        getAmPm: getAmPm
     };
 });

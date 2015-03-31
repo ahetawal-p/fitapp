@@ -33,14 +33,14 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
 
     vm.chartConfigs = [];
     healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(function (response) {
-        var chartConfig = chartConfigFactory.createChartConfig(response, "line");
+        var chartConfig = chartConfigFactory.createActivityChartConfig(response, "line");
         vm.chartConfigs.push(chartConfig);
     });
 
 
     /* create bar charts */
     healthKitService.getActivityDurationByDate().then(function(response){
-        var durationBarChartConfigs = chartConfigFactory.createActivityChartBarChartConfigs(response);
+        var durationBarChartConfigs = chartConfigFactory.createActivityChartConfig(response, "bar");
         vm.durationByDateComposites = [];
         _.each(durationBarChartConfigs, function(config){
             var durationByDateComposite = {
