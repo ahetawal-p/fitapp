@@ -3,6 +3,7 @@ angular.module('app.factories')
 .factory('chartConfigFactory',['dateTimeUtil',
     function(dateTimeUtil) {
 
+/*
         function createPlaceholderChartConfig(chartType) {
             var chartConfig = {};
 
@@ -98,6 +99,7 @@ angular.module('app.factories')
 
             return placeholderChartConfig;
         }
+*/
 
         function createChartConfig(chartDataContainer, chartType) {
             var chartConfig = {};
@@ -177,6 +179,9 @@ angular.module('app.factories')
 
                         }]
                     },  
+                    tooltip : {
+                        enabled: false
+                    },
                     legend: {
                         enabled: false,
                         layout: 'vertical',
@@ -188,17 +193,6 @@ angular.module('app.factories')
                             return dateTimeUtil.getDurationStringFromSeconds(totalDurationSeconds);
                         }
                     }
-                    // ,
-                    // labels: {
-                    //     items: [{
-                    //         html: "My custom laasdfbel",
-                    //         style: {
-                    //             left: "100px",
-                    //             top: "100px"
-                    //         }
-
-                    //     }]
-                    // }
                 },
 
                 //Series object (optional) - a list of series using normal highcharts series options.
@@ -275,21 +269,22 @@ angular.module('app.factories')
                     name: "test",
                     data: seriesData,
                     color: "#33C507",
-                    pointWidth: 30,
                     dataLabels: {
                         enabled: true,
                         align: 'left',
                         color: '#FFFFFF',
                         style: {
-                          textShadow: "none"
+                          textShadow: "none",
+                          fontSize: "15px"
                         },
-                        x: -80,
+                        x: -100,
                         formatter: function() {
                             var durationInSec = this.y;
                             return dateTimeUtil.getDurationStringFromSeconds(durationInSec);
                         }
                     }
                 }],
+
                 options: {
                     chart: {
                         type: 'bar'
@@ -299,6 +294,11 @@ angular.module('app.factories')
                     },
                     legend: {
                         enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            pointWidth: 70
+                        }
                     }
                 }
             };
@@ -368,7 +368,6 @@ angular.module('app.factories')
         // }
 
         return {
-            createPlaceholderChartConfig: createPlaceholderChartConfig,
             createChartConfig: createChartConfig,
             createActivityChartBarChartConfigs: createActivityChartBarChartConfigs
         };
