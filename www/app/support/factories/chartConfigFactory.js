@@ -277,7 +277,7 @@ angular.module('app.factories')
                           textShadow: "none",
                           fontSize: "15px"
                         },
-                        x: -100,
+                        x: -90,
                         formatter: function() {
                             var durationInSec = this.y;
                             return dateTimeUtil.getDurationStringFromSeconds(durationInSec);
