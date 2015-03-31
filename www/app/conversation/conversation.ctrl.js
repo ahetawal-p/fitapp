@@ -85,7 +85,7 @@ angular.module('app.conversation')
 				if(message.evalInfo != null 
 					&& message.evalInfo.type == "string"){
 					
-				var evaluatedMsg = $scope.$eval(message.text);
+				var evaluatedMsg = $scope.$eval(getTextData(message).text);
 				console.log("evaluated as >> " + evaluatedMsg);
 				message.text = evaluatedMsg;	
 			}
@@ -180,12 +180,18 @@ angular.module('app.conversation')
 				// evalaute the method for the node, using $parse service, 
 				// NOTE: Make sure the eval method always returns the next node which 
 				// need to be displayed
-				var evaluatedNode = $parse(node.evalInfo.method)($scope.user.minutes);
+				$parse(node.evalInfo.method)($scope).then(function(res){
+					
+					console.log($scope.user);
+					
+					// evaluate string in the message text
+					evalTypeStringProcessing(res);
 
-				// evaluate string in the message text
-				evalTypeStringProcessing(evaluatedNode);
+					triggerDigestHelper(res, true);
+				
+				});
 
-				triggerDigestHelper(evaluatedNode, true);
+				
 			};
 
 
@@ -211,7 +217,7 @@ angular.module('app.conversation')
 
 	  		//TODO: To be set when we first load the data or get user input
 	  		$scope.user = {
-	  			name: 'Amit',
+	  			//name: 'Amit',
 	  			minutes: 50
 	  		};
 

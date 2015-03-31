@@ -3,8 +3,8 @@ angular.module('app.services')
 /**
  * A simple example service that returns tree data for conversation
  */
-.factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory',
-function(healthKitService, $q, $ionicPlatform, chartConfigFactory) {
+.factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory', '$ionicPopup', '$localstorage',
+function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, $localstorage) {
 
 	
 	$ionicPlatform.ready(function() {
@@ -52,6 +52,47 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory) {
 
 	};
 
+	var userInputPopup = function(myScope){
+
+		var deferred = $q.defer();
+
+		var myPopup = $ionicPopup.show({
+	    template: '<input type="text" ng-model="user.name">',
+	    title: 'Enter your nick name',
+	    scope: myScope,
+	    buttons: [
+	      {
+	        text: '<b>Ok</b>',
+	        type: 'button-positive',
+	        onTap: function(e) {
+	          if (!myScope.user.name) {
+	            //don't allow the user to close unless he enters wifi password
+	            e.preventDefault();
+	          } else {
+	            return treeData['greetUser'];
+	          }
+	        }
+	      }
+	    ]
+	  	});
+  		
+  		myPopup.then(function(response){
+				deferred.resolve(response);
+			},
+			function(error){
+				deferred.reject(error);
+			}
+		);
+  
+ return deferred.promise;
+
+
+
+
+
+	};
+
+
 	var getChartData = function(type) {
 		console.log("Running data here...");
 
@@ -97,8 +138,17 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory) {
 		},
 		'askName': {
 			text: ['1'],
-			children: ['userName']
+			children: ['userInput']
 		},
+
+		'userInput': {
+			evalInfo : {
+				type : "func",
+				method : userInputPopup,
+			},
+			children:[]
+		},
+
 		'userName': {
 			text: "TODO UPDATE > My Name is User",
 			type: "user",
