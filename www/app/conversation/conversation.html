@@ -25,14 +25,10 @@
          </div>
         </div>
 
-        <div class="systemMsgAnimated animated fadeInDown" ng-if="message.type == 'chart' && !message.wait">
+        <div class="systemMsgAnimated chart animated fadeInDown" ng-if="message.type == 'chart' && !message.wait">
            <div class="innerDiv">
            </div>
            <div>
-<!--             <canvas class="chart chart-line" data="message.data"
-            labels="message.labels" legend="true" series="message.series" 
-            click="onClick" options="{scaleShowGridLines:false, scaleShowLabels:false, pointDot:false}">
-          </canvas>  -->
             <highchart class="message-chart" config="message.chartConfig"></highchart>
 
           </div>

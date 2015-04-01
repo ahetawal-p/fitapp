@@ -151,6 +151,9 @@ angular.module('app.factories')
                             } else if (this.isLast){
                                 return dateTimeUtil.getAmPm(this.value);
                             }
+                        },
+                        style: {
+                            color: "white"
                         }
                     }
                 },
@@ -168,7 +171,8 @@ angular.module('app.factories')
                     chart: {
                         renderTo: "container",
                         type: 'line',
-                        backgroundColor: "transparent"
+                        backgroundColor: "rgba(0,0,0, 0.1)",
+                        fillOpacity: 0.8
                     },
                     labels: {
                         items: [{
@@ -190,7 +194,7 @@ angular.module('app.factories')
                                 left: "10px",
                                 top: "20px",
                                 fontSize: "10px",
-                                color: "#BEBEBE"
+                                color: "#fff"
                             }
 
                         }]
@@ -226,7 +230,7 @@ angular.module('app.factories')
                     marker: {
                         enabled: false
                     },
-                    color: "#BEBEBE"
+                    color: "#fff"
 
                 }]
             };
