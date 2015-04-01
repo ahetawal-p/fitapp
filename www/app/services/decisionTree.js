@@ -110,7 +110,8 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 
 		healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(
 			function(response){
-				deferred.resolve(response);
+				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "line", "Activity Today");
+				deferred.resolve(chartConfig);
 			},
 			function(error){
 				deferred.reject(error);
@@ -121,6 +122,20 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
         return deferred.promise;
 	};
 
+	var getDailyAverageVsUsersChart = function(type){
+		var deferred = $q.defer();
+		healthKitService.getDailyAverageVsAllUsers().then(
+			function(response){
+				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Average minutes active per day");
+				deferred.resolve(chartConfig);
+			},
+			function(error){
+				deferred.reject(error);
+			});
+		console.log("fetched daily avg");
+
+		return deferred.promise;
+	}
 
 	var treeData = {
 		root: ['onboarding', 'onboardingInfo'],
@@ -321,6 +336,11 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 			type: "chart",
 			method: getChartData,
 			children:[]
+		},
+		'testBarChart': {
+			type: "chart",
+			method: getDailyAverageVsUsersChart,
+			children: []
 		}
 
 	};

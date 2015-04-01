@@ -101,12 +101,12 @@ angular.module('app.factories')
         }
 */
         /* create charts for conversation page */
-        function createConversationChargConfig(chartDataContainer, chartType, chartTitle) {
+        function createConversationChartConfig(chartDataContainer, chartType, chartTitle) {
             var chartConfig = {};
             if (chartType === "line") {
                 chartConfig = createConversationLineChartConfig(chartDataContainer, chartTitle);
             } else if (chartType === "bar") {
-                chartConfig = createConversationBarChartConfigs(chartDataContainer, chartTitle);
+                chartConfig = createConversationBarChartConfig(chartDataContainer, chartTitle);
             }
 
             return chartConfig;
@@ -171,9 +171,8 @@ angular.module('app.factories')
                     chart: {
                         renderTo: "container",
                         type: 'line',
-                        backgroundColor: "rgba(0,0,0, 0.1)",
-                        fillOpacity: 0.8
-                    },
+                        backgroundColor: "rgba(0,0,0, 0.1)"
+                            },
                     labels: {
                         items: [{
                             html: '<span>' + todayTotalDurationString + '</span>',
@@ -238,8 +237,94 @@ angular.module('app.factories')
             return chartConfig;
         }
 
-        function createConversationBarChartConfigs(chartDataContainer){
+        function createConversationBarChartConfig(chartDataContainer, chartTitle){
+           var seriesData = [];
+           //var yourAverage = chartDataContainer.dataSets[0].data;
+           //var usersAverage = chartDataContainer.dataSets[1].data;
+           var chartConfig = {
+                title: {
+                    text: chartTitle,
+                    style: {
+                       fontSize : "12px",
+                       color: "white"
+                    },
+                    margin: 5
+                },
+                xAxis: {
+                    categories: ['You', 'PokiFit Users'],
+                    minorTickLength: 0,
+                    tickLength: 0,
+                    lineColor: "transparent",
+                    labels: {
+                        enabled: true,
+                        style: {
+                            color: "white"
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    gridLineWidth: 0,
+                    lineWidth: 0,      
 
+                    labels: {
+                        enabled: false
+                    }
+                },
+                series: [
+                {
+                    name: "You",
+                    data: chartDataContainer.dataSets[0].data,
+                    colors: ["#33C507", "#BEBEBE"],
+                    dataLabels: {
+                        enabled: true
+                        ,
+                        inside: true,
+                        verticalAlign: 'top',
+                        style: {
+                          textShadow: "none",
+                          color: "white"
+                          // ,
+                          // fontSize: "15px"
+                        },
+                        formatter: function() {
+                            var durationInMins = this.y;
+                            return dateTimeUtil.getDurationStringFromMinutes(durationInMins);
+                        }
+                    }
+                }
+                ],
+
+                options: {
+                    chart: {
+                        type: 'column',
+                        backgroundColor: "rgba(0,0,0, 0.1)",
+                        margin: [0, 0, 30, 0]
+                    },
+                    tooltip: {
+                        enabled: false
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            pointWidth: 90,
+                            groupPadding: 0,
+                            pointPadding: 0
+                        },
+                        column: {
+                            colorByPoint: true,
+                            borderWidth: 0
+                        }
+                    }
+                }
+            };
+
+            return chartConfig;
         }
 
         /* create charts for activity charts page */
@@ -502,6 +587,6 @@ angular.module('app.factories')
 
         return {
             createActivityChartConfig: createActivityChartConfig,
-            createConversationChargConfig: createConversationChargConfig
+            createConversationChartConfig: createConversationChartConfig
         };
     }]);

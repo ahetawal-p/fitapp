@@ -116,6 +116,22 @@ angular.module('app.utils')
         return durationString;
     }
 
+    function getDurationStringFromMinutes(durationInMinutes){
+        var convertedHours = Math.floor(durationInMinutes/60);
+
+        if (convertedHours >= 1){
+            var leftOverMinutes = durationInMinutes - convertedHours * 60;
+            var durationString = convertedHours.toString().concat(" hr ")
+            .concat(leftOverMinutes).concat(" min ");
+
+            return durationString;
+        }
+
+        var durationString = durationInMinutes.toString().concat(" min ");
+
+        return durationString;
+    }
+
     function getMinutesFromSeconds(durationInSeconds){
         var totalMinutes = Math.ceil(durationInSeconds/60);
         return totalMinutes;
@@ -131,6 +147,7 @@ angular.module('app.utils')
         getMonthDay: getMonthDay,
         secondTimeGreaterThanFirst: secondTimeGreaterThanFirst,
         getMinutesFromSeconds: getMinutesFromSeconds,
+        getDurationStringFromMinutes: getDurationStringFromMinutes,
         getMonthDayYear: getMonthDayYear,
         getDayOfWeekName: getDayOfWeekName,
         getDayOfMonth: getDayOfMonth,

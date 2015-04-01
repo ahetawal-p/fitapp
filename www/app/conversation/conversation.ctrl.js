@@ -213,7 +213,7 @@ angular.module('app.conversation')
 	    		var promise = $parse(node.method)('test');
 	    		promise.then(function(response){
 	    			console.log("back in then");
-					node.chartConfig = 	chartConfigFactory.createConversationChargConfig(response, "line", "Activity Today");		
+					node.chartConfig = response;
 		    		triggerDigestHelper(node, true);
 		    	});
 	    	};

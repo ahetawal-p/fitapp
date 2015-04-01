@@ -21,6 +21,9 @@ angular.module('app.services.healthKit')
         	return deferred.promise;
         }
 
+        function getTwoWeeksDurationCompare(){
+
+        }
 
         function getWeekdayWeekendAverages(){
         	var deferred = $q.defer();
@@ -215,13 +218,28 @@ angular.module('app.services.healthKit')
             var deferred = $q.defer();
             getDailyAverageDuration().then(function(response){
                 var labels = ["You", "Other users"];
-                var data = [[response], [50]];
-                var plotNumbers = {
+                var dataSets = 
+                [
+                {
+                    name: "averageVsUsers",
+                    data: [response, 50]
+                }
+                    // {
+                    //     name: "You",
+                    //     data: [response]
+                    // },
+                    // {
+                    //     name: "Other users",
+                    //     data: [50]
+                    // }
+                ];
+
+                var chartDataContainer = {
                     labels: labels,
-                    data: data
+                    dataSets: dataSets
                 };
 
-                deferred.resolve(plotNumbers);
+                deferred.resolve(chartDataContainer);
             });
 
             return deferred.promise;
