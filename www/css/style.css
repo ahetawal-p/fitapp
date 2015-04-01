@@ -53,21 +53,14 @@ body {
   color:#383641;
  }
 
-.systemMsgAnimated.chart{
-  -webkit-animation-duration: .5s;
-  -webkit-animation-delay: 0s;
-  display:inline-block;
-  white-space: normal;
-  max-width:85%;
-  margin:0 0 0.8rem 0;
-  border-radius:.75rem 0 .75rem 0;
-  padding:.6875rem;
+.chart {
   opacity:0.1;
   background: transparent;
- }
+}
+
+
 
 .systemMsg {
-   
   display:inline-block;
   white-space: normal;
   max-width:85%;
@@ -105,7 +98,7 @@ body {
   font-size:.875rem;
   right: 0;
   overflow: auto;
-  border-radius:.75rem 0 .75rem 0;
+  border-radius: 0 .75rem 0 .75rem;
   background:#33C507;
   color:white;
   padding:.6875rem;
