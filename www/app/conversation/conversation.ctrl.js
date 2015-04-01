@@ -10,34 +10,51 @@ angular.module('app.conversation')
 	'$parse',
 	'chartConfigFactory',
 	'lableManager',
-	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, chartConfigFactory, lableManager) {
+	'$localstorage',
+	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, chartConfigFactory, lableManager, $localstorage) {
 
 			var ENGLISH = 0;
-
 			var CHINEESE = 1;
-
-			
-			// TODO : READ FROM SETTINGS...
-			$scope.language = ENGLISH;
 
 			// upper limit constant to fake the waiting time after system input
 			// Only in effect for normal text node.
 			var SYSTEM_INPUT_DELAY_MAX = 1500;
 
-
 			var USER_RESPONSE_ANIMATION = 'animated fadeInUp';
 			var ANIMATION_END_EVENTS = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
 
-
 			// CURRENT TREE IN PROCESSING...
 			var root = talky.getOnboarding('onboarding');
-
-
 			var lastNodePushed = {};
-			// actual message list which serves as the model for UI
-			$scope.messages = [];
-			$scope.waitIndicator = false;
 			var userOptionPlaceHolder = null;
+			
+			/**
+			 * INIT Function to setup scope level User object 
+			 * which is used for different eval nodes
+			**/
+			(function(){
+				
+				// UNCOMMENT FOR TESTING. IF NEEDED...
+				//$localstorage.removeUser();
+				
+				// actual message list which serves as the model for UI
+				$scope.messages = [];
+				$scope.waitIndicator = false;
+
+				$scope.user = {
+						'name': null,
+						'language': ENGLISH,
+						'lastLoginTime': new Date()
+				};
+
+  				if($localstorage.getUser() != null){
+  					$localstorage.updateUserLoginTime();
+  					angular.copy($localstorage.getUser(), $scope.user);
+  				}
+
+			})();
+
+
 			
 
 
@@ -57,7 +74,7 @@ angular.module('app.conversation')
 				if(typeof message.text === 'object'){
 					var randomIndex = 0; // used for randomizing the text nodes in future
 					var lableIndex = message.text[randomIndex];
-					message.text = lableManager.getTextValue(lableIndex, $scope.language);
+					message.text = lableManager.getTextValue(lableIndex, $scope.user.language);
 				}
 				return message;
 			};
@@ -180,18 +197,14 @@ angular.module('app.conversation')
 				// evalaute the method for the node, using $parse service, 
 				// NOTE: Make sure the eval method always returns the next node which 
 				// need to be displayed
-				$parse(node.evalInfo.method)($scope).then(function(res){
-					
-					console.log($scope.user);
+				$parse(node.evalInfo.method)($scope).then(function(nextNode){
 					
 					// evaluate string in the message text
-					evalTypeStringProcessing(res);
+					evalTypeStringProcessing(nextNode);
 
-					triggerDigestHelper(res, true);
-				
+					triggerDigestHelper(nextNode, true);
 				});
 
-				
 			};
 
 
@@ -215,12 +228,7 @@ angular.module('app.conversation')
 	  											evaluateNextNode();
 	  										});
 
-	  		//TODO: To be set when we first load the data or get user input
-	  		$scope.user = {
-	  			//name: 'Amit',
-	  			minutes: 50
-	  		};
-
+	  		
 	  		$scope.options = [];
   			/**
   			* Core method to evaluate and add nodes to the conversation, based on the 

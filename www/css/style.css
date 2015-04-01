@@ -23,6 +23,11 @@ body {
 
 /** END background color **/
 
+.myPopup > .popup { 
+  border-radius:0 .9rem 0 .9rem !important; 
+}
+
+
 
 .conversationBase {
   border-style:none; 

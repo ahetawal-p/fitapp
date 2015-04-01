@@ -6,7 +6,7 @@ angular.module('app.services')
 .factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory', '$ionicPopup', '$localstorage',
 function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, $localstorage) {
 
-	
+
 	$ionicPlatform.ready(function() {
 		var colorConfig = {
 					"0" : ['120deg', '#FFCC99', '#CCCC99'],
@@ -42,54 +42,57 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 	// Can be used for similar stuff when we call the 
 	// health kit for data and decide on next nodes in conversation.
 	var testMethod = function(minutes) {
-		if(minutes > 50){
-			return treeData['aboveAverage'];
-		}else if(minutes == 50){
-			return treeData['onParAverage'];
-		}else{
-			return treeData['belowAverage'];
-		}
+		var deferred = $q.defer();
 
+		if(minutes > 50){
+			deferred.resolve(treeData['aboveAverage']);
+		}else if(minutes == 50){
+			deferred.resolve(treeData['onParAverage']);
+		}else{
+			deferred.resolve(treeData['belowAverage']);
+		}
+		return deferred.promise;
 	};
 
+	
 	var userInputPopup = function(myScope){
 
 		var deferred = $q.defer();
 
-		var myPopup = $ionicPopup.show({
-	    template: '<input type="text" ng-model="user.name">',
-	    title: 'Enter your nick name',
-	    scope: myScope,
-	    buttons: [
-	      {
-	        text: '<b>Ok</b>',
-	        type: 'button-positive',
-	        onTap: function(e) {
-	          if (!myScope.user.name) {
-	            //don't allow the user to close unless he enters wifi password
-	            e.preventDefault();
-	          } else {
-	            return treeData['greetUser'];
-	          }
-	        }
-	      }
-	    ]
-	  	});
-  		
-  		myPopup.then(function(response){
-				deferred.resolve(response);
-			},
-			function(error){
-				deferred.reject(error);
-			}
-		);
-  
- return deferred.promise;
-
-
-
-
-
+		if($localstorage.getUser() != null){
+			deferred.resolve(treeData['greetUser']);
+  		} else {
+  			var myPopup = $ionicPopup.show({
+		    template: '<input type="text" ng-model="user.name">',
+		    title: 'Enter your nick name',
+		    cssClass: 'myPopup',
+		    scope: myScope,
+		    buttons: [
+		      {
+		        text: '<b>Ok</b>',
+		        type: 'button-energized',
+		        onTap: function(e) {
+		          if (!myScope.user.name) {
+		            //don't allow the user to close unless he enters a  password
+		            e.preventDefault();
+		          } else {
+		          	$localstorage.setObject("user", myScope.user);
+		            return treeData['greetUser'];
+		          }
+		        }
+		      }
+		    ]
+		  	});
+	  		
+	  		myPopup.then(function(response){
+					deferred.resolve(response);
+				},
+				function(error){
+					deferred.reject(error);
+				}
+			);
+  	}
+  		return deferred.promise;
 	};
 
 
