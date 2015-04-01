@@ -135,7 +135,8 @@ angular.module('app.factories')
                 title: {
                     text: chartTitle,
                     style: {
-                        fontSize: "12px"
+                        fontSize: "12px",
+                        color: "white"
                     }
                 },
                 xAxis: {
@@ -166,7 +167,8 @@ angular.module('app.factories')
                 options: {
                     chart: {
                         renderTo: "container",
-                        type: 'line'
+                        type: 'line',
+                        backgroundColor: "transparent"
                     },
                     labels: {
                         items: [{
