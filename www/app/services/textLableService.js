@@ -89,7 +89,7 @@ angular.module('app.services')
 			  ""],
 
 		'16' : [
-			  "Looking forward to that", 
+			  "Looking forward to that...", 
 			  ""],
 
 		'17' : [

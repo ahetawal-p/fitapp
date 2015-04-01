@@ -12,7 +12,27 @@ angular.module('app.utils')
       $window.localStorage[key] = JSON.stringify(value);
     },
     getObject: function(key) {
-      return JSON.parse($window.localStorage[key] || '{}');
+      return JSON.parse($window.localStorage[key] || null);
+    },
+    getUser: function() {
+      return this.getObject("user");
+    },
+    setUser: function(value) {
+      return this.setObject("user", value);
+    },
+    removeUser: function() {
+      delete $window.localStorage["user"];
+    },
+    updateUserLoginTime: function(){
+    	var currObject = this.getUser();
+    	currObject.lastLoginTime = new Date();
+    	this.setUser(currObject);
+    },
+    updateUserLanguage: function(language){
+    	var currObject = this.getUser();
+    	currObject.language = language;
+    	this.setUser(currObject);
     }
+
   }
 }]);

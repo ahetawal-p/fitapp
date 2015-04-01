@@ -1,4 +1,4 @@
-angular.module('app.conversation', ['app.services', 'app.factories'])
+angular.module('app.conversation', ['app.services', 'app.factories', 'app.utils'])
 
 
 .config(['$stateProvider',
