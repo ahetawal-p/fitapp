@@ -23,11 +23,11 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
 
 
     /* testing charts */
-    var startDate = new Date("3/20/2015");
+    var startDate = new Date("3/27/2015");
     startDate.setHours(5);
     startDate.setMinutes(0);
 
-    var endDate = new Date("3/20/2015");
+    var endDate = new Date("3/27/2015");
     endDate.setHours(19);
     endDate.setMinutes(0);
 

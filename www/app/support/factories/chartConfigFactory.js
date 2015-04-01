@@ -489,13 +489,13 @@ angular.module('app.factories')
                     color: "#33C507",
                     dataLabels: {
                         enabled: true,
-                        align: 'left',
+                         align: 'right',
+                        inside: true,
                         color: '#FFFFFF',
                         style: {
                           textShadow: "none",
                           fontSize: "15px"
                         },
-                        x: -100,
                         formatter: function() {
                             var durationInSec = this.y;
                             return dateTimeUtil.getDurationStringFromSeconds(durationInSec);

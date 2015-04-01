@@ -220,18 +220,10 @@ angular.module('app.services.healthKit')
                 var labels = ["You", "Other users"];
                 var dataSets = 
                 [
-                {
-                    name: "averageVsUsers",
-                    data: [response, 50]
-                }
-                    // {
-                    //     name: "You",
-                    //     data: [response]
-                    // },
-                    // {
-                    //     name: "Other users",
-                    //     data: [50]
-                    // }
+                    {
+                        name: "averageVsUsers",
+                        data: [response, 50]
+                    }
                 ];
 
                 var chartDataContainer = {

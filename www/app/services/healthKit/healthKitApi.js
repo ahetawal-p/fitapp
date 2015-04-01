@@ -13,6 +13,8 @@ angular.module('app.services.healthKit')
       };
 
       $cordovaHealthKit.querySampleType(queryObject).then(function(response) {
+        console.log("#######getWalkingAndRunningDistance#######");
+        console.log(JSON.stringify(response));
         deferred.resolve(response);
       }, function(err) {
         alert(err);
@@ -33,6 +35,8 @@ angular.module('app.services.healthKit')
       };
 
       $cordovaHealthKit.querySampleType(queryObject).then(function(response) {
+                console.log("#######getWalkingAndRunningDistanceByDateTime#######");
+        console.log(JSON.stringify(response));
         deferred.resolve(response);
       }, function(err) {
         alert(err);
