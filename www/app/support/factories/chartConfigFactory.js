@@ -451,8 +451,11 @@ angular.module('app.factories')
         }
 
         function createBarChartConfig(dataSet, maxYValue) {
+            function log10(n) {
+                return Math.log(n)/Math.log(10);   
+            }
             var seriesData = [];
-           seriesData.push(dataSet.data);
+           seriesData.push(log10(dataSet.data));
            var chartConfig = {
                 date: dataSet.name,
                 dayOfMonth: dateTimeUtil.getDayOfMonth(dataSet.name),
@@ -472,7 +475,7 @@ angular.module('app.factories')
                 },
                 yAxis: {
                     min: 0,
-                    max: maxYValue,
+                    max: log10(maxYValue),
                     title: {
                         text: ''
                     },
@@ -497,7 +500,7 @@ angular.module('app.factories')
                           fontSize: "15px"
                         },
                         formatter: function() {
-                            var durationInSec = this.y;
+                            var durationInSec = Math.pow(10, this.y);
                             return dateTimeUtil.getDurationStringFromSeconds(durationInSec);
                         }
                     }
