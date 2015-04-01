@@ -8,10 +8,9 @@ angular.module('app.conversation')
 	'$ionicScrollDelegate',
 	'$timeout',
 	'$parse',
-	'chartConfigFactory',
 	'lableManager',
 	'$localstorage',
-	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, chartConfigFactory, lableManager, $localstorage) {
+	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, lableManager, $localstorage) {
 
 			var ENGLISH = 0;
 			var CHINEESE = 1;
