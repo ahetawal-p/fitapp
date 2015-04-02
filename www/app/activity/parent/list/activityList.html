@@ -1,4 +1,4 @@
- <ion-view view-title="Activity" ng-controller="ActivityParentCtrl as vm">
+ <ion-view view-title="Activity" ng-controller="ActivityListCtrl as vm">
  <ion-content class="has-header has-subheader" delegate-handle="scrollHandle">
       <div class="transaction-list item-container" ng-repeat="activityDate in vm.activities | groupBy: 'date' | toArray:true | orderBy:'$key':true">
       <div class="item item-divider">

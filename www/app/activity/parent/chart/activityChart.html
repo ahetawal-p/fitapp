@@ -1,5 +1,5 @@
-<ion-view id="activityChartsPage" title="Activity Chart" ng-controller="ActivityParentCtrl as vm">
-    <ion-content class="padding has-tabs-top">
+<ion-view id="activityChartsPage" view-title="Activity Chart" ng-controller="ActivityChartCtrl as vm">
+  <ion-content class="has-header has-subheader" delegate-handle="scrollHandle">
 	<div ng-repeat="chartConfig in vm.chartConfigs">
 	   <highchart id="activityChart" config="chartConfig" ></highchart>
        <h5 id="todaysDateDisplay">TODAY {{vm.todaysDate | date:'MMM d' | uppercase}}</h5>
