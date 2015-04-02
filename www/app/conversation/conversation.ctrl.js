@@ -10,7 +10,13 @@ angular.module('app.conversation')
 	'$parse',
 	'lableManager',
 	'$localstorage',
-	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, lableManager, $localstorage) {
+	'$translate',
+	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, lableManager, $localstorage, $translate) {
+
+
+			console.log("HERRE>>>");
+			
+			$translate.use("en_US");
 
 			var ENGLISH = 0;
 			var CHINEESE = 1;
@@ -264,7 +270,9 @@ angular.module('app.conversation')
 								for(i in currentNodeToBeAdded.children){
 									var msg = root[currentNodeToBeAdded.children[i]];
 									msg.isClickDisabled = false;
-									msg = getTextData(msg);
+									console.log(msg.text[0]);
+									msg.text = msg.text[0];
+									//msg = getTextData(msg);
 									currentNodeToBeAdded['userOptions'].push(angular.extend({}, msg));
 									$scope.options.push(angular.extend({}, msg));
 								}

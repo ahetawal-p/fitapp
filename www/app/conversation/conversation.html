@@ -1,6 +1,6 @@
-<ion-view view-title="Wall-e" title="Wall-e" ng-controller="ConversationCtrl">
+<ion-view  ng-controller="ConversationCtrl">
   <ion-header-bar align-title="center" class="headerOverride">
-    <h1 class="title">Wall-e</h1>
+    <h1 class="title" translate="App_Nick_Name"></h1>
     <div class="buttons">
       <button class="button button-clear">
         <i class="icon ion-share icon-accessory"></i>
@@ -35,8 +35,8 @@
         </div>
 
         <div class="userMsg" ng-if="message.type == 'user' &&  !message.wait" ng-class="message.bufferClass">
-          <div class="innerUser" ng-if="message.showMeNow"> 
-            {{message.text}} 
+          <div class="innerUser" ng-if="message.showMeNow" translate="{{message.text}}"> 
+            
           </div>
         </div>
 
@@ -48,8 +48,8 @@
     <table width="100%">
        <tr>
          <td align="center">
-          <span class="userMsgOption" ng-click="userInput(msg)" ng-repeat="msg in options" >
-            {{msg.text}}
+          <span class="userMsgOption" ng-click="userInput(msg)" ng-repeat="msg in options" translate="{{msg.text}}">
+            
           </span> 
         </td>
       </tr>

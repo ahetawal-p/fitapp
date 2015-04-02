@@ -326,7 +326,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		},
 		'belowAverage': {
 			text: ['28'],
-			children:['moreActiveTip']
+			children:['testBarChart']
 		},
 		'moreActiveTip': {
 			text: ['29'],
