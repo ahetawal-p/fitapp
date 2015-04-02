@@ -109,6 +109,22 @@ angular.module('app.utils')
         return secondTimeInMinutes > firstTimeInMinutes;
     }
 
+    function isLastWeek(evalDate){
+        var endDateObj = moment();
+        var startDateObj = moment().subtract(7, 'days');
+        var evalDateObj = moment(evalDate);
+
+        return evalDateObj.isBetween(startDateObj, endDateObj);
+    }
+
+    function isPreviousWeek(evalDate){
+        var endDateObj = moment().subtract(7, 'days');
+        var startDateObj = moment().subtract(14, 'days');
+        var evalDateObj = moment(evalDate);
+
+        return evalDateObj.isBetween(startDateObj, endDateObj);
+    }
+
     return {
         getFormattedDateString: getFormattedDateString,
         getTimeStamp: getTimeStamp,
@@ -124,7 +140,8 @@ angular.module('app.utils')
         getDayOfMonth: getDayOfMonth,
         getMonthOfYear: getMonthOfYear,
         getAmPm: getAmPm,
-        secondTimeGreaterThanFirst: secondTimeGreaterThanFirst
-
+        secondTimeGreaterThanFirst: secondTimeGreaterThanFirst,
+        isPreviousWeek: isPreviousWeek,
+        isLastWeek: isLastWeek
     };
 }]);

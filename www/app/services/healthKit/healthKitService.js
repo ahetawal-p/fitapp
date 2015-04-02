@@ -21,8 +21,17 @@ angular.module('app.services.healthKit')
         	return deferred.promise;
         }
 
-        function getTwoWeeksDurationCompare(){
-
+        function getTwoWeeksAverages(){
+            var deferred = $q.defer();
+            api.getWalkingAndRunningDistance().then(
+                function(walkRunActivities){
+                    var twoWeekAverages = workoutProcessor.calculateTwoWeeksAvgMinutes(walkRunActivities);
+                    deferred.resolve(twoWeekAverages);
+                },
+                function(err){
+                    deferred.reject(err);
+                });
+            return deferred.promise;
         }
 
         function getWeekdayWeekendAverages(){
@@ -214,6 +223,29 @@ angular.module('app.services.healthKit')
         	return deferred.promise;
         }
 
+        function getLastVsPreviousWeekAverage(){
+            var deferred = $q.defer();
+            getTwoWeeksAverages().then(function(response){
+                var labels = ["This week", "Last week"];
+                var dataSets = 
+                [
+                    {
+                        name: "thisVsLastAvg",
+                        data: response
+                    }
+                ];
+
+                var chartDataContainer = {
+                    labels: labels,
+                    dataSets: dataSets
+                };
+
+                deferred.resolve(chartDataContainer);
+            });
+
+            return deferred.promise;
+        }
+
         function getDailyAverageVsAllUsers(){
             var deferred = $q.defer();
             getDailyAverageDuration().then(function(response){
@@ -283,6 +315,7 @@ angular.module('app.services.healthKit')
                 getWeekendTimesOfDayAverages: getWeekendTimesOfDayAverages,
                 getTodayVsAverageDataPoints: getTodayVsAverageDataPoints,
                 getDailyAverageVsAllUsers: getDailyAverageVsAllUsers,
-                getActivityDurationByDate: getActivityDurationByDate
+                getActivityDurationByDate: getActivityDurationByDate,
+                getLastVsPreviousWeekAverage: getLastVsPreviousWeekAverage
 			}}]
 			);
