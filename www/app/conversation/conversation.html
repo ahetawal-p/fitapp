@@ -20,8 +20,8 @@
         </div>
 
         <div class="systemMsgAnimated animated pulse" ng-if="message.type == null && !message.wait">
-          <div class="innerDiv">
-           {{message.text}} 
+          <div class="innerDiv" translate="{{message.text}}" translate-values="{{user}}">
+         
          </div>
         </div>
 
