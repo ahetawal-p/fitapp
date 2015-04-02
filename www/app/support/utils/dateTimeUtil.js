@@ -5,7 +5,7 @@ angular.module('app.utils')
  */
  .factory('dateTimeUtil', [function() {
     function getAmPm(timeString){
-        var timeObj = moment(timeString);
+        var timeObj = moment(timeString, "HH");
         return timeObj.format("hA");
     }
 
