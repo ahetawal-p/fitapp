@@ -35,7 +35,7 @@ angular.module('app.conversation')
 			(function(){
 				
 				// UNCOMMENT FOR TESTING. IF NEEDED...
-				//$localstorage.removeUser();
+				$localstorage.removeUser();
 				
 				// actual message list which serves as the model for UI
 				$scope.messages = [];
@@ -54,9 +54,6 @@ angular.module('app.conversation')
 			})();
 
 
-			
-
-
 			var addNodeHelper = function(message, doAnimation) {
 				$scope.messages.push(angular.extend({}, getTextData(message)));
 				lastNodePushed =  message;
@@ -72,10 +69,8 @@ angular.module('app.conversation')
 			var getTextData = function(message){
 				if(typeof message.text === 'object'){
 					var randomIndex = 0; // used for randomizing the text nodes in future
-					var lableIndex = message.text[randomIndex];
-					//message.text = lableManager.getTextValue(lableIndex, $scope.user.language);
-					message.text = message.text[0];
-				}
+					message.text = message.text[randomIndex];
+				} 
 				return message;
 			};
 
@@ -137,7 +132,6 @@ angular.module('app.conversation')
 				return $timeout( function() { 
 					lastMsgInListOnUi.wait = false;
 					$scope.waitIndicator = false;
-					//evalTypeStringProcessing(lastMsgInListOnUi);
 					$ionicScrollDelegate.scrollBottom(true);
 				}, 
 				getRandom(waitLimit));
@@ -198,10 +192,6 @@ angular.module('app.conversation')
 				// NOTE: Make sure the eval method always returns the next node which 
 				// need to be displayed
 				$parse(node.evalInfo.method)($scope).then(function(nextNode){
-					
-					// evaluate string in the message text
-					//evalTypeStringProcessing(nextNode);
-
 					triggerDigestHelper(nextNode, true);
 				});
 
@@ -265,10 +255,7 @@ angular.module('app.conversation')
 								for(i in currentNodeToBeAdded.children){
 									var msg = root[currentNodeToBeAdded.children[i]];
 									msg.isClickDisabled = false;
-									console.log(msg.text[0]);
-									msg.text = msg.text[0];
-									//msg = getTextData(msg);
-									currentNodeToBeAdded['userOptions'].push(angular.extend({}, msg));
+									currentNodeToBeAdded['userOptions'].push(angular.extend({}, getTextData(msg)));
 									$scope.options.push(angular.extend({}, msg));
 								}
 						}

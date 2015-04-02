@@ -56,9 +56,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 
 	
 	var userInputPopup = function(myScope){
-
 		var deferred = $q.defer();
-
 		if($localstorage.getUser() != null){
 			deferred.resolve(treeData['greetUser']);
   		} else {
@@ -346,7 +344,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		},
 		'belowAverage': {
 			text: ['28'],
-			children:['testBarChart']
+			children:['testChart']
 		},
 		'moreActiveTip': {
 			text: ['29'],
