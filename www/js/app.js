@@ -13,7 +13,6 @@ angular.module('fitapp', [
             'app.settings',
             'ngCordova',
             'underscore',
-            'chart.js',
             'highcharts-ng'
 ])
 
