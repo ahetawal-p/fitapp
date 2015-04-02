@@ -126,13 +126,26 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		var deferred = $q.defer();
 		healthKitService.getDailyAverageVsAllUsers().then(
 			function(response){
-				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Average minutes active per day");
+				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Average minutes active per day", "You", "Other users");
 				deferred.resolve(chartConfig);
 			},
 			function(error){
 				deferred.reject(error);
 			});
-		console.log("fetched daily avg");
+
+		return deferred.promise;
+	}
+
+	var getLastPreviousWeeksAvgerageChart = function(type){
+		var deferred = $q.defer();
+		healthKitService.getLastVsPreviousWeekAverage().then(
+			function(response){
+				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Average minutes of activity", "Last week", "2 weeks ago");
+				deferred.resolve(chartConfig);
+			},
+			function(error){
+				deferred.reject(error);
+			});
 
 		return deferred.promise;
 	}
@@ -337,9 +350,14 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 			method: getChartData,
 			children:[]
 		},
-		'testBarChart': {
+		'dailyAvgVsUsersBarChart': {
 			type: "chart",
 			method: getDailyAverageVsUsersChart,
+			children: []
+		},
+		'lastVsPrevBarChart': {
+			type: "chart",
+			method: getLastPreviousWeeksAvgerageChart,
 			children: []
 		}
 

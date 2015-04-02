@@ -254,6 +254,28 @@ angular.module('app.utils')
 		}
 	}
 
+	/* calculate avg mins of activity for last week and previous week */
+	function calculateTwoWeeksAvgMinutes(rawActivityObjects){
+		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+		groupedActivities = groupedActivities.filter(filterGroupedActivities);
+		
+		/* get last week's activities and calculate avg duration */
+		var lastWeeksGroupedActivities = groupedActivities.filter(function(groupedActivity){
+			return dateTimeUtil.isLastWeek(groupedActivity.startDate);
+		});
+		var lastWeeksAvgSec = calculateProcessedDailyAverageDuration(lastWeeksGroupedActivities);
+		var lastWeekAvgMin = Math.round(moment.duration(lastWeeksAvgSec, 'seconds').asMinutes());
+		
+		/* get previous week's activities and calculate avg duration */
+		var previousWeeksGroupedActivities = groupedActivities.filter(function(groupedActivity){
+			return dateTimeUtil.isPreviousWeek(groupedActivity.startDate);
+		});
+		var previousWeeksAvg = calculateProcessedDailyAverageDuration(previousWeeksGroupedActivities);
+		var previousWeekAvgMin = Math.round(moment.duration(previousWeeksAvg, 'seconds').asMinutes());
+
+		return [lastWeekAvgMin, previousWeekAvgMin];
+	}
+
 	function calculateProcessedDailyAverageDuration(groupedActivities){
 		var summedDuration = 0;
 		var dates = [];
@@ -268,6 +290,11 @@ angular.module('app.utils')
 
 		console.log("sum: " + summedDuration);
 		console.log("daysCount: " + daysCount);
+
+		if (daysCount == 0){
+			return 0;
+		}
+
 		return summedDuration/daysCount;
 	}
 
@@ -380,6 +407,7 @@ angular.module('app.utils')
 		getActivityDataPoints: getActivityDataPoints,
 		getAverageActivityDataPoints: getAverageActivityDataPoints,
 		getTotalDurationBetweenDateTimes: getTotalDurationBetweenDateTimes,
-		getActivityDurationByDate: getActivityDurationByDate
+		getActivityDurationByDate: getActivityDurationByDate,
+		calculateTwoWeeksAvgMinutes: calculateTwoWeeksAvgMinutes
 	}
 }]);

@@ -3,110 +3,13 @@ angular.module('app.factories')
 .factory('chartConfigFactory',['dateTimeUtil',
     function(dateTimeUtil) {
 
-/*
-        function createPlaceholderChartConfig(chartType) {
-            var chartConfig = {};
-
-            if (chartType === "line") {
-                chartConfig = createPlaceholderLineChartConfig();
-            } else if (chartType === "bar") {
-                chartConfig = createPlaceholderBarChartConfig();
-            }
-
-            return chartConfig;
-        }
-
-        function createPlaceholderLineChartConfig() {
-            var placeholderChartConfig = {
-                title: {
-                    text: ""
-                },
-                options: {
-                    legend: {
-                        enabled: true,
-                        layout: 'vertical',
-                        align: 'left',
-                        verticalAlign: 'top',
-                        floating: true
-                    },
-                    tooltip: {
-                        enabled: false
-                    }
-                },
-
-                xAxis: {
-                    minorTickLength: 0,
-                    tickLength: 0,
-                    labels: {
-                        enabled: false
-                    }
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: ''
-                    },
-                    gridLineWidth: 0,
-                    labels: {
-                        enabled: false
-                    }
-                }
-            };
-
-            return placeholderChartConfig;
-        }
-
-        function createPlaceholderBarChartConfig() {
-            var placeholderChartConfig = {
-                title: {
-                    text: ''
-                },
-                xAxis: {
-             lineWidth: 0, 
-                    tickLength: 0,
-                    labels: {
-                        enabled: false
-                    },
-                    title: {
-                        text: null
-                    }
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: ''
-                    },
-                    gridLineWidth: 0,
-                    labels: {
-                        enabled: false
-                    }
-                },
-                tooltip: {
-                    enabled: false
-                },
-                options: {
-                    chart: {
-                        type: 'bar'
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        enabled: false
-                    }
-                }
-            };
-
-            return placeholderChartConfig;
-        }
-*/
         /* create charts for conversation page */
-        function createConversationChartConfig(chartDataContainer, chartType, chartTitle) {
+        function createConversationChartConfig(chartDataContainer, chartType, chartTitle, firstBarLabel, secondBarLabel) {
             var chartConfig = {};
             if (chartType === "line") {
                 chartConfig = createConversationLineChartConfig(chartDataContainer, chartTitle);
             } else if (chartType === "bar") {
-                chartConfig = createConversationBarChartConfig(chartDataContainer, chartTitle);
+                chartConfig = createConversationBarChartConfig(chartDataContainer, chartTitle, firstBarLabel, secondBarLabel);
             }
 
             return chartConfig;
@@ -237,7 +140,7 @@ angular.module('app.factories')
             return chartConfig;
         }
 
-        function createConversationBarChartConfig(chartDataContainer, chartTitle){
+        function createConversationBarChartConfig(chartDataContainer, chartTitle, firstBarLabel, secondBarLabel){
            var seriesData = [];
            //var yourAverage = chartDataContainer.dataSets[0].data;
            //var usersAverage = chartDataContainer.dataSets[1].data;
@@ -251,7 +154,7 @@ angular.module('app.factories')
                     margin: 5
                 },
                 xAxis: {
-                    categories: ['You', 'PokiFit Users'],
+                    categories: [firstBarLabel, secondBarLabel],
                     minorTickLength: 0,
                     tickLength: 0,
                     lineColor: "transparent",
@@ -302,7 +205,7 @@ angular.module('app.factories')
                     chart: {
                         type: 'column',
                         backgroundColor: "rgba(0,0,0, 0.1)",
-                        margin: [0, 0, 30, 0]
+                        margin: [5, 0, 30, 0]
                     },
                     tooltip: {
                         enabled: false
@@ -526,67 +429,6 @@ angular.module('app.factories')
 
             return chartConfig;
         }
-
-        // function createBarChartConfig(chartDataContainer) {
-        //     var seriesData = [];
-        //    _.each(chartDataContainer.dataSets, function(dataSet){
-        //         seriesData.push(dataSet.data);
-        //    }); 
-
-        //    var chartConfig = {
-        //         title: {
-        //             text: ''
-        //         },
-        //         xAxis: {
-        //             minorTickLength: 0,
-        //             tickLength: 0,
-        //             labels: {
-        //                 enabled: false
-        //             },
-        //             title: {
-        //                 text: null
-        //             }
-        //         },
-        //         yAxis: {
-        //             min: 0,
-        //             title: {
-        //                 text: ''
-        //             },
-        //             gridLineWidth: 0,
-        //             lineWidth: 0,      
-
-        //             labels: {
-        //                 enabled: false
-        //             }
-        //         },
-        //         series: [{
-        //             name: "test",
-        //             data: seriesData,
-        //             color: "#33C507",
-        //             pointWidth: 30,
-        //             dataLabels: {
-        //                 enabled: true,
-        //                 align: 'left',
-        //                 color: '#FFFFFF',
-        //                 x: -80,
-        //                 formatter: function() {
-        //                     var durationInSec = this.y;
-        //                     return dateTimeUtil.getDurationStringFromSeconds(durationInSec);
-        //                 }
-        //             }
-        //         }],
-        //         options: {
-        //             chart: {
-        //                 type: 'bar'
-        //             },
-        //             tooltip: {
-        //                 enabled: false
-        //             }
-        //         }
-        //     };
-
-        //     return chartConfig;
-        // }
 
         return {
             createActivityChartConfig: createActivityChartConfig,

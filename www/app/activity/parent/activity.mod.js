@@ -1,10 +1,11 @@
-angular.module('app.activity.parent', ['app.services.healthKit', 'chart.js', 'app.factories'])
+angular.module('app.activity.parent', ['app.services.healthKit', 'app.factories'])
 
 .config(['$stateProvider',
 		function ($stateProvider) {
 			$stateProvider
         .state('tab.activity', {
           url: "/activity",
+          cache: false,
           abstract: true,
           views: {
               'tab-activity': {
@@ -24,7 +25,6 @@ angular.module('app.activity.parent', ['app.services.healthKit', 'chart.js', 'ap
         
         .state('tab.activity.activityChart', {
             url: "/activityChart",
-            cache: false,
             views: {
                 'activity-page': {
                     templateUrl: "app/activity/parent/chart/activityChart.html"

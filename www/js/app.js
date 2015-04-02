@@ -18,7 +18,6 @@ angular.module('fitapp', [
             'pascalprecht.translate',
             'ngCookies'
             
-
 ])
 
 .run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage) {

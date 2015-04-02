@@ -220,3 +220,20 @@ body {
   color:#BEBEBE;
   font-size: 30px;
 }
+
+/* activity page */
+#activityPage .bar-subheader {
+  border: 0px !important;
+  border-color: transparent !important;
+  border-bottom: none;
+  background-image: none;
+  border-top: none;
+}
+
+#activityPage .bar-header {
+    border: 0px !important;
+  border-color: transparent !important;
+  border-bottom: none;
+  background-image: none;
+  border-top: none;
+}

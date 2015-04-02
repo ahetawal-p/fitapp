@@ -44,7 +44,7 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
         vm.durationByDateComposites = [];
         _.each(durationBarChartConfigs, function(config){
             var durationByDateComposite = {
-                date: config.date,
+                date: new Date(config.date),
                 chartConfig: config
             };
 
@@ -97,13 +97,16 @@ function ($scope, $state, $ionicModal, healthKitService, chartConfigFactory) {
         $scope.openCreateActivityModal();
     };
 
-    $scope.demo = 'ios';
+    // $scope.demo = 'ios';
     $scope.setPlatform = function (p) {
         document.body.classList.remove('platform-ios');
         document.body.classList.remove('platform-android');
         document.body.classList.add('platform-' + p);
         $scope.demo = p;
     }
+
+    $scope.setPlatform('ios');
+
 
     buildNewActivity = function (activityType) {
         var activity = {

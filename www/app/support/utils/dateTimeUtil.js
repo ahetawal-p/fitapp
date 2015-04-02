@@ -1,35 +1,17 @@
 angular.module('app.utils')
 
 /**
- * A simple example service that returns some data.
+ * utility class that processes/reformats date
  */
- .factory('dateTimeUtil', function() {
-    var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December' ];
-
-    var dayNames = ['SUN','MON','TUE','WED',
-    'THU','FRI','SAT'];
-
+ .factory('dateTimeUtil', [function() {
     function getAmPm(timeString){
-        var hour = timeString.substring(0, 2);
-        if (hour > 12){
-            hour = hour - 12;
-            hour += "pm";
-        } else if (hour == 12){
-            hour += "pm";
-        } else {
-            if (hour.substring(0, 1) == "0"){
-                hour = hour.substring(1, 2);
-            }
-            hour += "am";
-        }
-
-        return hour;
+        var timeObj = moment(timeString, "HH");
+        return timeObj.format("hA");
     }
 
     function getFormattedDateString(date){
-
-        return date.substring(0, 10);//.toJSON().substring(0,10)
+        var dateObj = moment(date);
+        return dateObj.format("YYYY-MM-DD");
     }
 
     function getDayOfMonth(date){
@@ -38,35 +20,30 @@ angular.module('app.utils')
     }
 
     function getDayOfWeekName(date){
-        var dateObj = new Date(date.toString().replace(/-/g, "/"));
-        return dayNames[dateObj.getDay()];
+        var dateObj = moment(date);
+        var locale = dateObj.localeData();
+        return locale.weekdaysShort(dateObj).toUpperCase();
     }
 
     function getMonthOfYear(date){
-        var dateObj = new Date(date.toString().replace(/-/g, "/"));
-        return monthNames[dateObj.getMonth()];
-    }
-
-    function secondTimeGreaterThanFirst(firstDateTime, secondDateTime){
-        var firstTimeInMinutes = firstDateTime.getHours() * 60 + firstDateTime.getMinutes();
-        var secondTimeInMinutes = secondDateTime.getHours() * 60 + secondDateTime.getMinutes();
-
-        return secondTimeInMinutes > firstTimeInMinutes;
+        var dateObj = moment(date);
+        var locale = dateObj.localeData();
+        return locale.monthsShort(dateObj).toUpperCase();
     }
 
     function getMonthDayYear(date){
-        var dateObj = new Date(date.toString().replace(/-/g, "/"));
-        return dateObj.getMonth() + 1 + "/" + dateObj.getDate() + "/" + dateObj.getFullYear();
+        var dateObj = moment(date);
+        return dateObj.format("MM/DD/YYYY");
     }
 
     function getMonthDay(date){
-        var dateObj = new Date(date.toString().replace(/-/g, "/"));
-        return dateObj.getMonth() + 1 + "-" + dateObj.getDate();
+        var dateObj = new moment(date);
+        return dateObj.format('M-d');
     }
 
     function getTimeStamp(date){
-        var convertedDate = new Date(date.toString().replace(/-/g, "/"));
-        return (convertedDate.getHours() < 10? '0': '') + convertedDate.getHours() + ":" + (convertedDate.getMinutes() < 10 ? '0': '') + convertedDate.getMinutes();
+        var convertedDate = new moment(date.toString());
+        return convertedDate.format('H:mm')
     }
 
     function getDurationInHours(startDate, endDate){
@@ -80,23 +57,11 @@ angular.module('app.utils')
     }
 
     function getDurationInSeconds(startDate, endDate){
-        var convertedStartDateString = startDate;
-        var convertedEndDateString = endDate;
+        var startDateObj = moment(startDate);
+        var endDateObj = moment(endDate);
+        var diff = endDateObj.diff(startDateObj, "seconds");
 
-        if (startDate.indexOf("-") >= 0){
-            convertedStartDateString = convertedStartDateString.replace(/-/g, "/");
-        }
-
-        if (endDate.indexOf("-") >= 0){
-            convertedEndDateString = convertedEndDateString.replace(/-/g, "/");
-        }
-
-        var convertedStartDate = new Date(convertedStartDateString);
-        var convertedEndDate = new Date(convertedEndDateString);
-        var timeDiff = Math.abs(convertedEndDate - convertedStartDate);
-        var timeDiffInSeconds = Math.floor((timeDiff/1000));
-
-        return timeDiffInSeconds;
+        return diff;
     }
 
     function getDurationStringFromSeconds(durationInSeconds){
@@ -137,6 +102,29 @@ angular.module('app.utils')
         return totalMinutes;
     }
 
+    function secondTimeGreaterThanFirst(firstDateTime, secondDateTime){
+        var firstTimeInMinutes = firstDateTime.getHours() * 60 + firstDateTime.getMinutes();
+        var secondTimeInMinutes = secondDateTime.getHours() * 60 + secondDateTime.getMinutes();
+
+        return secondTimeInMinutes > firstTimeInMinutes;
+    }
+
+    function isLastWeek(evalDate){
+        var endDateObj = moment();
+        var startDateObj = moment().subtract(7, 'days');
+        var evalDateObj = moment(evalDate);
+
+        return evalDateObj.isBetween(startDateObj, endDateObj);
+    }
+
+    function isPreviousWeek(evalDate){
+        var endDateObj = moment().subtract(7, 'days');
+        var startDateObj = moment().subtract(14, 'days');
+        var evalDateObj = moment(evalDate);
+
+        return evalDateObj.isBetween(startDateObj, endDateObj);
+    }
+
     return {
         getFormattedDateString: getFormattedDateString,
         getTimeStamp: getTimeStamp,
@@ -145,13 +133,15 @@ angular.module('app.utils')
         getDurationInSeconds: getDurationInSeconds,
         getDurationStringFromSeconds: getDurationStringFromSeconds,
         getMonthDay: getMonthDay,
-        secondTimeGreaterThanFirst: secondTimeGreaterThanFirst,
         getMinutesFromSeconds: getMinutesFromSeconds,
         getDurationStringFromMinutes: getDurationStringFromMinutes,
         getMonthDayYear: getMonthDayYear,
         getDayOfWeekName: getDayOfWeekName,
         getDayOfMonth: getDayOfMonth,
         getMonthOfYear: getMonthOfYear,
-        getAmPm: getAmPm
+        getAmPm: getAmPm,
+        secondTimeGreaterThanFirst: secondTimeGreaterThanFirst,
+        isPreviousWeek: isPreviousWeek,
+        isLastWeek: isLastWeek
     };
-});
+}]);
