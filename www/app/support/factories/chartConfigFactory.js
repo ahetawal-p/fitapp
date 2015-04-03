@@ -236,11 +236,23 @@ angular.module('app.factories')
             if (chartType === "line") {
                 chartConfig = createActivityLineChartConfig(chartDataContainer);
             } else if (chartType === "bar") {
-                chartConfig = createActivityChartBarChartConfigs(chartDataContainer);
+                // chartConfig = createActivityChartBarChartConfigs(chartDataContainer);
+               chartConfig = createActivityChartBarChartConfig(chartDataContainer);
             }
 
             return chartConfig;
         }
+
+        // function createActivityChartConfig(chartDataContainer, chartType) {
+        //     var chartConfig = {};
+        //     if (chartType === "line") {
+        //         chartConfig = createActivityLineChartConfig(chartDataContainer);
+        //     } else if (chartType === "bar") {
+        //         chartConfig = createActivityChartBarChartConfigs(chartDataContainer);
+        //     }
+
+        //     return chartConfig;
+        // }
 
         function createActivityLineChartConfig(chartDataContainer) {
             var todayTotalDuration = getTotalDuration(chartDataContainer.dataSets[0].data);
@@ -351,6 +363,21 @@ angular.module('app.factories')
            }); 
 
            return chartConfigs;
+        }
+
+        /* TEST: creating bar charts async */
+        function createActivityChartBarChartConfig(chartDataContainer) {
+           var chartConfigs = [];
+           var maxDurationObject = _.max(chartDataContainer.dataSets, function(dataSet){
+                return dataSet.data;
+           });
+           var maxYValue = maxDurationObject.data;
+
+           // _.each(chartDataContainer.dataSets, function(dataSet){
+           //      chartConfigs.push(createBarChartConfig(dataSet, maxYValue));
+           // }); 
+
+           return createBarChartConfig(chartDataContainer.dataSets[0], maxYValue);
         }
 
         function createBarChartConfig(dataSet, maxYValue) {

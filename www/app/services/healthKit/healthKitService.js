@@ -10,7 +10,7 @@ angular.module('app.services.healthKit')
             api = healthKitStubApi;
         }
 
-        //api = healthKitApi;
+        // api = healthKitApi;
 
         function getActivities(){
         	var deferred = $q.defer();
@@ -49,23 +49,47 @@ angular.module('app.services.healthKit')
                 var durationsByDate = workoutProcessor.getActivityDurationByDate(walkRunActivities);
                 var dataSets = [];
                 var labels = [];
-
+                var chartDataContainers = [];
                 _.each(durationsByDate, function(durationByDate){
-                    dataSets.push({
+                    var dataSets = [{
                         name: durationByDate.date,
                         data: durationByDate.durationSum
-                    });
+                    }];
+
+                    chartDataContainers.push({
+                        dataSets: dataSets
+                    })
+
                 });
 
-                var chartDataContainer = {
-                    labels: labels,
-                    dataSets: dataSets
-                }
-
-                deferred.resolve(chartDataContainer);
+                deferred.resolve(chartDataContainers);
             });
             return deferred.promise;
         }
+
+        // function getActivityDurationByDate(){
+        //     var deferred = $q.defer();
+        //     api.getWalkingAndRunningDistance().then(function(walkRunActivities){
+        //         var durationsByDate = workoutProcessor.getActivityDurationByDate(walkRunActivities);
+        //         var dataSets = [];
+        //         var labels = [];
+
+        //         _.each(durationsByDate, function(durationByDate){
+        //             dataSets.push({
+        //                 name: durationByDate.date,
+        //                 data: durationByDate.durationSum
+        //             });
+        //         });
+
+        //         var chartDataContainer = {
+        //             labels: labels,
+        //             dataSets: dataSets
+        //         }
+
+        //         deferred.resolve(chartDataContainer);
+        //     });
+        //     return deferred.promise;
+        // }
 
         function getWeekdayTimesOfDayAverages(){
             var deferred = $q.defer();

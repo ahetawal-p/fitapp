@@ -1,4 +1,4 @@
-angular.module('app.activity.parent', ['app.services.healthKit', 'app.factories'])
+angular.module('app.activity.parent', ['app.services.healthKit', 'app.factories', 'infinite-scroll'])
 
 .config(['$stateProvider',
 		function ($stateProvider) {

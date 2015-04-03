@@ -1,24 +1,24 @@
 <ion-view id="activityChartsPage" view-title="Activity Chart" ng-controller="ActivityChartCtrl as vm">
-  <ion-content class="has-header has-subheader" delegate-handle="scrollHandle">
-	<div ng-repeat="chartConfig in vm.chartConfigs">
-	   <highchart id="activityChart" config="chartConfig" ></highchart>
-       <h5 id="todaysDateDisplay">TODAY {{vm.todaysDate | date:'MMM d' | uppercase}}</h5>
-	</div>
+    <ion-content class="has-header has-subheader" delegate-handle="scrollHandle">
+        <div ng-repeat="chartConfig in vm.chartConfigs">
+            <highchart id="activityChart" config="chartConfig"></highchart>
+            <h5 id="todaysDateDisplay">TODAY {{vm.todaysDate | date:'MMM d' | uppercase}}</h5>
+        </div>
 
-	<div class="transaction-list item-container" ng-repeat="durationByDateComposite in vm.durationByDateComposites | orderBy: '-date'">
-          <div class="row barChartRow">
-            <i class="icon {{activity.icon}}"></i>
-            <div class="col col-80">
-              	<highchart class="durationBarChart" config="durationByDateComposite.chartConfig"></highchart>
+        <div class="list">
+            <div ng-repeat="composite in vm.durationByDateComposites" class="row barChartRow">
+                <i class="icon {{activity.icon}}"></i>
+                <div class="col col-80">
+                    <highchart class="durationBarChart" config="composite.chartConfig"></highchart>
+                </div>
+                <div class="col col-20" style="text-align:right;">
+                    <div class="durationRowDateContainer">
+                        <div class="rowDateDisplay">{{composite.chartConfig.dayOfMonth}}</div>
+                        <div class="rowDateDisplay">{{composite.chartConfig.dayOfWeekName}}</div>
+                    </div>
+                </div>
             </div>
-            <div class="col col-20" style="text-align:right;">
-            	<div class="durationRowDateContainer">
-            		<div class="rowDateDisplay">{{durationByDateComposite.chartConfig.dayOfMonth}}</div>
-            		<div class="rowDateDisplay">{{durationByDateComposite.chartConfig.dayOfWeekName}}</div>
-            	</div>
-            </div>
-          </div>
-    </div>
-
+        </div>
+        <ion-infinite-scroll ng-if="vm.durationByDateComposites && !vm.noMoreItemsAvailable" on-infinite="vm.loadMore()" distance="1%"></ion-infinite-scroll>
     </ion-content>
 </ion-view>

@@ -1,13 +1,14 @@
 /* Empty. Add your own CSS if you like */
-body {
+/*body {
   cursor: url('http://ionicframework.com/img/finger.png'), auto;
-}
+}*/
 
 
 /** For Background color **/
-.scroll-content{
+/*.scroll-content{
     -webkit-animation: hue 60s linear infinite;
-}
+    -webkit-transform: translateZ(0);
+}*/
 
 
 
