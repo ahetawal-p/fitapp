@@ -6,7 +6,7 @@
 
 /** For Background color **/
 .conversationView > .scroll-content{
-    -webkit-animation: hue 40s linear infinite !important;
+    -webkit-animation: hue 60s linear infinite !important;
     -webkit-transform: translateZ(0);
 }
 
