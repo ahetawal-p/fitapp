@@ -351,18 +351,13 @@ angular.module('app.utils')
 				groupedActivityBuilder.createGroupedActivity(rawActivityObject.startDate);
 			}
 
-			//var workoutEndDate = new Date(rawActivityObject.endDate.replace(/-/g, "/"));
 			var workoutEndDate = moment(rawActivityObject.endDate);
 			var nextWorkout = rawActivityObjects[ii + 1];
 			if (nextWorkout == null){
 				groupedActivities.push(groupedActivityBuilder.getGroupedActivity(rawActivityObject.endDate));
 			}
 			else{
-				//var nextWorkoutStartDateString = nextWorkout.startDate.replace(/-/g, "/");
-				//var nextWorkoutStartDate = new Date(nextWorkoutStartDateString);
 				var nextWorkoutStartDate = moment(nextWorkout.startDate);
-				// var timeDiff = Math.abs(nextWorkoutStartDate - workoutEndDate);
-				// var timeDiffInMins = Math.floor((timeDiff/1000)/60);
 				var timeDiffInMins = nextWorkoutStartDate.diff(workoutEndDate, "minutes");
 
 				if (timeDiffInMins > 1){
@@ -396,11 +391,11 @@ angular.module('app.utils')
 
 	function calculateCalories(groupedActivity){
 		//CB = [0.0215 x KPH3 - 0.1765 x KPH2 + 0.8710 x KPH + 1.4577] x WKG x T
-		//assume weight is 60kg
+		//assume weight is 70kg
 
 		var durationInHours = dateTimeUtil.getDurationInHours(groupedActivity.startDate, groupedActivity.endDate)
 		var kph = groupedActivity.distance/durationInHours;
-		var weight = 60;
+		var weight = 70;
 		var calories = (0.0215 * Math.pow(kph, 3) - 0.1765 * Math.pow(kph, 2) 
 			+ 0.8710 * kph + 1.4577) * weight * durationInHours;
 		var roundedCalories = Math.ceil(calories);
