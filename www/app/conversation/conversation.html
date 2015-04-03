@@ -1,4 +1,4 @@
-<ion-view  ng-controller="ConversationCtrl">
+<ion-view  ng-controller="ConversationCtrl" class="conversationView">
   <ion-header-bar align-title="center" class="headerOverride">
     <h1 class="title" translate="App_Nick_Name"></h1>
     <div class="buttons">
@@ -8,7 +8,7 @@
     </div>
     </ion-header-bar>
   <ion-content class="has-header">
-    <ion-list class="messages">
+    <ion-list>
       <ion-item  ng-repeat="message in messages" class="conversationBase">
 
         <div class="systemMsg" ng-if="message.type == null && message.wait">

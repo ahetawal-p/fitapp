@@ -68,7 +68,7 @@ angular.module('fitapp', [
 
     
     $translateProvider.useStaticFilesLoader({
-      prefix: '/language/',
+      prefix: 'language/',
       suffix: '.json'
     });
    $translateProvider.preferredLanguage('en_US');

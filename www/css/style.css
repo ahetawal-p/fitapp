@@ -5,12 +5,10 @@
 
 
 /** For Background color **/
-/*.scroll-content{
-    -webkit-animation: hue 60s linear infinite;
+.conversationView > .scroll-content{
+    -webkit-animation: hue 60s linear infinite !important;
     -webkit-transform: translateZ(0);
-}*/
-
-
+}
 
 @-webkit-keyframes hue {
   from {
@@ -21,6 +19,7 @@
     -webkit-filter: hue-rotate(-360deg);
   }
 }
+
 
 /** END background color **/
 
@@ -146,16 +145,6 @@
         background: #CCC;
     }
 }
-
-@keyframes dot {
-     from  {
-        background: black;
-    }
-    to {
-        background: #CCC;
-    }
-}
-
 
 .userMsgOptionsContainer {
   -webkit-animation-duration: .5s;
