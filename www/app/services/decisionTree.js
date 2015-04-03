@@ -56,9 +56,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 
 	
 	var userInputPopup = function(myScope){
-
 		var deferred = $q.defer();
-
 		if($localstorage.getUser() != null){
 			deferred.resolve(treeData['greetUser']);
   		} else {
@@ -164,7 +162,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		},
 
 		'onboarding' : {
-			text: [0],
+			text: ['0'],
 			children: ['askName']
 		},
 		'askName': {
@@ -183,15 +181,22 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		'userName': {
 			text: "TODO UPDATE > My Name is User",
 			type: "user",
-			children: ['greetUser']
-		},
-		'greetUser': {
-			text: ['2'],
-			evalInfo : {
-				type : "string",
-			},
 			children: ['lookData']
 		},
+
+		// '_greetUser_': {
+		// 	text: ['2'],
+		// 	evalInfo : {
+		// 		type : "string",
+		// 	},
+		// 	children: ['lookData']
+		// },
+
+		'greetUser': {
+			text: ['2'],
+			children: ['lookData']
+		},
+
 		'lookData':{
 			text: ['3'],
 			children: ['includeHApp']
@@ -339,7 +344,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		},
 		'belowAverage': {
 			text: ['28'],
-			children:['moreActiveTip']
+			children:['testChart']
 		},
 		'moreActiveTip': {
 			text: ['29'],

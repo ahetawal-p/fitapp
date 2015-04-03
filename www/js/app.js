@@ -13,10 +13,14 @@ angular.module('fitapp', [
             'app.settings',
             'ngCordova',
             'underscore',
-            'highcharts-ng'
+            'chart.js',
+            'highcharts-ng',
+            'pascalprecht.translate',
+            'ngCookies'
+            
 ])
 
-.run(function($ionicPlatform, $cordovaHealthKit, $rootScope) {
+.run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage) {
   $ionicPlatform.ready(function() {
     // // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // // for form inputs)
@@ -26,6 +30,9 @@ angular.module('fitapp', [
     // if(window.StatusBar) {
     //   StatusBar.styleDefault();
     // }
+
+    console.log($localstorage.getUser());
+    //
 
     //Ask/set user permissions for Healthkit data
     try {
@@ -56,7 +63,17 @@ angular.module('fitapp', [
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$translateProvider',
+        function($stateProvider, $urlRouterProvider, $translateProvider) {
+
+    
+    $translateProvider.useStaticFilesLoader({
+      prefix: '/language/',
+      suffix: '.json'
+    });
+   $translateProvider.preferredLanguage('en_US');
+
+   $translateProvider.useLocalStorage();
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -94,4 +111,4 @@ angular.module('fitapp', [
 
 <!--
 <!--
-});
+}]);

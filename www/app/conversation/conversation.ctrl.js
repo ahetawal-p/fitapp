@@ -8,12 +8,13 @@ angular.module('app.conversation')
 	'$ionicScrollDelegate',
 	'$timeout',
 	'$parse',
-	'lableManager',
 	'$localstorage',
-	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, lableManager, $localstorage) {
+	'$translate',
+	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, $localstorage, $translate) {
 
-			var ENGLISH = 0;
-			var CHINEESE = 1;
+
+			console.log("HERRE>>>");
+			$translate.use("en_US");
 
 			// upper limit constant to fake the waiting time after system input
 			// Only in effect for normal text node.
@@ -34,7 +35,7 @@ angular.module('app.conversation')
 			(function(){
 				
 				// UNCOMMENT FOR TESTING. IF NEEDED...
-				//$localstorage.removeUser();
+				$localstorage.removeUser();
 				
 				// actual message list which serves as the model for UI
 				$scope.messages = [];
@@ -42,7 +43,6 @@ angular.module('app.conversation')
 
 				$scope.user = {
 						'name': null,
-						'language': ENGLISH,
 						'lastLoginTime': new Date()
 				};
 
@@ -52,9 +52,6 @@ angular.module('app.conversation')
   				}
 
 			})();
-
-
-			
 
 
 			var addNodeHelper = function(message, doAnimation) {
@@ -72,9 +69,8 @@ angular.module('app.conversation')
 			var getTextData = function(message){
 				if(typeof message.text === 'object'){
 					var randomIndex = 0; // used for randomizing the text nodes in future
-					var lableIndex = message.text[randomIndex];
-					message.text = lableManager.getTextValue(lableIndex, $scope.user.language);
-				}
+					message.text = message.text[randomIndex];
+				} 
 				return message;
 			};
 
@@ -96,7 +92,7 @@ angular.module('app.conversation')
 			* angular expression, so that it can have some
 			* runtime values which are souced from the current scope.
 			* ex: User Name.
-			**/
+			
 			var evalTypeStringProcessing = function(message){
 				if(message.evalInfo != null 
 					&& message.evalInfo.type == "string"){
@@ -105,7 +101,7 @@ angular.module('app.conversation')
 				console.log("evaluated as >> " + evaluatedMsg);
 				message.text = evaluatedMsg;	
 			}
-		};
+		}; **/
 
 			/**
 			* Method used for adding the current node to the 
@@ -136,7 +132,6 @@ angular.module('app.conversation')
 				return $timeout( function() { 
 					lastMsgInListOnUi.wait = false;
 					$scope.waitIndicator = false;
-					evalTypeStringProcessing(lastMsgInListOnUi);
 					$ionicScrollDelegate.scrollBottom(true);
 				}, 
 				getRandom(waitLimit));
@@ -197,10 +192,6 @@ angular.module('app.conversation')
 				// NOTE: Make sure the eval method always returns the next node which 
 				// need to be displayed
 				$parse(node.evalInfo.method)($scope).then(function(nextNode){
-					
-					// evaluate string in the message text
-					evalTypeStringProcessing(nextNode);
-
 					triggerDigestHelper(nextNode, true);
 				});
 
@@ -264,8 +255,7 @@ angular.module('app.conversation')
 								for(i in currentNodeToBeAdded.children){
 									var msg = root[currentNodeToBeAdded.children[i]];
 									msg.isClickDisabled = false;
-									msg = getTextData(msg);
-									currentNodeToBeAdded['userOptions'].push(angular.extend({}, msg));
+									currentNodeToBeAdded['userOptions'].push(angular.extend({}, getTextData(msg)));
 									$scope.options.push(angular.extend({}, msg));
 								}
 						}
