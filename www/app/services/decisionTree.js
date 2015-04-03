@@ -3,8 +3,8 @@ angular.module('app.services')
 /**
  * A simple example service that returns tree data for conversation
  */
-.factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory', '$ionicPopup', '$localstorage',
-function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, $localstorage) {
+.factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory', '$ionicPopup', '$localstorage', '$translate',
+function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, $localstorage, $translate) {
 
 
 	$ionicPlatform.ready(function() {
@@ -60,36 +60,38 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		if($localstorage.getUser() != null){
 			deferred.resolve(treeData['greetUser']);
   		} else {
-  			var myPopup = $ionicPopup.show({
-		    template: '<input type="text" ng-model="user.name">',
-		    title: 'Enter your nick name',
-		    cssClass: 'myPopup',
-		    scope: myScope,
-		    buttons: [
-		      {
-		        text: '<b>Ok</b>',
-		        type: 'button-energized',
-		        onTap: function(e) {
-		          if (!myScope.user.name) {
-		            //don't allow the user to close unless he enters a  password
-		            e.preventDefault();
-		          } else {
-		          	$localstorage.setObject("user", myScope.user);
-		            return treeData['greetUser'];
-		          }
-		        }
-		      }
-		    ]
-		  	});
-	  		
-	  		myPopup.then(function(response){
-					deferred.resolve(response);
-				},
-				function(error){
-					deferred.reject(error);
-				}
-			);
-  	}
+  			$translate('Enter_Name').then(function (enterNameMsg) {
+	  			var myPopup = $ionicPopup.show({
+			    template: '<input type="text" ng-model="user.name">',
+			    title: enterNameMsg,
+			    cssClass: 'myPopup',
+			    scope: myScope,
+			    buttons: [
+			      {
+			        text: '<b>Ok</b>',
+			        type: 'button-energized',
+			        onTap: function(e) {
+			          if (!myScope.user.name) {
+			            //don't allow the user to close unless he enters a  password
+			            e.preventDefault();
+			          } else {
+			          	$localstorage.setObject("user", myScope.user);
+			            return treeData['greetUser'];
+			          }
+			        }
+			      }
+			    ]
+			  	});
+		  		myPopup.then(function(response){
+						deferred.resolve(response);
+					},
+					function(error){
+						deferred.reject(error);
+					}
+				);
+			});
+
+  		}
   		return deferred.promise;
 	};
 

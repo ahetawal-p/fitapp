@@ -35,7 +35,7 @@ angular.module('app.conversation')
 			(function(){
 				
 				// UNCOMMENT FOR TESTING. IF NEEDED...
-				$localstorage.removeUser();
+				//$localstorage.removeUser();
 				
 				// actual message list which serves as the model for UI
 				$scope.messages = [];
