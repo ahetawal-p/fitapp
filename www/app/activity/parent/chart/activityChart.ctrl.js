@@ -13,13 +13,11 @@
             var vm = this;
             var SCROLL_ITEM_NUM = 5;
             /* testing charts */
-            var startDate = new Date("3/27/2015");
-            startDate.setHours(5);
+            var startDate = new Date();
+            startDate.setHours(0);
             startDate.setMinutes(0);
 
-            var endDate = new Date("3/27/2015");
-            endDate.setHours(19);
-            endDate.setMinutes(0);
+            var endDate = new Date();
 
             vm.chartConfigs = [];
             healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(function(response) {

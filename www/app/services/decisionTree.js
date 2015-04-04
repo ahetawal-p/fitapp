@@ -100,13 +100,11 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		console.log("Running data here...");
 
 		var deferred = $q.defer();
-		var startDate = new Date("3/20/2015");
-		startDate.setHours(5);
+		var startDate = new Date();
+		startDate.setHours(0);
 		startDate.setMinutes(0);
 
-		var endDate = new Date("3/20/2015");
-		endDate.setHours(19);
-		endDate.setMinutes(0);
+		var endDate = new Date();
 
 		healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(
 			function(response){
@@ -122,7 +120,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
         return deferred.promise;
 	};
 
-	var getDailyAverageVsUsersChart = function(type){
+	var getDailyAverageVsUsersChart = function(){
 		var deferred = $q.defer();
 		healthKitService.getDailyAverageVsAllUsers().then(
 			function(response){
@@ -136,7 +134,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		return deferred.promise;
 	}
 
-	var getLastPreviousWeeksAvgerageChart = function(type){
+	var getLastPreviousWeeksAvgerageChart = function(){
 		var deferred = $q.defer();
 		healthKitService.getLastVsPreviousWeekAverage().then(
 			function(response){
