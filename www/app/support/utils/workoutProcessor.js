@@ -218,13 +218,7 @@ angular.module('app.utils')
 				totalDuration += activityDuration;
 			});
 
-			var timeString = "";
-
-			try{
-			timeString = iterDateTime.format("HH:MM");
-			} catch (ex){
-				var str = ex;
-			};
+			var timeString = iterDateTime.format("HH:MM");
 			var dataPoint = {
 				"dateTime": timeString,
 				"durationTillNow": totalDuration

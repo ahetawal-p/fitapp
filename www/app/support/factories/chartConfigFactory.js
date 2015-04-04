@@ -16,7 +16,13 @@ angular.module('app.factories')
         }
 
         function getTotalDuration(durationsArray){
-            var totalDuration = _.max(durationsArray, function(dataPoint){
+            var totalDuration = 0;
+
+            if (durationsArray.length == 0){
+                return totalDuration;
+            }
+
+            totalDuration = _.max(durationsArray, function(dataPoint){
                 return dataPoint;
             });
 
