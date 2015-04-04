@@ -38,7 +38,7 @@ angular.module('app.utils')
 
     function getMonthDay(date){
         var dateObj = new moment(date);
-        return dateObj.format('M-d');
+        return dateObj.format('M-DD');
     }
 
     function getTimeStamp(date){
@@ -103,8 +103,11 @@ angular.module('app.utils')
     }
 
     function secondTimeGreaterThanFirst(firstDateTime, secondDateTime){
-        var firstTimeInMinutes = firstDateTime.getHours() * 60 + firstDateTime.getMinutes();
-        var secondTimeInMinutes = secondDateTime.getHours() * 60 + secondDateTime.getMinutes();
+        var firstDateTimeObj = moment(firstDateTime);
+        var secondDateTimeObj = moment(secondDateTime);
+
+        var firstTimeInMinutes = firstDateTimeObj.hours() * 60 + firstDateTimeObj.minutes();
+        var secondTimeInMinutes = secondDateTimeObj.hours() * 60 + secondDateTimeObj.minutes();
 
         return secondTimeInMinutes > firstTimeInMinutes;
     }

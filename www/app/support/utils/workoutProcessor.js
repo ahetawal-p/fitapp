@@ -86,7 +86,8 @@ angular.module('app.utils')
 		
 		//group raw activities by time 
 		var increment = 60;
-		var iterDateTime = startDateTime;
+		var iterDateTime = moment(startDateTime);
+		var endDateTime = moment(endDateTime);
 		var activityAverages = [];
 		/* need number of unique days accross ALL data points in ALL time buckets
 			, not just all data points within a certain time bucket. Might have activity
@@ -105,7 +106,7 @@ angular.module('app.utils')
 		});
 
 		var numUniqueDays = totalUniqueDays.length;
-		while (iterDateTime.getHours() < endDateTime.getHours()){
+		while (iterDateTime.hours() < endDateTime.hours()){
 			// get raw activities that fall bewteen startDateTime and iterDateTime
 			var activitiesInRange = _.filter(groupedActivities, function(groupedActivityObj){
 				var groupedActivityDateTime = new Date(groupedActivityObj.startDate.replace(/-/g, "/"));
@@ -119,7 +120,7 @@ angular.module('app.utils')
 				activitiesInRange = _.filter(activitiesInRange, filterFunction);
 			}
 
-			var timeString = (iterDateTime.getHours() < 10? '0': '') + iterDateTime.getHours() + ":" + (iterDateTime.getMinutes() < 10 ? '0': '') + iterDateTime.getMinutes();
+			var timeString = iterDateTime.format("HH:MM");
 
 			activityAverages.push({
 				"time": timeString,
@@ -127,7 +128,7 @@ angular.module('app.utils')
 			});
 
 			//increment iterDateTime by set interval
-			iterDateTime = new Date(iterDateTime.getTime() + increment*60000);
+			iterDateTime.add(1, "hours");
 		}
 
 		return activityAverages;
@@ -187,10 +188,15 @@ angular.module('app.utils')
 
 	// get activity data points in seconds
 	function getActivityDataPoints(startDateTime, endDateTime, rawActivityObjects){
-		var iterDateTime = startDateTime;
+		var iterDateTime = moment(startDateTime);
 		var dataPoints = [];
 		//get grouped activities between startDateTime adn iterDateTime
 		var groupedActivities = groupActivities(rawActivityObjects.reverse());
+		groupedActivities = _.filter(groupedActivities, function(activity){
+			var activityDateObj = moment(activity.startDate);
+			var startDateObj = moment(startDateTime);
+			return activityDateObj.dayOfYear() === startDateObj.dayOfYear();
+		});
 
 		//increment by 30 minutes
 		var increment = 60;
@@ -212,14 +218,20 @@ angular.module('app.utils')
 				totalDuration += activityDuration;
 			});
 
-			var timeString = (iterDateTime.getHours() < 10? '0': '') + iterDateTime.getHours() + ":" + (iterDateTime.getMinutes() < 10 ? '0': '') + iterDateTime.getMinutes();
+			var timeString = "";
+
+			try{
+			timeString = iterDateTime.format("HH:MM");
+			} catch (ex){
+				var str = ex;
+			};
 			var dataPoint = {
 				"dateTime": timeString,
 				"durationTillNow": totalDuration
 			};
 
 			dataPoints.push(dataPoint);
-			iterDateTime = new Date(iterDateTime.getTime() + increment*60000);
+			iterDateTime.add(1, 'hours');
 
 		}
 
@@ -232,9 +244,9 @@ angular.module('app.utils')
 		groupedActivities = groupedActivities.filter(filterGroupedActivities);
 
 		var activities = _.groupBy(groupedActivities, function(activity){
-			var date = new Date(activity.startDate.replace(/-/g, "/"));
+			var date = moment(activity.startDate);
 			//pretending weekend starts on thursday for testing
-			if (date.getDay() > 3){
+			if (date.days() == 6 || date.days() == 0){
 				return "weekend";
 			}
 			return "weekday";
@@ -249,8 +261,8 @@ angular.module('app.utils')
 		var weekendAverageSeconds = calculateProcessedDailyAverageDuration(weekendActivities);
 
 		return {
-			"weekdayAverage": weekdayAverageSeconds,
-			"weekendAverage": weekendAverageSeconds
+			"weekdayAverage": dateTimeUtil.getMinutesFromSeconds(weekdayAverageSeconds),
+			"weekendAverage": dateTimeUtil.getMinutesFromSeconds(weekendAverageSeconds)
 		}
 	}
 

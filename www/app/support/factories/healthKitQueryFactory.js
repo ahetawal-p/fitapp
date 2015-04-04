@@ -7,15 +7,43 @@ angular.module('app.factories')
 		console.log("Running data here...");
 
 		var deferred = $q.defer();
-		var startDate = new Date();
-		startDate.setHours(0);
-		startDate.setMinutes(0);
+		var startDate = moment();
+		startDate.hours(0);
+		startDate.minutes(0);
 
-		var endDate = new Date();
+		var endDate = moment();
 
-		healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(
+		healthKitService.getDateVsAverageDataPoints(startDate, endDate).then(
 			function(response){
 				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "line", "Activity Today");
+				deferred.resolve(chartConfig);
+			},
+			function(error){
+				deferred.reject(error);
+			}
+		);
+		console.log("1 Running data here...");
+		
+        return deferred.promise;
+	};
+
+	var getYesterdayVsAverageChartConfig = function(type) {
+		console.log("Running data here...");
+
+		var deferred = $q.defer();
+		var startDate = moment();
+		startDate.add(-1, 'days');
+		startDate.hours(0);
+		startDate.minutes(0);
+
+		var endDate = moment();
+		endDate.add(-1, 'days');
+		endDate.hours(23);
+		endDate.minutes(59);
+
+		healthKitService.getDateVsAverageDataPoints(startDate, endDate).then(
+			function(response){
+				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "line", "Activity Yesterday");
 				deferred.resolve(chartConfig);
 			},
 			function(error){
@@ -55,9 +83,25 @@ angular.module('app.factories')
 		return deferred.promise;
 	}
 
+	var getWeekdayVsWeekendChart = function() {
+		var deferred = $q.defer();
+		healthKitService.getWeekdayWeekendAverages().then(
+			function(response){
+				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Weekday vs Weekend Averages", "Weekday", "Weekend");
+				deferred.resolve(chartConfig);
+			},
+			function(error){
+				deferred.reject(error);
+			});
+
+		return deferred.promise;
+	}
+
         return {
             getTodayVsAverageChartConfig: getTodayVsAverageChartConfig,
             getLastPreviousWeeksAvgerageChart: getLastPreviousWeeksAvgerageChart,
-            getDailyAverageVsUsersChart: getDailyAverageVsUsersChart
+            getDailyAverageVsUsersChart: getDailyAverageVsUsersChart,
+            getYesterdayVsAverageChartConfig: getYesterdayVsAverageChartConfig,
+            getWeekdayVsWeekendChart: getWeekdayVsWeekendChart
         };
     }]);

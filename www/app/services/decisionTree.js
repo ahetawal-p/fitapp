@@ -114,8 +114,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		},
 		'askName': {
 			text: ['1'],
-			// children: ['userInput']
-			children: ['testChart','userInput']
+			children: ['userInput']
 		},
 
 		'userInput': {
@@ -304,6 +303,12 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 			//method: getChartData,
 			children:[]
 		},
+		'yesterdayVsAvgLineChart': {
+			type: "chart",
+			method: healthKitQueryFactory.getYesterdayVsAverageChartConfig(),
+			//method: getChartData,
+			children:[]
+		},
 		'dailyAvgVsUsersBarChart': {
 			type: "chart",
 			method: healthKitQueryFactory.getDailyAverageVsUsersChart(),
@@ -312,6 +317,11 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		'lastVsPrevBarChart': {
 			type: "chart",
 			method: healthKitQueryFactory.getLastPreviousWeeksAvgerageChart(),
+			children: []
+		},
+		'weekdayVsWeekendBarChart': {
+			type: "chart",
+			method: healthKitQueryFactory.getWeekdayVsWeekendChart(),
 			children: []
 		}
 
