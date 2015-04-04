@@ -95,34 +95,6 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
   		return deferred.promise;
 	};
 
-	var getDailyAverageVsUsersChart = function(){
-		var deferred = $q.defer();
-		healthKitService.getDailyAverageVsAllUsers().then(
-			function(response){
-				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Average minutes active per day", "You", "Other users");
-				deferred.resolve(chartConfig);
-			},
-			function(error){
-				deferred.reject(error);
-			});
-
-		return deferred.promise;
-	}
-
-	var getLastPreviousWeeksAvgerageChart = function(){
-		var deferred = $q.defer();
-		healthKitService.getLastVsPreviousWeekAverage().then(
-			function(response){
-				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Average minutes of activity", "Last week", "2 weeks ago");
-				deferred.resolve(chartConfig);
-			},
-			function(error){
-				deferred.reject(error);
-			});
-
-		return deferred.promise;
-	}
-
 	var treeData = {
 		root: ['onboarding', 'onboardingInfo'],
 
@@ -334,12 +306,12 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		},
 		'dailyAvgVsUsersBarChart': {
 			type: "chart",
-			method: getDailyAverageVsUsersChart,
+			method: healthKitQueryFactory.getDailyAverageVsUsersChart(),
 			children: []
 		},
 		'lastVsPrevBarChart': {
 			type: "chart",
-			method: getLastPreviousWeeksAvgerageChart,
+			method: healthKitQueryFactory.getLastPreviousWeeksAvgerageChart(),
 			children: []
 		}
 
