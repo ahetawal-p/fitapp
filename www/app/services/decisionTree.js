@@ -3,8 +3,8 @@ angular.module('app.services')
 /**
  * A simple example service that returns tree data for conversation
  */
-.factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory', '$ionicPopup', '$localstorage', '$translate',
-function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, $localstorage, $translate) {
+.factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory', '$ionicPopup', '$localstorage', '$translate', 'healthKitQueryFactory',
+function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, $localstorage, $translate, healthKitQueryFactory) {
 
 
 	$ionicPlatform.ready(function() {
@@ -95,31 +95,6 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
   		return deferred.promise;
 	};
 
-
-	var getChartData = function(type) {
-		console.log("Running data here...");
-
-		var deferred = $q.defer();
-		var startDate = new Date();
-		startDate.setHours(0);
-		startDate.setMinutes(0);
-
-		var endDate = new Date();
-
-		healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(
-			function(response){
-				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "line", "Activity Today");
-				deferred.resolve(chartConfig);
-			},
-			function(error){
-				deferred.reject(error);
-			}
-		);
-		console.log("1 Running data here...");
-		
-        return deferred.promise;
-	};
-
 	var getDailyAverageVsUsersChart = function(){
 		var deferred = $q.defer();
 		healthKitService.getDailyAverageVsAllUsers().then(
@@ -167,7 +142,8 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		},
 		'askName': {
 			text: ['1'],
-			children: ['userInput']
+			// children: ['userInput']
+			children: ['testChart','userInput']
 		},
 
 		'userInput': {
@@ -352,7 +328,8 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		},
 		'testChart': {
 			type: "chart",
-			method: getChartData,
+			method: healthKitQueryFactory.getTodayVsAverageChartConfig('myType'),
+			//method: getChartData,
 			children:[]
 		},
 		'dailyAvgVsUsersBarChart': {
