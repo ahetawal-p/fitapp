@@ -1,9 +1,21 @@
-	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', SettingsCtrl]);
-	function SettingsCtrl($state, stubService, $ionicModal, $scope){
+	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', '$window', 'emailInfoFactory', SettingsCtrl]);
+	function SettingsCtrl($state, stubService, $ionicModal, $scope, $window, emailInfoFactory){
 		var vm = this;
 		vm.myProfile = stubService.getProfile();
 		vm.goalTypes = stubService.getGoalTypes();
 		vm.selectedGoal = vm.goalTypes[vm.myProfile.goalTypeId];
+
+		vm.reportProblem = function(){
+    		  window.plugin.email.open(emailInfoFactory.createEmail('reportProblem') , 
+    		  	function () {},
+            this);    
+		}
+
+		vm.giveFeedback = function(){
+    		  window.plugin.email.open(emailInfoFactory.createEmail('giveFeedback') , 
+    		  	function () {},
+            this);    
+		}
 
 		$ionicModal.fromTemplateUrl('app/settings/editProfileModal.html', {
 		    scope: $scope,

@@ -6,6 +6,7 @@
 angular.module('fitapp', [
             'ionic',
             'angular.filter',
+            'app.login',
             'app.activity.parent',
             'app.activity.create',
             'app.activity.update',
@@ -79,7 +80,7 @@ angular.module('fitapp', [
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
-  var myname = $localstorageProvider.$get().getUser().name;
+  // var myname = $localstorageProvider.$get().getUser().name;
 
   $stateProvider
   // setup an abstract state for the tabs directive
@@ -94,11 +95,17 @@ angular.module('fitapp', [
                           //  }
                         }
    // templateUrl: "app/home/apptabs.html"
-  });
+  })
+  .state('login', {
+    url: '/login',
+    templateUrl: 'app/login/login.html'
+    }
+  );
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/conversation');
+  // $urlRouterProvider.otherwise('/tab/conversation');
 
+   $urlRouterProvider.otherwise('/login');
 <!--
 <!--
 }]);

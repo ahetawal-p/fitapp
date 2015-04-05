@@ -3,8 +3,8 @@ angular.module('app.conversation', ['app.services', 'app.factories', 'app.utils'
 
 .config(['$stateProvider', '$localstorageProvider',
 		function ($stateProvider, $localstorageProvider) {
-      console.log($localstorageProvider.$get().getUser());
-      var myname = $localstorageProvider.$get().getUser().name;
+      // console.log($localstorageProvider.$get().getUser());
+      // var myname = $localstorageProvider.$get().getUser().name;
 			$stateProvider
 				.state('tab.conversation', {
     					url: '/conversation',
