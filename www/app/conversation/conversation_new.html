@@ -1,0 +1,61 @@
+<ion-view  ng-controller="ConversationCtrl" class="">
+  <ion-header-bar align-title="center" class="headerOverride">
+    <h1 class="title" translate="App_Nick_Name"></h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="tester()">
+        <i class="icon ion-share icon-accessory"></i>
+      </button>
+    </div>
+    </ion-header-bar>
+  <ion-content class="has-header">
+    <ion-list>
+      <ion-item  ng-repeat="message in messages" class="conversationBase">
+
+        <div class="systemMsg" ng-if="message.type == null && message.wait">
+          <div class="wrapper">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+
+        <div class="systemMsgAnimated animated pulse" ng-if="message.type == null && !message.wait">
+          <div class="innerDiv" translate="{{message.text}}" translate-values="{{user}}">
+         
+         </div>
+        </div>
+
+        <div class="systemMsgAnimated chart animated fadeInDown" ng-if="message.type == 'chart' && !message.wait">
+           <div class="innerDiv">
+           </div>
+           <div>
+            <highchart class="message-chart" config="message.chartConfig"></highchart>
+
+          </div>
+        </div>
+
+        <div class="userMsg" ng-if="message.type == 'user' &&  !message.wait" ng-class="message.bufferClass">
+          <div class="innerUser" ng-if="message.showMeNow" translate="{{message.text}}"> 
+            
+          </div>
+        </div>
+
+      </ion-item>
+
+    </ion-list>
+  </ion-content>
+  <div class="userMsgOptionsContainer animated fadeInUp" ng-if="!waitIndicator">
+    <table width="100%">
+       <tr>
+         <td align="center">
+          <span class="userMsgOption" ng-click="userInput(msg)" ng-repeat="msg in options" translate="{{msg.text}}">
+            
+          </span> 
+        </td>
+      </tr>
+    </table>
+  </div>
+</ion-view>
+
+
+
