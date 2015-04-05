@@ -63,8 +63,8 @@ angular.module('fitapp', [
   });
 })
 
-.config(['$stateProvider', '$urlRouterProvider', '$translateProvider',
-        function($stateProvider, $urlRouterProvider, $translateProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$translateProvider', '$localstorageProvider',
+        function($stateProvider, $urlRouterProvider, $translateProvider, $localstorageProvider) {
 
     
     $translateProvider.useStaticFilesLoader({
@@ -79,13 +79,21 @@ angular.module('fitapp', [
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
-  $stateProvider
+  var myname = $localstorageProvider.$get().getUser().name;
 
+  $stateProvider
   // setup an abstract state for the tabs directive
     .state('tab', {
     url: "/tab",
     abstract: true,
-    templateUrl: "app/home/apptabs.html"
+    templateUrl: function() {
+                          if(myname == "Amit1") {
+                              return 'app/home/apptabs.html';
+                            }else {
+                              return 'app/home/apptabs_new.html';
+                            }
+                        }
+   // templateUrl: "app/home/apptabs.html"
   });
 
   
