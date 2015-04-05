@@ -13,16 +13,14 @@
             var vm = this;
             var SCROLL_ITEM_NUM = 5;
             /* testing charts */
-            var startDate = new Date("3/27/2015");
-            startDate.setHours(5);
-            startDate.setMinutes(0);
+            var startDate = moment();
+            startDate.hours(0);
+            startDate.minutes(0);
 
-            var endDate = new Date("3/27/2015");
-            endDate.setHours(19);
-            endDate.setMinutes(0);
+            var endDate = moment();
 
             vm.chartConfigs = [];
-            healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(function(response) {
+            healthKitService.getDateVsAverageDataPoints(startDate, endDate).then(function(response) {
                 var chartConfig = chartConfigFactory.createActivityChartConfig(response, "line");
                 vm.chartConfigs.push(chartConfig);
             });

@@ -200,15 +200,14 @@ angular.module('app.conversation')
 
 	    	var handleChartNode = function(node){
 	    		addNodeHelper(root['skeletonWaitNode'], true);
-	    		var promise = $parse(node.method)('test');
+	    		//var promise = $parse(node.method)('test');
+	    		var promise = node.method;
 	    		promise.then(function(response){
 	    			console.log("back in then");
 					node.chartConfig = response;
 		    		triggerDigestHelper(node, true);
 		    	});
 	    	};
-
-
 	    	/**
 	    		* Adding the very first node to the conversation
 	    		* STARTING POINT OF THE APP *

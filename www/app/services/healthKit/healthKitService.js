@@ -38,7 +38,22 @@ angular.module('app.services.healthKit')
         	var deferred = $q.defer();
         	api.getWalkingAndRunningDistance().then(function(walkRunActivities){
                 var weekdayWeekendAverages = workoutProcessor.calculateWeekdayWeekendAverages(walkRunActivities);
-        		deferred.resolve(weekdayWeekendAverages);
+        		var labels = ["Weekday", "Weekend"];
+                var dataSets = 
+                [
+                    {
+                        name: "weekdayVsWeekendAvg",
+                        data: [weekdayWeekendAverages.weekdayAverage, 
+                                weekdayWeekendAverages.weekendAverage]
+                    }
+                ];
+
+                var chartDataContainer = {
+                    labels: labels,
+                    dataSets: dataSets
+                };
+
+                deferred.resolve(chartDataContainer);
         	});
         	return deferred.promise;
         }
@@ -156,7 +171,7 @@ angular.module('app.services.healthKit')
         }
 
         /* get today's data points vs average */
-        function getTodayVsAverageDataPoints(startDateTime, endDateTime){
+        function getDateVsAverageDataPoints(startDateTime, endDateTime){
             var deferred = $q.defer();
             var labels = [];
             var dataSets = [];
@@ -337,7 +352,7 @@ angular.module('app.services.healthKit')
 				getAverageActivityDataPoints: getAverageActivityDataPoints,
                 getWeekdayTimesOfDayAverages: getWeekdayTimesOfDayAverages,
                 getWeekendTimesOfDayAverages: getWeekendTimesOfDayAverages,
-                getTodayVsAverageDataPoints: getTodayVsAverageDataPoints,
+                getDateVsAverageDataPoints: getDateVsAverageDataPoints,
                 getDailyAverageVsAllUsers: getDailyAverageVsAllUsers,
                 getActivityDurationByDate: getActivityDurationByDate,
                 getLastVsPreviousWeekAverage: getLastVsPreviousWeekAverage

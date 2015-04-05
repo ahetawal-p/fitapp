@@ -3,8 +3,8 @@ angular.module('app.services')
 /**
  * A simple example service that returns tree data for conversation
  */
-.factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory', '$ionicPopup', '$localstorage', '$translate',
-function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, $localstorage, $translate) {
+.factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory', '$ionicPopup', '$localstorage', '$translate', 'healthKitQueryFactory',
+function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, $localstorage, $translate, healthKitQueryFactory) {
 
 
 	$ionicPlatform.ready(function() {
@@ -94,61 +94,6 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
   		}
   		return deferred.promise;
 	};
-
-
-	var getChartData = function(type) {
-		console.log("Running data here...");
-
-		var deferred = $q.defer();
-		var startDate = new Date("3/20/2015");
-		startDate.setHours(5);
-		startDate.setMinutes(0);
-
-		var endDate = new Date("3/20/2015");
-		endDate.setHours(19);
-		endDate.setMinutes(0);
-
-		healthKitService.getTodayVsAverageDataPoints(startDate, endDate).then(
-			function(response){
-				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "line", "Activity Today");
-				deferred.resolve(chartConfig);
-			},
-			function(error){
-				deferred.reject(error);
-			}
-		);
-		console.log("1 Running data here...");
-		
-        return deferred.promise;
-	};
-
-	var getDailyAverageVsUsersChart = function(type){
-		var deferred = $q.defer();
-		healthKitService.getDailyAverageVsAllUsers().then(
-			function(response){
-				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Average minutes active per day", "You", "Other users");
-				deferred.resolve(chartConfig);
-			},
-			function(error){
-				deferred.reject(error);
-			});
-
-		return deferred.promise;
-	}
-
-	var getLastPreviousWeeksAvgerageChart = function(type){
-		var deferred = $q.defer();
-		healthKitService.getLastVsPreviousWeekAverage().then(
-			function(response){
-				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Average minutes of activity", "Last week", "2 weeks ago");
-				deferred.resolve(chartConfig);
-			},
-			function(error){
-				deferred.reject(error);
-			});
-
-		return deferred.promise;
-	}
 
 	var treeData = {
 		root: ['onboarding', 'onboardingInfo'],
@@ -354,17 +299,29 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		},
 		'testChart': {
 			type: "chart",
-			method: getChartData,
+			method: healthKitQueryFactory.getTodayVsAverageChartConfig('myType'),
+			//method: getChartData,
+			children:[]
+		},
+		'yesterdayVsAvgLineChart': {
+			type: "chart",
+			method: healthKitQueryFactory.getYesterdayVsAverageChartConfig(),
+			//method: getChartData,
 			children:[]
 		},
 		'dailyAvgVsUsersBarChart': {
 			type: "chart",
-			method: getDailyAverageVsUsersChart,
+			method: healthKitQueryFactory.getDailyAverageVsUsersChart(),
 			children: []
 		},
 		'lastVsPrevBarChart': {
 			type: "chart",
-			method: getLastPreviousWeeksAvgerageChart,
+			method: healthKitQueryFactory.getLastPreviousWeeksAvgerageChart(),
+			children: []
+		},
+		'weekdayVsWeekendBarChart': {
+			type: "chart",
+			method: healthKitQueryFactory.getWeekdayVsWeekendChart(),
 			children: []
 		}
 
