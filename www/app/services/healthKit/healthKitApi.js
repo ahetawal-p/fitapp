@@ -28,8 +28,8 @@ angular.module('app.services.healthKit')
     function getWalkingAndRunningDistanceByDateTime(startDate, endDate){
       var deferred = $q.defer();
       var queryObject = {
-        'startDate' :  startDate,
-        'endDate' : endDate, 
+        'startDate' :  new Date(startDate),
+        'endDate' : new Date(endDate), 
         'sampleType': "HKQuantityTypeIdentifierDistanceWalkingRunning",
         'unit' : 'km' 
       };
