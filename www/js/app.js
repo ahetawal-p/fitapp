@@ -87,32 +87,14 @@ angular.module('fitapp', [
     url: "/tab",
     abstract: true,
     templateUrl: function() {
-                          if(myname == "Amit1") {
+                         // if(myname == "Amit1") {
                               return 'app/home/apptabs.html';
-                            }else {
-                              return 'app/home/apptabs_new.html';
-                            }
+                          //  }else {
+                          //   return 'app/home/apptabs_new.html';
+                          //  }
                         }
    // templateUrl: "app/home/apptabs.html"
   });
-
-  
-  // .state('tab.activityList', {
-  //   url: '/activityList',
-  //   views: {
-  //     'activityContent': {
-  //       templateUrl: 'app/activity/parent/list/activityList.html'
-  //     }
-  //   }
-  // })
-  // .state('tab.activityChart', {
-  //   url: '/activityChart',
-  //   views: {
-  //     'activityContent': {
-  //       templateUrl: 'app/activity/parent/chart/activityChart.html'
-  //     }
-  //   }
-  // });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/conversation');

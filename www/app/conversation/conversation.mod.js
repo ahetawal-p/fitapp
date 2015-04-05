@@ -11,11 +11,11 @@ angular.module('app.conversation', ['app.services', 'app.factories', 'app.utils'
     					views: {
       						'tab-conversation': {
         							templateUrl: function() {
-                          if(myname == "Amit1") {
+                         // if(myname == "Amit1") {
                               return 'app/conversation/conversation.html';
-                            }else {
-                              return 'app/conversation/conversation_new.html';
-                            }
+                           // }else {
+                             // return 'app/conversation/conversation_new.html';
+                            //}
                         }
       							}
     						}
