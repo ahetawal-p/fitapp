@@ -32,7 +32,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		console.log("Color: " + randomColor);
 		console.log("Dir: " + radomDirection);
 
-		jQuery(".scroll-content").css('background', styleConfig[radomDirection]);
+		jQuery(".conversationView > .scroll-content").css('background', styleConfig[radomDirection]);
 
 	  });
 
@@ -299,29 +299,29 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		},
 		'testChart': {
 			type: "chart",
-			method: healthKitQueryFactory.getTodayVsAverageChartConfig('myType'),
+			method: healthKitQueryFactory.getTodayVsAverageChartConfig,
 			//method: getChartData,
 			children:[]
 		},
 		'yesterdayVsAvgLineChart': {
 			type: "chart",
-			method: healthKitQueryFactory.getYesterdayVsAverageChartConfig(),
+			method: healthKitQueryFactory.getYesterdayVsAverageChartConfig,
 			//method: getChartData,
 			children:[]
 		},
 		'dailyAvgVsUsersBarChart': {
 			type: "chart",
-			method: healthKitQueryFactory.getDailyAverageVsUsersChart(),
+			method: healthKitQueryFactory.getDailyAverageVsUsersChart,
 			children: []
 		},
 		'lastVsPrevBarChart': {
 			type: "chart",
-			method: healthKitQueryFactory.getLastPreviousWeeksAvgerageChart(),
+			method: healthKitQueryFactory.getLastPreviousWeeksAvgerageChart,
 			children: []
 		},
 		'weekdayVsWeekendBarChart': {
 			type: "chart",
-			method: healthKitQueryFactory.getWeekdayVsWeekendChart(),
+			method: healthKitQueryFactory.getWeekdayVsWeekendChart,
 			children: []
 		}
 
