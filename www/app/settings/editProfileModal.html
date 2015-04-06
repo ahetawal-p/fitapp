@@ -1,0 +1,41 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <button class="button button-clear button-primary" ng-click="editProfileModal.hide()">Cancel</button>
+        <h1 class="title">Profile</h1>
+        <button class="button button-clear button-primary" ng-click="editProfileModal.hide()">Done</button>
+    </ion-header-bar>
+    <ion-content>
+        <div class="list">
+            <div class="item item-divider">
+                </br>
+                USER INFO
+            </div>
+            <label class="item item-input">
+                <span class="input-label">Email</span>
+                <span>{{vm.myProfile.email}}</span>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Name</span>
+                <input type="text" ng-model="vm.myProfile.name" />
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Nickname</span>
+                <input type="text" ng-model="vm.myProfile.nickname" />
+            </label>
+            <div class="item item-divider">
+                </br>
+                GOAL
+            </div>
+            <div>
+                <div ng-repeat="goalType in vm.goalTypes">
+                    <ion-radio ng-value="goalType.goalTypeId" ng-model="vm.selectedGoalTypeId">{{goalType.goalType}}
+                    </ion-radio>
+                </div>
+            </div>
+            </br>
+            <!--   <a class="item item-assertive" href="#" style="text-align:center;">
+    Sign out
+  </a> -->
+        </div>
+    </ion-content>
+</ion-modal-view>

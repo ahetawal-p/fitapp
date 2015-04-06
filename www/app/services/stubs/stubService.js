@@ -26,8 +26,8 @@ angular.module('app.services.stubs')
             {content: '<p>Alright</p>'}
         ];
 
-        var myProfile = JSON.parse('{"name": "Beck", "email": "bcfchen@gmail.com", "goalTypeId": 0}');
-        var goalTypes = JSON.parse('[{"goalTypeId": 0, "goalType": "Getting fitter"}, {"goalTypeId": 1, "goalType": "Staying healthy and happy"}, {"goalTypeId": 2, "goalType": "Weight loss"}]');
+        var myProfile = JSON.parse('{"name": "Beck", "nickname": "Random name", "email": "bcfchen@gmail.com", "goalTypeId": 0}');
+        var goalTypes = JSON.parse('[{"goalTypeId": 0, "goalType": "Getting fitter", "checked": true}, {"goalTypeId": 1, "goalType": "Staying healthy and happy", "checked": false}, {"goalTypeId": 2, "goalType": "Weight loss", "checked": false}]');
         var activity = JSON.parse('{}');
 
   return {
