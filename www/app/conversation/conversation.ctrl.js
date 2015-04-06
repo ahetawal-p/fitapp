@@ -202,7 +202,7 @@ angular.module('app.conversation')
 	    		addNodeHelper(root['skeletonWaitNode'], true);
 	    		//var promise = $parse(node.method)('test');
 	    		var promise = node.method;
-	    		promise.then(function(response){
+	    		promise('test').then(function(response){
 	    			console.log("back in then");
 					node.chartConfig = response;
 		    		triggerDigestHelper(node, true);
