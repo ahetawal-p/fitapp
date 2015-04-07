@@ -106,6 +106,19 @@ angular.module('app.services.healthKit')
         //     return deferred.promise;
         // }
 
+        function getCombinedTimesOfDayAverages(){
+            var deferred = $q.defer();
+
+            api.getWalkingAndRunningDistance().then(function(walkRunActivities){
+                var timesOfDayAverages = getTimesOfDayAverages(walkRunActivities);
+                console.log(JSON.stringify(timesOfDayAverages));
+
+                deferred.resolve(timesOfDayAverages);
+            });
+
+            return deferred.promise;
+        }
+
         function getWeekdayTimesOfDayAverages(){
             var deferred = $q.defer();
 
@@ -355,6 +368,7 @@ angular.module('app.services.healthKit')
                 getDateVsAverageDataPoints: getDateVsAverageDataPoints,
                 getDailyAverageVsAllUsers: getDailyAverageVsAllUsers,
                 getActivityDurationByDate: getActivityDurationByDate,
-                getLastVsPreviousWeekAverage: getLastVsPreviousWeekAverage
+                getLastVsPreviousWeekAverage: getLastVsPreviousWeekAverage,
+                getCombinedTimesOfDayAverages: getCombinedTimesOfDayAverages
 			}}]
 			);

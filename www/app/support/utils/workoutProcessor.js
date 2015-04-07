@@ -62,8 +62,10 @@ angular.module('app.utils')
 
 	function getAverageActivityDuration(startDateTime, endDateTime, rawActivityObjects, filterFunction){
 		//pre filter rawActivityObjects, potentially by weekend or weekday
-		rawActivityObjects = rawActivityObjects.filter(filterFunction);
-
+		if (filterFunction){
+			rawActivityObjects = rawActivityObjects.filter(filterFunction);
+		}
+		
 		var totalUniqueDays = _.uniq(rawActivityObjects, function(activityObj){
 			var activityDate = new Date(activityObj.startDate.replace(/-/g, "/"));
 			var dateString = activityDate.getMonth()+1 + "/" + activityDate.getDate();
@@ -417,6 +419,7 @@ angular.module('app.utils')
 		getAverageActivityDataPoints: getAverageActivityDataPoints,
 		getTotalDurationBetweenDateTimes: getTotalDurationBetweenDateTimes,
 		getActivityDurationByDate: getActivityDurationByDate,
-		calculateTwoWeeksAvgMinutes: calculateTwoWeeksAvgMinutes
+		calculateTwoWeeksAvgMinutes: calculateTwoWeeksAvgMinutes,
+		getAverageActivityDuration: getAverageActivityDuration
 	}
 }]);
