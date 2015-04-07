@@ -1,16 +1,18 @@
-	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', 'emailInfoFactory', '$ionicPopup', '$localstorage', SettingsCtrl]);
-	function SettingsCtrl($state, stubService, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage){
+	angular.module('app.settings').controller('SettingsCtrl', [
+				'$state', 'stubService','$ionicModal', 
+				'$scope', 'emailInfoFactory', '$ionicPopup', '$localstorage', '$translate', SettingsCtrl]);
+	function SettingsCtrl($state, stubService, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage, $translate){
 		var vm = this;
 		vm.myProfile = stubService.getProfile();
 		vm.goalTypes = stubService.getGoalTypes();
 		vm.selectedGoalTypeId = vm.myProfile.goalTypeId;
 		vm.languages = [
 			{
-				id: 0,
+				id: 'en_US',
 				languageName: "English"
 			},
 			{
-				id: 1,
+				id: 'zh_ZH',
 				languageName: "Chinese"
 			}
 		];
@@ -32,6 +34,8 @@
 		  };
 
 		vm.changeLanguage = function(language){
+			// TODO : Save this in localStroage as well
+			$translate.use(language.id);
 			console.log(language);
 		}
 
