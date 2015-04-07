@@ -1,5 +1,5 @@
-	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', 'emailInfoFactory', '$ionicPopup', '$localstorage', SettingsCtrl]);
-	function SettingsCtrl($state, stubService, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage){
+	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', 'emailInfoFactory', '$ionicPopup', '$localstorage', '$translate', SettingsCtrl]);
+	function SettingsCtrl($state, stubService, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage, $translate){
 		var vm = this;
 		vm.myProfile = stubService.getProfile();
 		vm.nickname = $localstorage.getUserNickname();
@@ -36,6 +36,7 @@
 
 		vm.changeLanguage = function(language){
 			console.log(language);
+			$translate.use(language.id);
 			$localstorage.setUserLanguageId(language.id);
 		}
 
