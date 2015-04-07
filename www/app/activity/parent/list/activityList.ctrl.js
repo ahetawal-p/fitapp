@@ -21,6 +21,12 @@
                 /* load activities */
                 loadActivities("regular");
 
+                /* testing here */
+                healthKitService.getCombinedTimesOfDayAverages().then(function(response){
+                    console.log("RESOPNSE");
+                    console.log(response);
+                });
+
                 vm.reloadActivities = function(){
                     loadActivities("reload");
                 }

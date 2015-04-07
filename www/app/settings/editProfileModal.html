@@ -1,8 +1,8 @@
 <ion-modal-view>
     <ion-header-bar>
-        <button class="button button-clear button-primary" ng-click="editProfileModal.hide()">Cancel</button>
+        <button class="button button-clear button-primary" ng-click="editProfileModal.cancel()">Cancel</button>
         <h1 class="title">Profile</h1>
-        <button class="button button-clear button-primary" ng-click="editProfileModal.hide()">Done</button>
+        <button class="button button-clear button-primary" ng-click="editProfileModal.done()">Done</button>
     </ion-header-bar>
     <ion-content>
         <div class="list">
@@ -20,13 +20,13 @@
             </label>
             <label class="item item-input">
                 <span class="input-label">Nickname</span>
-                <input type="text" ng-model="vm.myProfile.nickname" />
+                <input type="text" ng-model="vm.nickname" ng-change="vm.setNickname()"/>
             </label>
             <div class="item item-divider">
                 </br>
                 LANGUAGE    
             </div>
-                <ion-radio  ng-repeat="language in vm.languages" ng-value="language.languageId" ng-model="vm.selectedLanguageId" ng-click="vm.changeLanguage(language)" name="language">{{language.languageName}}
+                <ion-radio  ng-repeat="language in vm.languages" ng-value="language.id" ng-model="vm.selectedLanguageId" ng-click="vm.changeLanguage(language)" name="language">{{language.languageName}}
                 </ion-radio>
 <!--             <div class="item item-divider">
                 </br>

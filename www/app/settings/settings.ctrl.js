@@ -2,15 +2,18 @@
 	function SettingsCtrl($state, stubService, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage){
 		var vm = this;
 		vm.myProfile = stubService.getProfile();
+		vm.nickname = $localstorage.getUserNickname();
 		vm.goalTypes = stubService.getGoalTypes();
 		vm.selectedGoalTypeId = vm.myProfile.goalTypeId;
-		vm.languages = [
-			{
-				id: 0,
+		vm.selectedLanguageId = $localstorage.getUserLanguageId();
+
+		vm.languages = 
+		[	{
+				id: "en_US",
 				languageName: "English"
 			},
 			{
-				id: 1,
+				id: "zh_ZH",
 				languageName: "Chinese"
 			}
 		];
@@ -33,6 +36,7 @@
 
 		vm.changeLanguage = function(language){
 			console.log(language);
+			$localstorage.setUserLanguageId(language.id);
 		}
 
 		vm.clearData = function(){
@@ -55,6 +59,16 @@
 		    animation: 'slide-in-up'
 		  }).then(function(modal) {
 		    $scope.editProfileModal = modal;
+		    $scope.editProfileModal.done = function() {
+		    	/* set input values */
+
+		    	$localstorage.setUserNickname(vm.nickname);
+		    	$scope.editProfileModal.hide();
+		  	}
+
+		  	$scope.editProfileModal.cancel = function() {
+		    	$scope.editProfileModal.hide();
+		  	}
 		  });
 		  //Cleanup the modal when we're done with it!
 		  $scope.$on('$destroy', function() {

@@ -32,6 +32,27 @@ angular.module('app.utils')
     	var currObject = this.getUser();
     	currObject.language = language;
     	this.setUser(currObject);
+    },
+    getUserNickname: function(){
+      return this.getUser().nickname;
+    },
+    setUserNickname: function(nickname){
+      var currObject = this.getUser();
+      currObject.nickname = nickname;
+      this.setUser(currObject);
+    },
+    getUserLanguageId: function(){
+      var languageId = this.getUser().languageId;
+      if (!languageId){
+        return "en_US";
+      }
+
+      return languageId;
+    },
+    setUserLanguageId: function(languageId){
+      var currObject = this.getUser();
+      currObject.languageId = languageId;
+      this.setUser(currObject);    
     }
 
   }
