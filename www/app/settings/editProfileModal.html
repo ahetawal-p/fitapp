@@ -24,18 +24,22 @@
             </label>
             <div class="item item-divider">
                 </br>
+                LANGUAGE    
+            </div>
+                <ion-radio  ng-repeat="language in vm.languages" ng-value="language.languageId" ng-model="vm.selectedLanguageId" ng-click="vm.changeLanguage(language)" name="language">{{language.languageName}}
+                </ion-radio>
+<!--             <div class="item item-divider">
+                </br>
                 GOAL
             </div>
-            <div>
-                <div ng-repeat="goalType in vm.goalTypes">
-                    <ion-radio ng-value="goalType.goalTypeId" ng-model="vm.selectedGoalTypeId">{{goalType.goalType}}
-                    </ion-radio>
-                </div>
-            </div>
+            <div ng-repeat="goalType in vm.goalTypes">
+                <ion-radio ng-value="goalType.goalTypeId" ng-model="vm.selectedGoalTypeId" name="goals">{{goalType.goalType}}
+                </ion-radio>
+            </div> -->
             </br>
-            <!--   <a class="item item-assertive" href="#" style="text-align:center;">
-    Sign out
-  </a> -->
+              <a class="item item-assertive" ng-click="vm.clearData()" style="text-align:center;">
+                Clear data
+              </a>
         </div>
     </ion-content>
 </ion-modal-view>

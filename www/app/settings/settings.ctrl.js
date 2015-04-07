@@ -1,9 +1,19 @@
-	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', 'emailInfoFactory', SettingsCtrl]);
-	function SettingsCtrl($state, stubService, $ionicModal, $scope, emailInfoFactory){
+	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', 'emailInfoFactory', '$ionicPopup', '$localstorage', SettingsCtrl]);
+	function SettingsCtrl($state, stubService, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage){
 		var vm = this;
 		vm.myProfile = stubService.getProfile();
 		vm.goalTypes = stubService.getGoalTypes();
 		vm.selectedGoalTypeId = vm.myProfile.goalTypeId;
+		vm.languages = [
+			{
+				id: 0,
+				languageName: "English"
+			},
+			{
+				id: 1,
+				languageName: "Chinese"
+			}
+		];
 
 		vm.reportProblem = function(){
     		  window.plugin.email.open(emailInfoFactory.createEmail('reportProblem') , 
@@ -20,6 +30,25 @@
 		  vm.openEditProfileModal = function() {
 		    $scope.editProfileModal.show();
 		  };
+
+		vm.changeLanguage = function(language){
+			console.log(language);
+		}
+
+		vm.clearData = function(){
+			var confirmPopup = $ionicPopup.confirm({
+			     title: 'Clear data',
+			     template: 'Are you sure you want to clear data?'
+			   });
+			   confirmPopup.then(function(res) {
+			     if(res) {
+			       console.log('Clearing storage');
+			       $localstorage.removeUser();
+			     } else {
+			       console.log('Cancel no clear');
+			     }
+			   });
+		}
 
 		$ionicModal.fromTemplateUrl('app/settings/editProfileModal.html', {
 		    scope: $scope,
