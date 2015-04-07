@@ -355,12 +355,6 @@ angular.module('app.services')
 
   
   return {
-    getOnboarding: function(type) {
-    	console.log(dateTimeUtil.getDayOfWeekName());
-      //return conversationData[type];
-      return treeData;
-    },
-
     getConversationTree : function() {
     	var rootName = null;
     	var currentHour = dateTimeUtil.getCurrentHour();

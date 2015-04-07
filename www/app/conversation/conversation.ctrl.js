@@ -13,8 +13,8 @@ angular.module('app.conversation')
 	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, $localstorage, $translate) {
 
 
-			console.log("HERRE>>>");
-			$translate.use("en_US");
+			console.log("HERRE>>>" + $translate.preferredLanguage());
+			//$translate.use("en_US");
 
 			// upper limit constant to fake the waiting time after system input
 			// Only in effect for normal text node.
@@ -24,15 +24,15 @@ angular.module('app.conversation')
 			var ANIMATION_END_EVENTS = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
 
 			// CURRENT TREE IN PROCESSING...
-			//var root = talky.getOnboarding('onboarding');
+			var rootType = talky.getConversationTree().rootType;
+			var fullTree = talky.getConversationTree().allNodes;
+			var root = fullTree[rootType];
+
+
 			var lastNodePushed = {};
 			var userOptionPlaceHolder = null;
 			
-			var rootType = talky.getConversationTree().rootType;
-			var fullTree = talky.getConversationTree().allNodes;
 			
-			var root = fullTree[rootType];
-
 
 			/**
 			 * INIT Function to setup scope level User object 
@@ -49,7 +49,8 @@ angular.module('app.conversation')
 
 				$scope.user = {
 						'name': null,
-						'lastLoginTime': new Date()
+						'lastLoginTime': new Date(),
+						'language' : $translate.preferredLanguage()
 				};
 
   				if($localstorage.getUser() != null){
