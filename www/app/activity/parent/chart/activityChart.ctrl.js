@@ -3,107 +3,107 @@
 
     .controller('ActivityChartCtrl', [
         '$scope',
-        '$state',
-        '$ionicModal',
         'healthKitService',
         'chartConfigFactory',
         '$timeout',
-        function($scope, $state, $ionicModal, healthKitService, chartConfigFactory, $timeout) {
+        '$q',
+        function($scope, healthKitService, chartConfigFactory, $timeout, $q) {
 
             var vm = this;
             var SCROLL_ITEM_NUM = 5;
-            /* testing charts */
-            var startDate = moment();
-            startDate.hours(0);
-            startDate.minutes(0);
+            var allComposites;
+            var loader;
 
-            var endDate = moment();
+            var chartLoader = function(){
+                var startDate, endDate;
 
-            vm.chartConfigs = [];
-            healthKitService.getDateVsAverageDataPoints(startDate, endDate).then(function(response) {
-                var chartConfig = chartConfigFactory.createActivityChartConfig(response, "line");
-                vm.chartConfigs.push(chartConfig);
-            });
-
-            vm.noMoreItemsAvailable = false;
-            var index = SCROLL_ITEM_NUM;
-            vm.loadMore = function() {
-                index = vm.durationByDateComposites.length;
-                $timeout(function() {
-                    vm.durationByDateComposites = vm.durationByDateComposites.concat(allComposites.slice(index, index + SCROLL_ITEM_NUM));
-
-                    if (vm.durationByDateComposites.length >= allComposites.length) {
-                        vm.noMoreItemsAvailable = true;
-                    }
-                    $scope.$broadcast('scroll.infiniteScrollComplete');
-                    $scope.$broadcast('scroll.resize');
-                    $scope.$broadcast('scroll.resize')
-                }, 1);
-            };
-
-            /* create bar charts */
-
-            var allComposites = [];
-            healthKitService.getActivityDurationByDate().then(function(response) {
-                _.each(response, function(chartDataContainer) {
-                    var durationBarChartConfig = chartConfigFactory.createActivityChartConfig(chartDataContainer, "bar");
-                    var durationByDateComposite = {
-                        date: new Date(durationBarChartConfig.date),
-                        chartConfig: durationBarChartConfig
-                    };
-
-                    allComposites.push(durationByDateComposite);
-
-                });
-                allComposites = allComposites.reverse();
-                vm.durationByDateComposites = allComposites.slice(0, SCROLL_ITEM_NUM);
-                console.log('length: ' + vm.durationByDateComposites.length);
-            });
-
-            vm.openEditActivityModal = function(activity) {
-                vm.selectedActivity = activity;
-                $scope.openEditActivityModal();
-            };
-
-            vm.createActivity = function() {
-                $scope.openSelectActivityTypeModal();
-            };
-
-            vm.selectActivityType = function(activityType) {
-                $scope.selectedActivity = buildNewActivity(activityType);
-                $scope.openCreateActivityModal();
-            };
-
-            $scope.demo = 'ios';
-            $scope.setPlatform = function(p) {
-                document.body.classList.remove('platform-ios');
-                document.body.classList.remove('platform-android');
-                document.body.classList.add('platform-' + p);
-                $scope.demo = p;
-            }
-
-            buildNewActivity = function(activityType) {
-                var activity = {
-                    activityType: activityType,
-                    icon: activityType.icon
-                };
-                // activity.activityType = activityType;
-                // activity.icon = activityType.icon;
-                var currentTime = new Date();
-
-                if (activityType.activityType === "sleep") {
-                    activity.date = currentTime.getDate();
-                    activity.length = "8 hours";
-                    activity.timeStamp = "23:00";
-                } else {
-                    activity.date = currentTime.getDate();
-                    activity.length = "5 mins";
-                    activity.timeStamp = currentTime.getTime();
+                function initializeDates(){
+                    startDate = moment();
+                    startDate.hours(0);
+                    startDate.minutes(0);
+                    endDate = moment();
                 }
 
-                return activity;
-            };
+                function loadTodaysLineChart(){
+                    return healthKitService.getDateVsAverageDataPoints(startDate, endDate).then(function(response) {
+                        var chartConfig = chartConfigFactory.createActivityChartConfig(response, "line");
+                        vm.chartConfigs.push(chartConfig);
+                    });
+                }
 
+                function loadMore(){
+                    if (!vm.durationByDateComposites){
+                        return false;
+                    }
+
+                    var index = vm.durationByDateComposites.length;
+                    $timeout(function() {
+                        vm.durationByDateComposites = vm.durationByDateComposites.concat(allComposites.slice(index, index + SCROLL_ITEM_NUM));
+
+                        if (vm.durationByDateComposites.length >= allComposites.length) {
+                            vm.noMoreItemsAvailable = true;
+                        }
+                        $scope.$broadcast('scroll.infiniteScrollComplete');
+                        $scope.$broadcast('scroll.resize');
+                    }, 1);
+                }
+
+                function loadAllCharts(){
+                    var deferred = $q.defer();
+                    initializeDates();
+                    loadTodaysLineChart().then(loadActivityBarCharts).then(function(){
+                        deferred.resolve();
+                    });
+
+                    return deferred.promise;
+                }
+
+                function loadActivityBarCharts(){
+                    return healthKitService.getActivityDurationByDate().then(function(response) {
+                        _.each(response, function(chartDataContainer) {
+                            var durationBarChartConfig = chartConfigFactory.createActivityChartConfig(chartDataContainer, "bar");
+                            var durationByDateComposite = {
+                                date: new Date(durationBarChartConfig.date),
+                                chartConfig: durationBarChartConfig
+                            };
+
+                            allComposites.push(durationByDateComposite);
+
+                        });
+                        allComposites = allComposites.reverse();
+                        vm.durationByDateComposites = allComposites.slice(0, SCROLL_ITEM_NUM);
+                    });
+                }
+
+                return {
+                    initializeDates: initializeDates,
+                    loadTodaysLineChart: loadTodaysLineChart,
+                    loadActivityBarCharts: loadActivityBarCharts,
+                    loadMore: loadMore,
+                    loadAllCharts: loadAllCharts     
+                }
+            }
+
+            loadCharts();
+
+            function loadCharts(){
+                initializeValues();
+                loader.loadAllCharts();
+            }
+
+            function initializeValues(){
+                vm.chartConfigs = [];
+                allComposites = [];
+                vm.noMoreItemsAvailable = false;
+                loader = new chartLoader();
+            }
+
+            vm.loadMore = function (){loader.loadMore()};
+            vm.reloadCharts = function(){
+                loadCharts();
+                $scope.$broadcast('scroll.refreshComplete');
+
+            }
         }
 
     ]);

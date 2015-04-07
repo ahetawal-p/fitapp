@@ -1,9 +1,19 @@
-	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', '$window', 'emailInfoFactory', SettingsCtrl]);
-	function SettingsCtrl($state, stubService, $ionicModal, $scope, $window, emailInfoFactory){
+	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', 'emailInfoFactory', '$ionicPopup', '$localstorage', SettingsCtrl]);
+	function SettingsCtrl($state, stubService, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage){
 		var vm = this;
 		vm.myProfile = stubService.getProfile();
 		vm.goalTypes = stubService.getGoalTypes();
-		vm.selectedGoal = vm.goalTypes[vm.myProfile.goalTypeId];
+		vm.selectedGoalTypeId = vm.myProfile.goalTypeId;
+		vm.languages = [
+			{
+				id: 0,
+				languageName: "English"
+			},
+			{
+				id: 1,
+				languageName: "Chinese"
+			}
+		];
 
 		vm.reportProblem = function(){
     		  window.plugin.email.open(emailInfoFactory.createEmail('reportProblem') , 
@@ -17,18 +27,35 @@
             this);    
 		}
 
+		  vm.openEditProfileModal = function() {
+		    $scope.editProfileModal.show();
+		  };
+
+		vm.changeLanguage = function(language){
+			console.log(language);
+		}
+
+		vm.clearData = function(){
+			var confirmPopup = $ionicPopup.confirm({
+			     title: 'Clear data',
+			     template: 'Are you sure you want to clear data?'
+			   });
+			   confirmPopup.then(function(res) {
+			     if(res) {
+			       console.log('Clearing storage');
+			       $localstorage.removeUser();
+			     } else {
+			       console.log('Cancel no clear');
+			     }
+			   });
+		}
+
 		$ionicModal.fromTemplateUrl('app/settings/editProfileModal.html', {
 		    scope: $scope,
 		    animation: 'slide-in-up'
 		  }).then(function(modal) {
 		    $scope.editProfileModal = modal;
 		  });
-		  $scope.openEditProfileModal = function() {
-		    $scope.editProfileModal.show();
-		  };
-		  $scope.closeEditProfileModal = function() {
-		    $scope.editProfileModal.hide();
-		  };
 		  //Cleanup the modal when we're done with it!
 		  $scope.$on('$destroy', function() {
 		    $scope.editProfileModal.remove();

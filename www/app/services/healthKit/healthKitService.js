@@ -10,7 +10,7 @@ angular.module('app.services.healthKit')
             api = healthKitStubApi;
         }
 
-        // api = healthKitApi;
+         //api = healthKitApi;
 
         function getActivities(){
         	var deferred = $q.defer();

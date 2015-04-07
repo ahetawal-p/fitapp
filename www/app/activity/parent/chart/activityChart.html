@@ -1,5 +1,9 @@
 <ion-view id="activityChartsPage" view-title="Activity Chart" ng-controller="ActivityChartCtrl as vm">
     <ion-content class="has-header has-subheader" delegate-handle="scrollHandle">
+         <ion-refresher
+            pulling-text="Refresh activities..."
+            on-refresh='vm.reloadCharts()'>
+        </ion-refresher>
         <div ng-repeat="chartConfig in vm.chartConfigs">
             <highchart id="activityChart" config="chartConfig"></highchart>
             <h5 id="todaysDateDisplay">TODAY {{vm.todaysDate | date:'MMM d' | uppercase}}</h5>

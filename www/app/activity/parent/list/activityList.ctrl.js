@@ -18,11 +18,23 @@
                     showDelay: 0
                 });
 
-                healthKitService.getActivities().then(function(response) {
-                    $ionicLoading.hide();
-                    vm.activities = response;
-                });
+                /* load activities */
+                loadActivities("regular");
 
+                vm.reloadActivities = function(){
+                    loadActivities("reload");
+                }
+
+                function loadActivities(loadType) {
+                    healthKitService.getActivities().then(function(response) {
+                        $ionicLoading.hide();
+                        vm.activities = response;
+                        /* handle reload case */
+                        if (loadType === "reload"){
+                            $scope.$broadcast('scroll.refreshComplete');
+                        }
+                    });
+                }
 
                 vm.openEditActivityModal = function(activity) {
                     vm.selectedActivity = activity;
