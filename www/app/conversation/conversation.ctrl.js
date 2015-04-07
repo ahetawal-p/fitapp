@@ -24,10 +24,16 @@ angular.module('app.conversation')
 			var ANIMATION_END_EVENTS = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
 
 			// CURRENT TREE IN PROCESSING...
-			var root = talky.getOnboarding('onboarding');
+			//var root = talky.getOnboarding('onboarding');
 			var lastNodePushed = {};
 			var userOptionPlaceHolder = null;
 			
+			var rootType = talky.getConversationTree().rootType;
+			var fullTree = talky.getConversationTree().allNodes;
+			
+			var root = fullTree[rootType];
+
+
 			/**
 			 * INIT Function to setup scope level User object 
 			 * which is used for different eval nodes
@@ -123,7 +129,7 @@ angular.module('app.conversation')
 				var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
 
 				if(isUserNodePresent){
-					userOptionPlaceHolder = root['userInputPlaceHolder'];
+					userOptionPlaceHolder = fullTree['userInputPlaceHolder'];
 					userOptionPlaceHolder.bufferClass = "buffer";
 					addNodeHelper(userOptionPlaceHolder, false);
 				}
@@ -186,7 +192,7 @@ angular.module('app.conversation')
 
 				// adding a temporary wait node, until the actual evluation is completed.
 				// The evaluation can be query to healthkit or drawing graphs
-				addNodeHelper(root['skeletonWaitNode'], true);
+				addNodeHelper(fullTree['skeletonWaitNode'], true);
 				
 				// evalaute the method for the node, using $parse service, 
 				// NOTE: Make sure the eval method always returns the next node which 
@@ -199,7 +205,7 @@ angular.module('app.conversation')
 
 
 	    	var handleChartNode = function(node){
-	    		addNodeHelper(root['skeletonWaitNode'], true);
+	    		addNodeHelper(fullTree['skeletonWaitNode'], true);
 	    		//var promise = $parse(node.method)('test');
 	    		var promise = node.method;
 	    		promise('test').then(function(response){
@@ -212,7 +218,7 @@ angular.module('app.conversation')
 	    		* Adding the very first node to the conversation
 	    		* STARTING POINT OF THE APP *
 	    	**/
-	  		performAddToConversationList(root['onboarding'], SYSTEM_INPUT_DELAY_MAX, false)
+	  		performAddToConversationList(root, SYSTEM_INPUT_DELAY_MAX, false)
 	  										.then(function(){ 
 	  											evaluateNextNode();
 	  										});
@@ -232,7 +238,7 @@ angular.module('app.conversation')
 				var isUserNodeRequired = false;
 
   				if(lastNodePushed.children.length > 0){
-  					var nextNode = root[lastNodePushed.children[0]];
+  					var nextNode = fullTree[lastNodePushed.children[0]];
     				// check for evaluation type nodes
     				if(isThisEvaluationNode(nextNode)){
     					handleEvaluationNode(nextNode);
@@ -248,11 +254,11 @@ angular.module('app.conversation')
 						$scope.options = [];
 						var childLen = currentNodeToBeAdded.children.length;
 						if(childLen >= 1 
-							&& root[currentNodeToBeAdded.children[0]].type == 'user'){
+							&& fullTree[currentNodeToBeAdded.children[0]].type == 'user'){
 								
 								isUserNodeRequired = true;
 								for(i in currentNodeToBeAdded.children){
-									var msg = root[currentNodeToBeAdded.children[i]];
+									var msg = fullTree[currentNodeToBeAdded.children[i]];
 									msg.isClickDisabled = false;
 									currentNodeToBeAdded['userOptions'].push(angular.extend({}, getTextData(msg)));
 									$scope.options.push(angular.extend({}, msg));

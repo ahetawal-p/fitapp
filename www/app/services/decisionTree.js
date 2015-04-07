@@ -3,8 +3,25 @@ angular.module('app.services')
 /**
  * A simple example service that returns tree data for conversation
  */
-.factory('talky', ['healthKitService', '$q', '$ionicPlatform', 'chartConfigFactory', '$ionicPopup', '$localstorage', '$translate', 'healthKitQueryFactory',
-function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, $localstorage, $translate, healthKitQueryFactory) {
+.factory('talky', [
+	'healthKitService', 
+	'$q', 
+	'$ionicPlatform', 
+	'chartConfigFactory', 
+	'$ionicPopup', 
+	'$localstorage', 
+	'$translate', 
+	'healthKitQueryFactory',
+	'dateTimeUtil',
+	function(healthKitService, 
+			$q, 
+			$ionicPlatform, 
+			chartConfigFactory, 
+			$ionicPopup, 
+			$localstorage, 
+			$translate, 
+			healthKitQueryFactory,
+			dateTimeUtil) {
 
 
 	$ionicPlatform.ready(function() {
@@ -72,7 +89,7 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 			        type: 'button-energized',
 			        onTap: function(e) {
 			          if (!myScope.user.name) {
-			            //don't allow the user to close unless he enters a  password
+			            //don't allow the user to close unless he enters a name
 			            e.preventDefault();
 			          } else {
 			          	$localstorage.setObject("user", myScope.user);
@@ -95,9 +112,19 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
   		return deferred.promise;
 	};
 
-	var treeData = {
-		root: ['onboarding', 'onboardingInfo'],
+	var treeRoots = {
+		onboardingRoot 		: 'onboarding',
+		weekDayMorningRoot	: 'weekdayMorning',
+		weekDayNoonRoot		: 'weekDayNoon',
+		weekDayEveRoot		: 'weekDayEve',
+		weekDayNiteRoot		: 'weekDayNite',
+		weekendRoot			: 'weekendRoot'  
 
+	};
+
+
+	var treeData = {
+		
 		// used when actual processing is in-progress for user data
 		'skeletonWaitNode' : {
 			wait : true,
@@ -169,7 +196,6 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
 		'onboardingInfo': {
 			text: ['8'],
 			children:['moreOnboardingInfo']
-			//children: ['aboveAverage']
 		},
 		'moreOnboardingInfo': {
 			text: ['9'],
@@ -330,8 +356,38 @@ function(healthKitService, $q, $ionicPlatform, chartConfigFactory, $ionicPopup, 
   
   return {
     getOnboarding: function(type) {
+    	console.log(dateTimeUtil.getDayOfWeekName());
       //return conversationData[type];
       return treeData;
+    },
+
+    getConversationTree : function() {
+    	var rootName = null;
+    	var currentHour = dateTimeUtil.getCurrentHour();
+    	var dayName = dateTimeUtil.getDayOfWeekName();
+    	if(dayName != 'SUNDAY' && dayName !='SATURDAY') {
+	    	if($localstorage.getUser() == null){
+	    		rootName = treeRoots['onboardingRoot'];
+	    	} else if(currentHour >=5 && currentHour < 12){ // 5am - 12pm
+	    		rootName = treeRoots['weekDayMorningRoot'];
+	    	} else if(currentHour >=12 && currentHour < 17){ // 12pm - 5pm
+	    		rootName = treeRoots['weekDayNoonRoot'];
+	    	} else if(currentHour >=17 && currentHour < 21) { //5pm - 9pm
+	    		rootName = treeRoots['weekDayEveRoot'];
+	    	} else if(currentHour >=21 || currentHour < 5) {
+	    		rootName = treeRoots['onboardingRoot'];
+	    	}
+	    }else {
+	    	rootName = treeRoots['weekendRoot'];
+	    }
+
+	    return {
+	    	rootType : rootName,
+	    	allNodes : treeData
+	    };
+
+
     }
+
   }
 }]);

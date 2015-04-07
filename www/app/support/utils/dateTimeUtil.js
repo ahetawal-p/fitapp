@@ -22,7 +22,7 @@ angular.module('app.utils')
     function getDayOfWeekName(date){
         var dateObj = moment(date);
         var locale = dateObj.localeData();
-        return locale.weekdaysShort(dateObj).toUpperCase();
+        return locale.weekdays(dateObj).toUpperCase();
     }
 
     function getMonthOfYear(date){
@@ -128,6 +128,10 @@ angular.module('app.utils')
         return evalDateObj.isBetween(startDateObj, endDateObj);
     }
 
+    function getCurrentHour() {
+        return moment().hour();
+    }
+
     return {
         getFormattedDateString: getFormattedDateString,
         getTimeStamp: getTimeStamp,
@@ -145,6 +149,7 @@ angular.module('app.utils')
         getAmPm: getAmPm,
         secondTimeGreaterThanFirst: secondTimeGreaterThanFirst,
         isPreviousWeek: isPreviousWeek,
-        isLastWeek: isLastWeek
+        isLastWeek: isLastWeek,
+        getCurrentHour : getCurrentHour
     };
 }]);
