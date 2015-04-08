@@ -13,7 +13,7 @@
  	"0"  : "Hi There I am Poki",
  	"1"  : "What is your name?",
  	"_2"  : "Hi {{test.name}} ! Nice to meet you",
- 	"2"  : "Hi {{name}} ! Nice to meet you",
+ 	"2"  : "Hi {{nickname}} ! Nice to meet you",
  	"3"  : "Let's get started by taking a look at your existing data",
  	"4"  : "In my analysis, I can include data from your iPhone's Healthapp", 
 	"5"	 : "Would you like that", 

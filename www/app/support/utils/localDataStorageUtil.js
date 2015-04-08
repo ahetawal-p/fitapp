@@ -28,11 +28,6 @@ angular.module('app.utils')
     	currObject.lastLoginTime = new Date();
     	this.setUser(currObject);
     },
-    updateUserLanguage: function(language){
-    	var currObject = this.getUser();
-    	currObject.language = language;
-    	this.setUser(currObject);
-    },
     getUserNickname: function(){
       return this.getUser().nickname;
     },
@@ -42,16 +37,12 @@ angular.module('app.utils')
       this.setUser(currObject);
     },
     getUserLanguageId: function(){
-      var languageId = this.getUser().languageId;
-      if (!languageId){
-        return "en_US";
-      }
-
+      var languageId = this.getUser().language;
       return languageId;
     },
     setUserLanguageId: function(languageId){
       var currObject = this.getUser();
-      currObject.languageId = languageId;
+      currObject.language = languageId;
       this.setUser(currObject);    
     }
 

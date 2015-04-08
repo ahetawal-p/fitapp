@@ -79,7 +79,7 @@ angular.module('app.services')
   		} else {
   			$translate('Enter_Name').then(function (enterNameMsg) {
 	  			var myPopup = $ionicPopup.show({
-			    template: '<input type="text" ng-model="user.name">',
+			    template: '<input type="text" ng-model="user.nickname">',
 			    title: enterNameMsg,
 			    cssClass: 'myPopup',
 			    scope: myScope,
@@ -88,7 +88,7 @@ angular.module('app.services')
 			        text: '<b>Ok</b>',
 			        type: 'button-energized',
 			        onTap: function(e) {
-			          if (!myScope.user.name) {
+			          if (!myScope.user.nickname) {
 			            //don't allow the user to close unless he enters a name
 			            e.preventDefault();
 			          } else {
@@ -359,22 +359,24 @@ angular.module('app.services')
     	var rootName = null;
     	var currentHour = dateTimeUtil.getCurrentHour();
     	var dayName = dateTimeUtil.getDayOfWeekName();
-    	if(dayName != 'SUNDAY' && dayName !='SATURDAY') {
-	    	if($localstorage.getUser() == null){
-	    		rootName = treeRoots['onboardingRoot'];
-	    	} else if(currentHour >=5 && currentHour < 12){ // 5am - 12pm
-	    		rootName = treeRoots['weekDayMorningRoot'];
-	    	} else if(currentHour >=12 && currentHour < 17){ // 12pm - 5pm
-	    		rootName = treeRoots['weekDayNoonRoot'];
-	    	} else if(currentHour >=17 && currentHour < 21) { //5pm - 9pm
-	    		rootName = treeRoots['weekDayEveRoot'];
-	    	} else if(currentHour >=21 || currentHour < 5) {
-	    		rootName = treeRoots['onboardingRoot'];
+    	if($localstorage.getUser() == null){
+    		rootName = treeRoots['onboardingRoot'];
+    	} else {
+    		if(dayName != 'SUNDAY' && dayName !='SATURDAY') {
+		    	 if(currentHour >=5 && currentHour < 12){ // 5am - 12pm
+		    		rootName = treeRoots['onboardingRoot'];
+		    	} else if(currentHour >=12 && currentHour < 17){ // 12pm - 5pm
+		    		rootName = treeRoots['onboardingRoot'];
+		    	} else if(currentHour >=17 && currentHour < 21) { //5pm - 9pm
+		    		rootName = treeRoots['onboardingRoot'];
+		    	} else if(currentHour >=21 || currentHour < 5) {
+		    		rootName = treeRoots['onboardingRoot'];
+		    	}
+	    	} else {
+	    		rootName = treeRoots['weekendRoot'];
 	    	}
-	    }else {
-	    	rootName = treeRoots['weekendRoot'];
 	    }
-
+	    
 	    return {
 	    	rootType : rootName,
 	    	allNodes : treeData

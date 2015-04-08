@@ -49,6 +49,7 @@ angular.module('app.conversation')
 
 				$scope.user = {
 						'name': null,
+						'nickname' : null,
 						'lastLoginTime': new Date(),
 						'language' : $translate.preferredLanguage()
 				};
