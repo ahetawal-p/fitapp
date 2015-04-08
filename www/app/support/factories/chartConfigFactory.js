@@ -395,7 +395,7 @@ angular.module('app.factories')
            var chartConfig = {
                 date: dataSet.name,
                 dayOfMonth: dateTimeUtil.getDayOfMonth(dataSet.name),
-                dayOfWeekName: dateTimeUtil.getDayOfWeekName(dataSet.name),
+                dayOfWeekName: dateTimeUtil.getDayOfWeekShortName(dataSet.name),
                 title: {
                     text: ''
                 },

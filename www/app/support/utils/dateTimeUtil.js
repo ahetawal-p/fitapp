@@ -25,6 +25,12 @@ angular.module('app.utils')
         return locale.weekdays(dateObj).toUpperCase();
     }
 
+    function getDayOfWeekShortName(date){
+        var dateObj = moment(date);
+        var locale = dateObj.localeData();
+        return locale.weekdaysShort(dateObj).toUpperCase();
+    }
+
     function getMonthOfYear(date){
         var dateObj = moment(date);
         var locale = dateObj.localeData();
@@ -150,6 +156,7 @@ angular.module('app.utils')
         secondTimeGreaterThanFirst: secondTimeGreaterThanFirst,
         isPreviousWeek: isPreviousWeek,
         isLastWeek: isLastWeek,
-        getCurrentHour : getCurrentHour
+        getCurrentHour : getCurrentHour,
+        getDayOfWeekShortName : getDayOfWeekShortName
     };
 }]);
