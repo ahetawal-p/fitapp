@@ -4,11 +4,12 @@ angular.module('app.services.healthKit')
 	function(healthKitApi, healthKitStubApi, workoutProcessor, $q, $rootScope) {
         var api = {};
 
-        if ($rootScope.healthkitExists){
-            api = healthKitApi;
-        }else{
-            api = healthKitStubApi;
-        }
+        // if ($rootScope.healthkitExists){
+        //     api = healthKitApi;
+        // }else{
+        //     api = healthKitStubApi;
+        // }
+        api = healthKitStubApi;
 
          //api = healthKitApi;
 
