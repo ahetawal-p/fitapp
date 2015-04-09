@@ -86,6 +86,25 @@ angular.module('app.services')
 
 	};
 	
+	var calculateAverageMinsPerDay = function(currentNode){
+		var deferred = $q.defer();
+		console.log("<<<<< THIS IS >>>>>");
+		console.log(currentNode);
+		healthKitService.getDailyAverageDuration().then(function(minutes){
+		// TODO : Will add randomization later if required.
+			$translate(currentNode.text[0]).then(function (translated){
+				var replaced = translated.replace("$$", minutes);
+				currentNode.text = replaced;
+
+				currentNode.type = null;
+				deferred.resolve(currentNode);
+			});
+		});
+
+		return deferred.promise;
+
+	};
+
 	var userInputPopup = function(myScope){
 		var deferred = $q.defer();
 		if($localstorage.getUser() != null){
@@ -205,16 +224,16 @@ angular.module('app.services')
 		'userExplain':{
 			text: ['7'],
 			type: "user",
-			//children: ['onboardingInfo']
-			children: ['stringReplacer']
+			children: ['onboardingInfo']
+			//children: ['stringReplacer']
 		},
 
-		'stringReplacer' : {
-			text: ['30'],
-			type: 'replacer',
-			method: testReplacer,
-			children:['onboardingInfo']
-		},
+		// 'stringReplacer' : {
+		// 	text: ['30'],
+		// 	type: 'replacer',
+		// 	method: testReplacer,
+		// 	children:['onboardingInfo']
+		// },
 
 		'onboardingInfo': {
 			text: ['8'],
@@ -315,7 +334,8 @@ angular.module('app.services')
 		'activityOnPhoneSure': {
 			text: ['24'],
 			type: "user",
-			children: ['dummyAnalyzer']
+			// children: ['dummyAnalyzer']
+			children: ['averageMinutesPerDay']
 		},
 		'activityOnPhoneNotNow': {
 			text: ['25'],
@@ -344,6 +364,24 @@ angular.module('app.services')
 		},
 		'moreActiveTip': {
 			text: ['29'],
+			children:['testChart']
+		},
+		'averageMinutesPerDay': {
+			text: ['30'],
+			type: 'replacer',
+			method: calculateAverageMinsPerDay,
+			children:['minutesToMoon']
+		},
+		'minutesToMoon': {
+			text: ['31'],
+			type: 'replacer',
+			method: testReplacer,
+			children:['testChart']
+		},
+		'minutesPrettyGood': {
+			text: ['32'],
+			type: 'replacer',
+			method: testReplacer,
 			children:['testChart']
 		},
 		'testChart': {
