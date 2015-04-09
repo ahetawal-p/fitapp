@@ -197,13 +197,15 @@ angular.module('app.conversation')
 	    			if(node.userOptions !=null &&  node.userOptions.length >=1){
 						addUnserInputPlaceHolder();
 						$scope.waitIndicator = false;
+						// hack to display container, somehow it doesnt show up with scope 
+						// updates here 
 						var userOptions = jQuery(".userMsgOptionsContainer");
 						userOptions.show();
 						$ionicScrollDelegate.scrollBottom(true);
 					} else {
 						evaluateNextNode();
 					}
-				}, 10);
+				}, 1700);
 			};
 
 			/**

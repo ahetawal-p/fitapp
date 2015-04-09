@@ -95,6 +95,7 @@ angular.module('app.services')
 			$translate(currentNode.text[0]).then(function (translated){
 				var replaced = translated.replace("$$", minutes);
 				currentNode.text = replaced;
+				currentNode.type = null;
 				deferred.resolve(currentNode);
 			});
 		});
@@ -113,6 +114,7 @@ angular.module('app.services')
 				var yearsToMoon = Math.round(384400/(minutes/60 * 5)/365);
 				var replaced = translated.replace("$$", yearsToMoon);
 				currentNode.text = replaced;
+				currentNode.type = null;
 				deferred.resolve(currentNode);
 			});
 		});
@@ -504,14 +506,14 @@ angular.module('app.services')
 		"showMoreDetailsNo": {
 			text: ['39'],
 			type: 'user',
-			children:['']
+			children:[]
 		},	
 		"compareWeekdayWeekends": {
 			evalInfo : {
 				type : "func",
 				method : compareWeekdayWeekends
 			},
-			children:['']
+			children:[]
 		},	
 		"weekdayMoreWeekends": {
 			text: ['40'],
