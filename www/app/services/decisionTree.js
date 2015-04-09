@@ -71,19 +71,20 @@ angular.module('app.services')
 		return deferred.promise;
 	};
 
-	var averageMinutesADay = function(){
+	var testReplacer = function(currentNode){
 		var deferred = $q.defer();
-
-		healthKitService.getDailyAverageDuration().then(function(minutes){
-			var node = treeData['displayAverageMinutesADay'];
-			var key = node.text;
-			$translate(key[0]).then(function(msg){
-				msg = msg.replace('$$', minutes);
-				deferred.resolve(node);
-			});
+		console.log("<<<<< THIS IS >>>>>");
+		console.log(currentNode);
+		// TODO : Will add randomization later if required.
+		$translate(currentNode.text[0]).then(function (translated){
+			currentNode.text = translated;
+			currentNode.type = null;
+			deferred.resolve(currentNode);
 		});
+
 		return deferred.promise;
-	}
+
+	};
 	
 	var userInputPopup = function(myScope){
 		var deferred = $q.defer();
@@ -204,8 +205,17 @@ angular.module('app.services')
 		'userExplain':{
 			text: ['7'],
 			type: "user",
-			children: ['onboardingInfo']
+			//children: ['onboardingInfo']
+			children: ['stringReplacer']
 		},
+
+		'stringReplacer' : {
+			text: ['30'],
+			type: 'replacer',
+			method: testReplacer,
+			children:['onboardingInfo']
+		},
+
 		'onboardingInfo': {
 			text: ['8'],
 			children:['moreOnboardingInfo']
@@ -272,8 +282,7 @@ angular.module('app.services')
 		'activityOnPhoneOk': {
 			text: ['15'],
 			type: "user",
-			// children: ['dummyAnalyzer']
-			children: ['calcAverageMinutesADay']
+			children: ['dummyAnalyzer']
 		},
 		
 		'activityOnPhone1': {
@@ -337,27 +346,6 @@ angular.module('app.services')
 			text: ['29'],
 			children:['testChart']
 		},
-		'calcAverageMinutesADay': {
-			// text: ['30'],
-			// children:['testChart']
-			evalInfo : {
-				type : "func",
-				method : averageMinutesADay
-			},
-			children:[]
-		},
-		'displayAverageMinutesADay': {
-			text: ['30'],
-			children:['']
-		},
-		'yearsToMoon': {
-			text: ['31'],
-			children:['testChart']
-		},
-		'minutesPrettyGood': {
-			text: ['32'],
-			children:['testChart']
-		},
 		'testChart': {
 			type: "chart",
 			method: healthKitQueryFactory.getTodayVsAverageChartConfig,
@@ -411,7 +399,7 @@ angular.module('app.services')
 	    		rootName = treeRoots['weekendRoot'];
 	    	}
 	    }
-	    
+
 	    return {
 	    	rootType : rootName,
 	    	allNodes : treeData

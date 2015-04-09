@@ -169,6 +169,15 @@ angular.module('app.conversation')
 				return false;
 			};
 
+			var isThisStrReplacerNode = function(node) {
+				if(typeof node.type != "undefined" 
+					&& node.type == "replacer") {
+
+					return true;
+				}
+				return false;
+			};
+
 
 			var triggerDigestHelper = function(node, doAnimation){
 				// remove later when actual promise is returned
@@ -216,6 +225,17 @@ angular.module('app.conversation')
 		    		triggerDigestHelper(node, true);
 		    	});
 	    	};
+
+
+	    	var handleStrReplacer = function(node){
+	    		addNodeHelper(fullTree['skeletonWaitNode'], true);
+	    		
+	    		$parse(node.method)(node).then(function(replacedNode){
+					triggerDigestHelper(replacedNode, true);
+				});
+	    	};
+
+
 	    	/**
 	    		* Adding the very first node to the conversation
 	    		* STARTING POINT OF THE APP *
@@ -249,7 +269,12 @@ angular.module('app.conversation')
     				} else if(isThisChartNode(nextNode)){
     					handleChartNode(nextNode);
 						return;
-    				} else {
+
+					} else if(isThisStrReplacerNode(nextNode)){
+						handleStrReplacer(nextNode);
+						return;
+
+					} else {
 						// Processing standard text nodes and their user options
 						currentNodeToBeAdded = nextNode;
 						currentNodeToBeAdded['userOptions'] = [];
