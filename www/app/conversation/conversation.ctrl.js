@@ -30,8 +30,6 @@ angular.module('app.conversation')
 
 
 			var lastNodePushed = {};
-			var userOptionPlaceHolder = null;
-			
 			
 
 			/**
@@ -67,6 +65,13 @@ angular.module('app.conversation')
 				lastNodePushed =  message;
 				console.log(message);
 				$ionicScrollDelegate.scrollBottom(true);
+			};
+
+
+			var addUnserInputPlaceHolder = function(){
+				var userOptionPlaceHolder = fullTree['userInputPlaceHolder'];
+				userOptionPlaceHolder.bufferClass = "buffer";
+				addNodeHelper(userOptionPlaceHolder, false);
 			};
 
 			/*
@@ -131,9 +136,7 @@ angular.module('app.conversation')
 				var lastMsgInListOnUi = $scope.messages[$scope.messages.length - 1];
 
 				if(isUserNodePresent){
-					userOptionPlaceHolder = fullTree['userInputPlaceHolder'];
-					userOptionPlaceHolder.bufferClass = "buffer";
-					addNodeHelper(userOptionPlaceHolder, false);
+					addUnserInputPlaceHolder();
 				}
 
 				
@@ -182,16 +185,25 @@ angular.module('app.conversation')
 			var triggerDigestHelper = function(node, doAnimation){
 				// remove later when actual promise is returned
 				$timeout(function() {
+					$scope.waitIndicator = true;
 					// remove the temporary wait node now
 	    			$scope.messages.pop();
 
 	    			// add the new evaluated node to the conversation list
 	    			addNodeHelper(node, doAnimation);
+	    			
+	    			constructChildNodes(node);
 
-	    			evaluateNextNode();
+	    			if(node.userOptions !=null &&  node.userOptions.length >=1){
+						addUnserInputPlaceHolder();
+						$scope.waitIndicator = false;
+						var userOptions = jQuery(".userMsgOptionsContainer");
+						userOptions.show();
+						$ionicScrollDelegate.scrollBottom(true);
+					} else {
+						evaluateNextNode();
+					}
 				}, 10);
-
-
 			};
 
 			/**
@@ -229,11 +241,29 @@ angular.module('app.conversation')
 
 	    	var handleStrReplacer = function(node){
 	    		addNodeHelper(fullTree['skeletonWaitNode'], true);
-	    		
 	    		$parse(node.method)(node).then(function(replacedNode){
-					triggerDigestHelper(replacedNode, true);
+	    			triggerDigestHelper(replacedNode, true);
 				});
+
 	    	};
+
+
+	    	var constructChildNodes = function(parentNode){
+	    		$scope.options = [];
+	    		parentNode['userOptions'] = [];
+				var childLen = parentNode.children.length;
+				if(childLen >= 1 
+					&& fullTree[parentNode.children[0]].type == 'user'){
+						
+						isUserNodeRequired = true;
+						for(i in parentNode.children){
+							var msg = fullTree[parentNode.children[i]];
+							msg.isClickDisabled = false;
+							parentNode['userOptions'].push(angular.extend({}, getTextData(msg)));
+							$scope.options.push(angular.extend({}, msg));
+						}
+				}
+			};
 
 
 	    	/**
@@ -277,20 +307,13 @@ angular.module('app.conversation')
 					} else {
 						// Processing standard text nodes and their user options
 						currentNodeToBeAdded = nextNode;
-						currentNodeToBeAdded['userOptions'] = [];
-						$scope.options = [];
-						var childLen = currentNodeToBeAdded.children.length;
-						if(childLen >= 1 
-							&& fullTree[currentNodeToBeAdded.children[0]].type == 'user'){
-								
-								isUserNodeRequired = true;
-								for(i in currentNodeToBeAdded.children){
-									var msg = fullTree[currentNodeToBeAdded.children[i]];
-									msg.isClickDisabled = false;
-									currentNodeToBeAdded['userOptions'].push(angular.extend({}, getTextData(msg)));
-									$scope.options.push(angular.extend({}, msg));
-								}
+						
+						constructChildNodes(currentNodeToBeAdded);
+						
+						if(currentNodeToBeAdded.userOptions.length >=1){
+							isUserNodeRequired = true;
 						}
+						
 						var addToListPromise = performAddToConversationList(currentNodeToBeAdded, SYSTEM_INPUT_DELAY_MAX, isUserNodeRequired);
 						/*
 						If no child node of user type present, 
