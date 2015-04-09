@@ -71,6 +71,19 @@ angular.module('app.services')
 		return deferred.promise;
 	};
 
+	var averageMinutesADay = function(){
+		var deferred = $q.defer();
+
+		healthKitService.getDailyAverageDuration().then(function(minutes){
+			var node = treeData['displayAverageMinutesADay'];
+			var key = node.text;
+			$translate(key[0]).then(function(msg){
+				msg = msg.replace('$$', minutes);
+				deferred.resolve(node);
+			});
+		});
+		return deferred.promise;
+	}
 	
 	var userInputPopup = function(myScope){
 		var deferred = $q.defer();
@@ -259,7 +272,8 @@ angular.module('app.services')
 		'activityOnPhoneOk': {
 			text: ['15'],
 			type: "user",
-			children: ['dummyAnalyzer']
+			// children: ['dummyAnalyzer']
+			children: ['calcAverageMinutesADay']
 		},
 		
 		'activityOnPhone1': {
@@ -321,6 +335,27 @@ angular.module('app.services')
 		},
 		'moreActiveTip': {
 			text: ['29'],
+			children:['testChart']
+		},
+		'calcAverageMinutesADay': {
+			// text: ['30'],
+			// children:['testChart']
+			evalInfo : {
+				type : "func",
+				method : averageMinutesADay
+			},
+			children:[]
+		},
+		'displayAverageMinutesADay': {
+			text: ['30'],
+			children:['']
+		},
+		'yearsToMoon': {
+			text: ['31'],
+			children:['testChart']
+		},
+		'minutesPrettyGood': {
+			text: ['32'],
 			children:['testChart']
 		},
 		'testChart': {

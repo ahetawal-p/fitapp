@@ -34,7 +34,9 @@
 	"27" : "You are on par with the average of Pokifit users",
 	"28" : "It is slightly under the average of a typical Pokifit user", 
 	"29" : "Consider this",
+	"30" : "On average, you were active for $$ minutes a day",
+	"31" : "At this rate, it will take you $$ years to travel to the moon",
+	"32" : "All jokes said, $$ minutes a day on your feet is pretty good"	
 
-	"30" : "You were $$ active at this time"
 
 }

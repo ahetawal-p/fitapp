@@ -83,6 +83,10 @@ angular.module('app.factories')
 		return deferred.promise;
 	}
 
+	var getAverageMinutesADay = function(){
+		return healthKitService.getDailyAverageDuration();
+	}
+
 	var getWeekdayVsWeekendChart = function() {
 		var deferred = $q.defer();
 		healthKitService.getWeekdayWeekendAverages().then(
@@ -102,6 +106,7 @@ angular.module('app.factories')
             getLastPreviousWeeksAvgerageChart: getLastPreviousWeeksAvgerageChart,
             getDailyAverageVsUsersChart: getDailyAverageVsUsersChart,
             getYesterdayVsAverageChartConfig: getYesterdayVsAverageChartConfig,
-            getWeekdayVsWeekendChart: getWeekdayVsWeekendChart
+            getWeekdayVsWeekendChart: getWeekdayVsWeekendChart,
+            getAverageMinutesADay: getAverageMinutesADay
         };
     }]);
