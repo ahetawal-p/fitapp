@@ -88,6 +88,103 @@ angular.module('app.services')
 
 	};
 	
+	var calculateAverageMinsPerDay = function(currentNode){
+		var deferred = $q.defer();
+		healthKitService.getDailyAverageDuration().then(function(minutes){
+		// TODO : Will add randomization later if required.
+			$translate(currentNode.text[0]).then(function (translated){
+				var replaced = translated.replace("$$", minutes);
+				currentNode.text = replaced;
+				deferred.resolve(currentNode);
+			});
+		});
+
+		return deferred.promise;
+	};
+
+	var calculateYearsToMoon = function(currentNode){
+		var deferred = $q.defer();
+		healthKitService.getDailyAverageDuration().then(function(minutes){
+		// TODO : Will add randomization later if required.
+			$translate(currentNode.text[0]).then(function (translated){
+				var distanceToMoon = 384400;
+				var avgWalkSpeed = 5;
+				/* years to moon = distance / (hours/day x km/hours)/365 */
+				var yearsToMoon = Math.round(384400/(minutes/60 * 5)/365);
+				var replaced = translated.replace("$$", yearsToMoon);
+				currentNode.text = replaced;
+				deferred.resolve(currentNode);
+			});
+		});
+
+		return deferred.promise;
+	};
+
+	var compareAvgMinutesWithUsers = function() {
+		var deferred = $q.defer();
+
+		healthKitService.getDailyAverageDuration().then(function(minutes){
+				if(minutes > 50){
+					deferred.resolve(treeData['aboveAverage']);
+				}else if(minutes == 50){
+					deferred.resolve(treeData['onParAverage']);
+				}else{
+					deferred.resolve(treeData['belowAverage']);
+				}
+		});
+
+		return deferred.promise;
+	};
+
+	var calculatePercentOnButt = function (currentNode){
+		var deferred = $q.defer();
+
+		healthKitService.getDailyAverageDuration().then(function(minutes){
+			if (!minutes){
+				minutes = 0;
+			}
+
+			$translate(currentNode.text[0]).then(function (translated){
+				var totalMinutesADay = 24 * 60;
+				var totalMinutesOnButt = totalMinutesADay - minutes;
+				var percentOnButt = Math.round(totalMinutesOnButt/totalMinutesADay * 100);
+				var replaced = translated.replace("$$", percentOnButt);
+				currentNode.text = replaced;
+				currentNode.type = null;
+				deferred.resolve(currentNode);
+			});
+		});
+
+		return deferred.promise;
+	}
+
+	var compareWeekdayWeekends = function(){
+		var deferred = $q.defer();
+
+		healthKitService.getWeekdayWeekendAverages().then(function(chartDataContainer){
+				var weekday = chartDataContainer.dataSets[0].data[0];
+				var weekend = chartDataContainer.dataSets[0].data[1];
+				var diff = weekday - weekend;
+				var denominator = weekend == 0 ? weekday : weekend;
+				/* handle case where both weekend and weekday activities are 0 */
+				if (denominator == 0){
+					deferred.resolve(treeData['weekdayEqualWeekends']);
+				}
+
+				var percentDiff = diff/denominator * 100;
+
+				if(percentDiff > 5){
+					deferred.resolve(treeData['weekdayMoreWeekends']);
+				}else if(percentDiff < -5){
+					deferred.resolve(treeData['weekdayLessWeekends']);
+				}else{
+					deferred.resolve(treeData['weekdayEqualWeekends']);
+				}
+		});
+
+		return deferred.promise;
+	}
+
 	var userInputPopup = function(myScope){
 		var deferred = $q.defer();
 		if($localstorage.getUser() != null){
@@ -207,16 +304,16 @@ angular.module('app.services')
 		'userExplain':{
 			text: ['7'],
 			type: "user",
-			//children: ['onboardingInfo']
-			children: ['stringReplacer']
+			children: ['onboardingInfo']
+			//children: ['stringReplacer']
 		},
 
-		'stringReplacer' : {
-			text: ['30'],
-			type: 'replacer',
-			method: testReplacer,
-			children:['onboardingInfo']
-		},
+		// 'stringReplacer' : {
+		// 	text: ['30'],
+		// 	type: 'replacer',
+		// 	method: testReplacer,
+		// 	children:['onboardingInfo']
+		// },
 
 		'onboardingInfo': {
 			text: ['8'],
@@ -284,7 +381,8 @@ angular.module('app.services')
 		'activityOnPhoneOk': {
 			text: ['15'],
 			type: "user",
-			children: ['dummyAnalyzer']
+			// children: ['dummyAnalyzer']
+			children: ['averageMinutesPerDay']
 		},
 		
 		'activityOnPhone1': {
@@ -317,7 +415,8 @@ angular.module('app.services')
 		'activityOnPhoneSure': {
 			text: ['24'],
 			type: "user",
-			children: ['dummyAnalyzer']
+			// children: ['dummyAnalyzer']
+			children: ['averageMinutesPerDay']
 		},
 		'activityOnPhoneNotNow': {
 			text: ['25'],
@@ -334,19 +433,97 @@ angular.module('app.services')
 		},
 		'aboveAverage':{
 			text: ['26'],
-			children:['moreActiveTip']
+			children:['dailyAvgVsUsersBarChart']
 		},
 		'onParAverage':{
 			text: ['27'],
-			children:['moreActiveTip']
+			children:['dailyAvgVsUsersBarChart']
 		},
 		'belowAverage': {
 			text: ['28'],
-			children:['testChart']
+			children:['dailyAvgVsUsersBarChart']
 		},
 		'moreActiveTip': {
 			text: ['29'],
-			children:['testChart']
+			children:['percentOfDayOnButt']
+		},
+		'averageMinutesPerDay': {
+			text: ['30'],
+			type: 'replacer',
+			method: calculateAverageMinsPerDay,
+			children:['minutesToMoon']
+		},
+		'minutesToMoon': {
+			text: ['31'],
+			type: 'replacer',
+			method: calculateYearsToMoon,
+			children:['minutesPrettyGood']
+		},
+		'minutesPrettyGood': {
+			text: ['32'],
+			type: 'replacer',
+			method: calculateAverageMinsPerDay,
+			children:['minutesPrettyGoodHa']
+		},
+		'minutesPrettyGoodHa': {
+			text: ['33'],
+			type: 'user',
+			children:['avgMinutesVsUsers']
+		},
+		"avgMinutesVsUsers": {
+			evalInfo : {
+				type : "func",
+				method : compareAvgMinutesWithUsers
+			},
+			children:[]
+		},
+		"percentOfDayOnButt": {
+			text: ['34'],
+			type: 'replacer',
+			method: calculatePercentOnButt,
+			children:['percentOfDayOnButtWow']
+		},
+		"percentOfDayOnButtWow": {
+			text: ['35'],
+			type: 'user',
+			children:['concludeAssessment']
+		},
+		"concludeAssessment": {
+			text: ['36'],
+			children:['askToShowMoreDetails']
+		},
+		"askToShowMoreDetails": {
+			text: ['37'],
+			children:['showMoreDetailsYes', 'showMoreDetailsNo']
+		},
+		"showMoreDetailsYes": {
+			text: ['38'],
+			type: 'user',
+			children:['compareWeekdayWeekends']
+		},
+		"showMoreDetailsNo": {
+			text: ['39'],
+			type: 'user',
+			children:['']
+		},	
+		"compareWeekdayWeekends": {
+			evalInfo : {
+				type : "func",
+				method : compareWeekdayWeekends
+			},
+			children:['']
+		},	
+		"weekdayMoreWeekends": {
+			text: ['40'],
+			children:['weekdayVsWeekendBarChart']
+		},
+		"weekdayEqualWeekends": {
+			text: ['41'],
+			children:['weekdayVsWeekendBarChart']
+		},
+		"weekdayLessWeekends": {
+			text: ['42'],
+			children:['weekdayVsWeekendBarChart']
 		},
 		'testChart': {
 			type: "chart",
@@ -363,7 +540,7 @@ angular.module('app.services')
 		'dailyAvgVsUsersBarChart': {
 			type: "chart",
 			method: healthKitQueryFactory.getDailyAverageVsUsersChart,
-			children: []
+			children: ['moreActiveTip']
 		},
 		'lastVsPrevBarChart': {
 			type: "chart",

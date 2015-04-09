@@ -74,7 +74,7 @@ angular.module('app.utils')
 
 		//get sum of duration of rawActivityObjects in given time
 		var totalDuration = getTotalDurationBetweenDateTimes(startDateTime, endDateTime, rawActivityObjects);
-		//console.log("unique Days: " + totalUniqueDays.length);
+		console.log("unique Days: " + totalUniqueDays.length);
 		if (totalUniqueDays == null || totalUniqueDays.length == 0){
 			return 0;
 		}
@@ -140,7 +140,6 @@ angular.module('app.utils')
 	function getTotalDurationBetweenDateTimes(startDateTime, endDateTime, rawActivityObjects){
 		var activitiesInRange = _.filter(rawActivityObjects, function(rawActivityObject){
 			var rawActivityDateTime = new Date(rawActivityObject.startDate.replace(/-/g, "/"));
-			//console.log("getTotalDurationBetweenDateTimes");
 			var afterStartTime = dateTimeUtil.secondTimeGreaterThanFirst(startDateTime, rawActivityDateTime);
 			var beforeEndTime = dateTimeUtil.secondTimeGreaterThanFirst(rawActivityDateTime, endDateTime);
 
