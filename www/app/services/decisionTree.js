@@ -71,6 +71,20 @@ angular.module('app.services')
 		return deferred.promise;
 	};
 
+	var testReplacer = function(currentNode){
+		var deferred = $q.defer();
+		console.log("<<<<< THIS IS >>>>>");
+		console.log(currentNode);
+		// TODO : Will add randomization later if required.
+		$translate(currentNode.text[0]).then(function (translated){
+			currentNode.text = translated;
+			currentNode.type = null;
+			deferred.resolve(currentNode);
+		});
+
+		return deferred.promise;
+
+	};
 	
 	var userInputPopup = function(myScope){
 		var deferred = $q.defer();
@@ -191,8 +205,17 @@ angular.module('app.services')
 		'userExplain':{
 			text: ['7'],
 			type: "user",
-			children: ['onboardingInfo']
+			//children: ['onboardingInfo']
+			children: ['stringReplacer']
 		},
+
+		'stringReplacer' : {
+			text: ['30'],
+			type: 'replacer',
+			method: testReplacer,
+			children:['onboardingInfo']
+		},
+
 		'onboardingInfo': {
 			text: ['8'],
 			children:['moreOnboardingInfo']
@@ -376,7 +399,7 @@ angular.module('app.services')
 	    		rootName = treeRoots['weekendRoot'];
 	    	}
 	    }
-	    
+
 	    return {
 	    	rootType : rootName,
 	    	allNodes : treeData
