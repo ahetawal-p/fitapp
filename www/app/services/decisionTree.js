@@ -75,9 +75,11 @@ angular.module('app.services')
 		var deferred = $q.defer();
 		console.log("<<<<< THIS IS >>>>>");
 		console.log(currentNode);
+		var calculatedValue = "<<>>"
 		// TODO : Will add randomization later if required.
 		$translate(currentNode.text[0]).then(function (translated){
-			currentNode.text = translated;
+			currentNode.text = translated.split("$$").join(calculatedValue);
+			//currentNode.text = translated;
 			currentNode.type = null;
 			deferred.resolve(currentNode);
 		});
