@@ -255,6 +255,22 @@ angular.module('app.services')
 		return deferred.promise;	
 	}
 
+	var powerHour = function(currentNode){
+		var deferred = $q.defer();
+
+		healthKitService.getMostActiveTimeOfWeek().then(function(response){
+				$translate(currentNode.text[0]).then(function (translated){
+					var timeOfDay = response.timeOfDay;
+					var replaced = translated.replace("$$", timeOfDay);
+					currentNode.text = replaced;
+					currentNode.type = null;
+					deferred.resolve(currentNode);
+				});
+		});
+
+		return deferred.promise;	
+	}
+
 	var userInputPopup = function(myScope){
 		var deferred = $q.defer();
 		if($localstorage.getUser() != null){
@@ -629,6 +645,25 @@ angular.module('app.services')
 			text: ['48'],
 			type: 'replacer',
 			method: mostActiveTimeOfWeekDuration,
+			children:['powerHour']
+		},
+		"powerHour": {
+			text: ['49'],
+			type: 'replacer',
+			method: powerHour,
+			children:['thatsAllIHave']
+		},
+		"thatsAllIHave": {
+			text: ['50'],
+			children:['keepBringingPhone']
+		},
+		"keepBringingPhone": {
+			text: ['51'],
+			children:['introTreeEndOk']
+		},
+		"introTreeEndOk": {
+			text: ['15'],
+			type: "user",
 			children:['']
 		},
 		'yesterdayVsAvgLineChart': {
