@@ -79,7 +79,7 @@ angular.module('app.utils')
 			return 0;
 		}
 
-		return totalDuration/totalUniqueDays.length;
+		return dateTimeUtil.getMinutesFromSeconds(totalDuration/totalUniqueDays.length);
 	} 
 
 	/* specify startTime and endTime, and get average activity durations for time slots in between

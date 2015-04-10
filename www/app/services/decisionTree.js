@@ -187,6 +187,74 @@ angular.module('app.services')
 		return deferred.promise;
 	}
 
+	var compareWeekdayWeekendsComments = function(){
+		var deferred = $q.defer();
+
+		healthKitService.getWeekdayWeekendAverages().then(function(chartDataContainer){
+				var weekday = chartDataContainer.dataSets[0].data[0];
+				var weekend = chartDataContainer.dataSets[0].data[1];
+				var diff = weekday - weekend;
+				var denominator = weekend == 0 ? weekday : weekend;
+				/* handle case where both weekend and weekday activities are 0 */
+				if (denominator == 0){
+					deferred.resolve(treeData['weekdayEqualWeekends']);
+				}
+
+				var percentDiff = diff/denominator * 100;
+
+				if(percentDiff > 5){
+					deferred.resolve(treeData['weekdayWarrior']);
+				}else if(percentDiff < -5){
+					deferred.resolve(treeData['weekendWarrior']);
+				}else{
+					deferred.resolve(treeData['weekdayEqualWeekendWarrior']);
+				}
+		});
+
+		return deferred.promise;
+	}
+
+	var timesOfDayMap = {
+		"morning": "",
+		"afternoon": "",
+		"evening": ""
+	};
+
+	var mostActiveTimeOfWeek = function(currentNode){
+		var deferred = $q.defer();
+
+		healthKitService.getMostActiveTimeOfWeek().then(function(response){
+				$translate(currentNode.text[0]).then(function (translated){
+					var weekdayOrWeekend = response.timeOfWeek;
+					var timeOfDay = response.timeOfDay;
+					var replaced = translated.replace("$$", weekdayOrWeekend);
+					replaced = replaced.replace("%%", timeOfDay);
+					currentNode.text = replaced;
+					currentNode.type = null;
+					deferred.resolve(currentNode);
+				});
+		});
+
+		return deferred.promise;
+	}
+
+	var mostActiveTimeOfWeekDuration = function(currentNode){
+		var deferred = $q.defer();
+
+		healthKitService.getMostActiveTimeOfWeek().then(function(response){
+				$translate(currentNode.text[0]).then(function (translated){
+					var weekdayOrWeekend = response.timeOfWeek;
+					var timeOfDay = response.timeOfDay;
+					var replaced = translated.replace("$$", response.duration);
+					currentNode.text = replaced;
+					currentNode.type = null;
+					deferred.resolve(currentNode);
+				});
+		});
+
+		return deferred.promise;	
+	}
+
 	var userInputPopup = function(myScope){
 		var deferred = $q.defer();
 		if($localstorage.getUser() != null){
@@ -527,16 +595,45 @@ angular.module('app.services')
 			text: ['42'],
 			children:['weekdayVsWeekendBarChart']
 		},
-		'testChart': {
-			type: "chart",
-			method: healthKitQueryFactory.getTodayVsAverageChartConfig,
-			//method: getChartData,
-			children:[]
+		"weekdayVsWeekendComment": {
+			evalInfo : {
+				type : "func",
+				method : compareWeekdayWeekendsComments
+			},
+			children:[]			
+		},
+		"weekdayWarrior": {
+			text: ['43'],
+			children:['weekdayVsWeekendCommentThanks']
+		},	
+		"weekendWarrior": {
+			text: ['44'],
+			children:['weekdayVsWeekendCommentThanks']
+		},	
+		"weekdayEqualWeekendWarrior": {
+			text: ['45'],
+			children:['weekdayVsWeekendCommentThanks']
+		},	
+		"weekdayVsWeekendCommentThanks": {
+			text: ['46'],
+			type: 'user',
+			children:['displayMostActiveTimeOfWeek']
+		},
+		"displayMostActiveTimeOfWeek": {
+			text: ['47'],
+			type: 'replacer',
+			method: mostActiveTimeOfWeek,
+			children:['displayMostActiveTimeOfWeekDuration']
+		},
+		"displayMostActiveTimeOfWeekDuration": {
+			text: ['48'],
+			type: 'replacer',
+			method: mostActiveTimeOfWeekDuration,
+			children:['']
 		},
 		'yesterdayVsAvgLineChart': {
 			type: "chart",
 			method: healthKitQueryFactory.getYesterdayVsAverageChartConfig,
-			//method: getChartData,
 			children:[]
 		},
 		'dailyAvgVsUsersBarChart': {
@@ -552,7 +649,7 @@ angular.module('app.services')
 		'weekdayVsWeekendBarChart': {
 			type: "chart",
 			method: healthKitQueryFactory.getWeekdayVsWeekendChart,
-			children: []
+			children: ['weekdayVsWeekendComment']
 		}
 
 	};

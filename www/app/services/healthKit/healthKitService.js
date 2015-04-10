@@ -4,11 +4,12 @@ angular.module('app.services.healthKit')
 	function(healthKitApi, healthKitStubApi, workoutProcessor, $q, $rootScope) {
         var api = {};
 
-        if ($rootScope.healthkitExists){
-            api = healthKitApi;
-        }else{
-            api = healthKitStubApi;
-        }
+        // if ($rootScope.healthkitExists){
+        //     api = healthKitApi;
+        // }else{
+        //     api = healthKitStubApi;
+        // }
+             api = healthKitStubApi;
 
          //api = healthKitApi;
 
@@ -132,9 +133,76 @@ angular.module('app.services.healthKit')
                 }
 
                 var timesOfDayAverages = getTimesOfDayAverages(walkRunActivities, weekdayFilter);
-                console.log(JSON.stringify(timesOfDayAverages));
-
                 deferred.resolve(timesOfDayAverages);
+            });
+
+            return deferred.promise;
+        }
+
+        function getMostActiveTimeOfWeek(){
+            var deferred = $q.defer();
+            getWeekdayWeekendAverages().then(function(chartDataContainer){
+                var weekday = chartDataContainer.dataSets[0].data[0];
+                var weekend = chartDataContainer.dataSets[0].data[1];
+                var diff = weekday - weekend;
+                var denominator = weekend == 0 ? weekday : weekend;
+                /* handle case where both weekend and weekday activities are 0 */
+                if (denominator == 0){
+                    deferred.resolve(treeData['weekdayEqualWeekends']);
+                }
+
+                var percentDiff = diff/denominator * 100;
+
+                if(percentDiff > 5){
+                    /* weekday > weekend */
+                    getWeekdayTimesOfDayAverages().then(function(response){
+                        var maxTimeOfDay = _.max(response, function(timeOfDay){
+                            return timeOfDay.duration;
+                        });
+                        
+                        var mostActiveTimeOfWeek = 
+                        {
+                            timeOfWeek: "weekday",
+                            timeOfDay: maxTimeOfDay.timeOfDay,
+                            duration: maxTimeOfDay.duration
+                        };
+
+                        deferred.resolve(mostActiveTimeOfWeek);
+                    });
+
+                }else if(percentDiff < -5){
+                    /* weekend > weekday */
+                  getWeekendTimesOfDayAverages().then(function(response){
+                        var maxTimeOfDay = _.max(response, function(timeOfDay){
+                            return timeOfDay.duration;
+                        });
+                        
+                        var mostActiveTimeOfWeek = 
+                        {
+                            timeOfWeek: "weekend",
+                            timeOfDay: maxTimeOfDay.timeOfDay,
+                            duration: maxTimeOfDay.duration
+                        };
+
+                        deferred.resolve(mostActiveTimeOfWeek);
+                    });                
+                }else{
+                    /* equal, display weekday */
+                  getWeekdayTimesOfDayAverages().then(function(response){
+                        var maxTimeOfDay = _.max(response, function(timeOfDay){
+                            return timeOfDay.duration;
+                        });
+                        
+                        var mostActiveTimeOfWeek = 
+                        {
+                            timeOfWeek: "weekday",
+                            timeOfDay: maxTimeOfDay.timeOfDay,
+                            duration: maxTimeOfDay.duration
+                        };
+
+                        deferred.resolve(mostActiveTimeOfWeek);
+                    });                
+                }
             });
 
             return deferred.promise;
@@ -173,12 +241,27 @@ angular.module('app.services.healthKit')
             var eveningStartDateTime = new Date("1/1/1900 17:00");
             var eveningEndDateTime = new Date("1/1/1900 23:59");
             var weekdayEveningAverage = workoutProcessor.getAverageActivityDuration(eveningStartDateTime, eveningEndDateTime, rawActivityObjects, filterFunction);
+
+            var timesOfDayAverages = [
+                {
+                    timeOfDay: "morning",
+                    duration: weekdayMorningAverage
+                },
+                {
+                    timeOfDay: "afternoon",
+                    duration: weekdayAfternoonAverage
+                },
+                {
+                    timeOfDay: "evening",
+                    duration: weekdayEveningAverage
+                },
+            ];
             
-            var timesOfDayAverages = {
-                "morning": weekdayMorningAverage,
-                "afternoon": weekdayAfternoonAverage,
-                "evening": weekdayEveningAverage
-            };
+            // var timesOfDayAverages = {
+            //     "morning": weekdayMorningAverage,
+            //     "afternoon": weekdayAfternoonAverage,
+            //     "evening": weekdayEveningAverage
+            // };
 
             return timesOfDayAverages;
         }
@@ -369,6 +452,7 @@ angular.module('app.services.healthKit')
                 getDailyAverageVsAllUsers: getDailyAverageVsAllUsers,
                 getActivityDurationByDate: getActivityDurationByDate,
                 getLastVsPreviousWeekAverage: getLastVsPreviousWeekAverage,
-                getCombinedTimesOfDayAverages: getCombinedTimesOfDayAverages
+                getCombinedTimesOfDayAverages: getCombinedTimesOfDayAverages,
+                getMostActiveTimeOfWeek: getMostActiveTimeOfWeek
 			}}]
 			);

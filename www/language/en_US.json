@@ -46,6 +46,14 @@
 	"39" : "No",
 	"40" : "You are more active on weekdays than weekends",
 	"41" : "You are equally active on weekdays ands weekends",
-	"42" : "You are less active on weekdays than weekends"
+	"42" : "You are less active on weekdays than weekends",
+	"43" : "A weekday warrior!",
+	"44" : "A weekend warrior!",
+	"45" : "Good job keeping the pace up everyday!",
+	"46" : "Thanks",
+	"47" : "On $$s, you're the most active in the %%s",
+	"48" : "You usually get around $$ minutes of activity around then",
+	"49" : "$$ is your power hour huh?"
+
 
 }
