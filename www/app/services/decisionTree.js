@@ -627,7 +627,7 @@ angular.module('app.services')
 		"showMoreDetailsNo": {
 			text: ['39'],
 			type: 'user',
-			children:[]
+			children:['thatsAllIHave']
 		},	
 		"compareWeekdayWeekends": {
 			evalInfo : {
