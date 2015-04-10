@@ -23,44 +23,39 @@ angular.module('fitapp', [
 
 .run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage) {
   $ionicPlatform.ready(function() {
-    // // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // // for form inputs)
-    // if(window.cordova && window.cordova.plugins.Keyboard) {
-    //   cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    // }
-    // if(window.StatusBar) {
-    //   StatusBar.styleDefault();
-    // }
 
     console.log($localstorage.getUser());
     //
 
-    //Ask/set user permissions for Healthkit data
-    try {
-      $cordovaHealthKit.isAvailable().then(function(yes) {
-        // HK is available
-        $rootScope.healthkitExists = true;
+    
 
-        var permissions = [
-        'HKQuantityTypeIdentifierDistanceWalkingRunning',
-        'HKCategoryValueSleepAnalysisAsleep'];
+  //   //Ask/set user permissions for Healthkit data
+  //   try {
+  //     $cordovaHealthKit.isAvailable().then(function(yes) {
+  //       // HK is available
+  //       $rootScope.healthkitExists = true;
+  //       var permissions = [
+  //       'HKQuantityTypeIdentifierDistanceWalkingRunning',
+  //       'HKCategoryValueSleepAnalysisAsleep'];
      
-        $cordovaHealthKit.requestAuthorization(
-            permissions, // Read permission
-            permissions // Write permission
-        ).then(function(success) {
-            // store that you have permissions
-
-        }, function(err) {
-            // handle error
-        });
+  //       $cordovaHealthKit.requestAuthorization(
+  //           permissions, // Read permission
+  //           permissions // Write permission
+  //       ).then(function(success) {
+  //           // store that you have permissions
+  //           alert('here');
+  //       }, function(err) {
+  //           // handle error
+  //       });
      
-        }, function(no) {
-            // No HK available
-        }); 
-    } catch (exception){
-      $rootScope.healthkitExists = false;
-  }
+  //       }, function(no) {
+  //           // No HK available
+  //           alert("no");
+  //       }); 
+  //   } catch (exception){
+  //     alert('no');
+  //     $rootScope.healthkitExists = false;
+  // }
   });
 })
 

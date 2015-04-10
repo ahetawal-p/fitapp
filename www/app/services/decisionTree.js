@@ -271,6 +271,34 @@ angular.module('app.services')
 		return deferred.promise;	
 	}
 
+	var checkHealthKitExists = function(){
+		var deferred = $q.defer();
+
+		healthKitService.checkHealthKitExists().then(function(exists){
+			if (exists){
+				deferred.resolve(treeData['askName']);
+			} else {
+				/* MODIFY THIS IN PRODUCTION TO RETURN healthKitNotExist node */
+				//deferred.resolve(treeData['healthKitNotExist']);
+				deferred.resolve(treeData['askName']);
+			}
+		});
+
+		return deferred.promise;
+	}
+
+	var requestAuthorization = function(){
+		var deferred = $q.defer();
+
+		healthKitService.requestAuthorization().then(function(response){
+			deferred.resolve(treeData['addDataHApp']);
+		}, function(err){
+			deferred.resolve(treeData['addDataHApp']);
+		});
+
+		return deferred.promise;
+	}
+
 	var userInputPopup = function(myScope){
 		var deferred = $q.defer();
 		if($localstorage.getUser() != null){
@@ -336,8 +364,20 @@ angular.module('app.services')
 
 		'onboarding' : {
 			text: ['0'],
-			children: ['askName']
+			children: ['checkHealthKitExists']
+			// children: ['askName']
 		},
+		'checkHealthKitExists' : {
+			evalInfo : {
+				type : "func",
+				method : checkHealthKitExists,
+			},
+			children:[]
+		},
+		'healthKitNotExist': {
+			text: ['52'],
+			children: ['']
+		},		
 		'askName': {
 			text: ['1'],
 			children: ['userInput']
@@ -391,15 +431,7 @@ angular.module('app.services')
 			text: ['7'],
 			type: "user",
 			children: ['onboardingInfo']
-			//children: ['stringReplacer']
 		},
-
-		// 'stringReplacer' : {
-		// 	text: ['30'],
-		// 	type: 'replacer',
-		// 	method: testReplacer,
-		// 	children:['onboardingInfo']
-		// },
 
 		'onboardingInfo': {
 			text: ['8'],
@@ -446,11 +478,17 @@ angular.module('app.services')
 			text: ['16'],
 			children: []
 		},
-
 		'openHealthApp': {
-			text: "FIX ME : NEED TO OPEN Health App here...",
-			children: ['addDataHApp']
+			evalInfo : {
+				type : "func",
+				method : requestAuthorization,
+			},
+			children:[]
 		},
+		// 'openHealthApp': {
+		// 	text: "FIX ME : NEED TO OPEN Health App here...",
+		// 	children: ['addDataHApp']
+		// },
 		'addDataHApp': {
 			text: ['17'],
 			children: ['addDataOk']
@@ -501,13 +539,12 @@ angular.module('app.services')
 		'activityOnPhoneSure': {
 			text: ['24'],
 			type: "user",
-			// children: ['dummyAnalyzer']
 			children: ['averageMinutesPerDay']
 		},
 		'activityOnPhoneNotNow': {
 			text: ['25'],
 			type: "user",
-			children: []
+			children: ['thatsAllIHave']
 		},
 		
 		'dummyAnalyzer' : {

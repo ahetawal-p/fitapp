@@ -58,7 +58,7 @@
 	"48" : "You usually get around $$ minutes of activity around then",
 	"49" : "$$ is your power hour huh?",
 	"50" : "Thats all I got for now",
-	"51" : "Keep on bringing your phone with you to ensure data is tracked"
-
+	"51" : "Keep on bringing your phone with you to ensure data is tracked",
+	"52" : "Sorry, but this app requires HealthKit to run"
 
 }

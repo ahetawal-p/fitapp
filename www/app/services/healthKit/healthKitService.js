@@ -7,11 +7,28 @@ angular.module('app.services.healthKit')
         // if ($rootScope.healthkitExists){
         //     api = healthKitApi;
         // }else{
-        //     api = healthKitStubApi;
+        //     api = healthKitStubApi;getMostActiveTimeOfWeek
         // }
-             api = healthKitStubApi;
+             //api = healthKitStubApi;
 
-         //api = healthKitApi;
+         api = healthKitApi;
+
+        function checkHealthKitExists(){
+            var deferred = $q.defer();
+            api.checkHealthKitExists().then(function(exists){
+                if (!exists){
+                    api = healthKitStubApi;
+                }
+
+                deferred.resolve(exists);
+            });
+
+            return deferred.promise;
+        }
+
+        function requestAuthorization(){
+            return api.requestAuthorization();
+        }
 
         function getActivities(){
         	var deferred = $q.defer();
@@ -453,6 +470,8 @@ angular.module('app.services.healthKit')
                 getActivityDurationByDate: getActivityDurationByDate,
                 getLastVsPreviousWeekAverage: getLastVsPreviousWeekAverage,
                 getCombinedTimesOfDayAverages: getCombinedTimesOfDayAverages,
-                getMostActiveTimeOfWeek: getMostActiveTimeOfWeek
+                getMostActiveTimeOfWeek: getMostActiveTimeOfWeek,
+                checkHealthKitExists: checkHealthKitExists,
+                requestAuthorization: requestAuthorization
 			}}]
 			);

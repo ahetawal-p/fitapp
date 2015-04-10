@@ -19,7 +19,15 @@ angular.module('app.services.healthKit')
 	      return deferred.promise;
 	    }
 
+        function requestAuthorization() {
+            var deferred = $q.defer();
+            deferred.resolve(true);
+
+            return deferred.promise;
+        }
+
 		return {
+			requestAuthorization: requestAuthorization,
 			getWalkingAndRunningDistance: getWalkingAndRunningDistance,
 			getWalkingAndRunningDistanceByDateTime: getWalkingAndRunningDistanceByDateTime
 		}
