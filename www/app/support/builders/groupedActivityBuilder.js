@@ -4,10 +4,11 @@ angular.module('app.builders')
 	function() {
 
 	var currentGroupedActivity;
-    function createGroupedActivity(startDate){
+    function createGroupedActivity(startDate, activityType){
         currentGroupedActivity = {};
         currentGroupedActivity.startDate = startDate;
         currentGroupedActivity.distance = 0;
+        currentGroupedActivity.activityType = activityType;
     }
 
     function addDistance(distance){
@@ -28,5 +29,5 @@ angular.module('app.builders')
     addDistance: addDistance,
     getGroupedActivity: getGroupedActivity,
     clearGroupedActivity: clearGroupedActivity
-      };
+    };
 });

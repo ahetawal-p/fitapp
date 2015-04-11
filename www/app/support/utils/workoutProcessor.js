@@ -19,13 +19,15 @@ angular.module('app.utils')
 			var description = distanceString + ", " + calories + " cal";
 			var date = dateTimeUtil.getFormattedDateString(groupedActivity.startDate);
 			var timeStamp = dateTimeUtil.getTimeStamp(groupedActivity.startDate);
+			var activityType = groupedActivity.activityType;
+			var img = iconUtil.getIcon(groupedActivity);
 			processedActivities.push({
 				timeStamp: timeStamp,
 				date: date,
 				description: description,
 				duration: durationString,
-				activityType: "walk",
-				icon: "ion-fireball"
+				activityType: activityType,
+				img: img
 			});
 		}
 
@@ -354,8 +356,11 @@ angular.module('app.utils')
 		for (var ii=0;ii<rawActivityObjects.length;ii++){
 			var rawActivityObject = rawActivityObjects[ii];
 
+			/* assign activity type based on speed */
+			rawActivityObject.activityType = activityTypeUtil.getActivityType(rawActivityObject);
+
 			if (ii == 0){
-				groupedActivityBuilder.createGroupedActivity(rawActivityObject.startDate);
+				groupedActivityBuilder.createGroupedActivity(rawActivityObject.startDate, rawActivityObject.activityType);
 			}
 
 			var workoutEndDate = moment(rawActivityObject.endDate);
@@ -364,15 +369,16 @@ angular.module('app.utils')
 				groupedActivities.push(groupedActivityBuilder.getGroupedActivity(rawActivityObject.endDate));
 			}
 			else{
+				nextWorkout.activityType = activityTypeUtil.getActivityType(nextWorkout); 
 				var nextWorkoutStartDate = moment(nextWorkout.startDate);
 				var timeDiffInMins = nextWorkoutStartDate.diff(workoutEndDate, "minutes");
-
-				if (timeDiffInMins > 1){
+				var diffActivityType = rawActivityObject.activityType !== nextWorkout.activityType;
+				if (timeDiffInMins > 1 || diffActivityType){
 					groupedActivityBuilder.addDistance(rawActivityObject.quantity);
 					groupedActivities.push(groupedActivityBuilder.getGroupedActivity(rawActivityObject.endDate));
 					groupedActivityBuilder.clearGroupedActivity();
 
-					groupedActivityBuilder.createGroupedActivity(nextWorkout.startDate);
+					groupedActivityBuilder.createGroupedActivity(nextWorkout.startDate, nextWorkout.activityType);
 				}else{
 					groupedActivityBuilder.addDistance(rawActivityObject.quantity);
 				}

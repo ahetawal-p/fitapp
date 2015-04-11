@@ -8,15 +8,12 @@
       <div class="item item-divider">
         <p>{{activityDate.$key | date:'EEE, MMM d'}}</p>
       </div>
-      <div class="item transaction-item item-icon-left" ng-repeat="activity in activityDate" href="" ng-click="vm.openEditActivityModal(activity)">            <i class="icon" style="padding-left:5px;"><img ng-src="img/icon-walk-32.png"/></i>
-
-<!--                <img ng-src="img/walking.png"/>
- -->
+      <div class="item transaction-item item-icon-left" ng-repeat="activity in activityDate" href="" ng-click="vm.openEditActivityModal(activity)">
         <div class="row">
-<!--           <i class="icon {{activity.icon}}"></i>-->
-          <div class="col">
-            <p>{{activity.duration}} {{activity.activityType}}</p>
-            <p>{{activity.description}}</p>
+            <i class="icon"><img ng-src="img/icon-walk-32.png"/></i>          
+            <div class="col">
+              <p>{{activity.duration}} {{activity.activityType}}</p>
+              <p>{{activity.description}}</p>
           </div>
           <div class="col" style="text-align:right;">
             <p>{{activity.timeStamp}}</p>

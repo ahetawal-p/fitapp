@@ -91,7 +91,7 @@ angular.module('app.factories')
 		var deferred = $q.defer();
 		healthKitService.getWeekdayWeekendAverages().then(
 			function(response){
-				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Weekday vs Weekend Averages", "Weekday", "Weekend");
+				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", "Weekday vs Weekend", "Weekday", "Weekend");
 				deferred.resolve(chartConfig);
 			},
 			function(error){

@@ -2,13 +2,12 @@ angular.module('app.utils')
 
 .factory('iconUtil', function() {
 	var iconDictionary = {};
-	iconDictionary["HKWorkoutActivityTypeWalking"] = "";
-	iconDictionary["HKWorkoutActivityTypeRunning"] = "ion-fireball";
-	iconDictionary["HKWorkoutActivityTypeCycling"] = "ion-ios7-cart-outline";
+	iconDictionary["run"] = "img/icon-walk-32.png";
+	iconDictionary["walk"] = "img/icon-run-32.png";
 
     function getIcon(activityType){
-		var icon = iconDictionary[activityType];
-        return icon;
+  		var icon = iconDictionary[activityType];
+      return icon;
     }
 
   return {
