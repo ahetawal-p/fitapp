@@ -1,7 +1,7 @@
 angular.module('app.services.healthKit')
 
-.factory('healthKitService', ['healthKitApi', 'healthKitStubApi', 'workoutProcessor', '$q', '$rootScope',
-	function(healthKitApi, healthKitStubApi, workoutProcessor, $q, $rootScope) {
+.factory('healthKitService', ['healthKitApi', 'healthKitStubApi', 'workoutProcessor', '$q', '$rootScope', 'decisionTreeStorage',
+	function(healthKitApi, healthKitStubApi, workoutProcessor, $q, $rootScope, decisionTreeStorage) {
         var api = {};
 
         // if ($rootScope.healthkitExists){
@@ -56,7 +56,9 @@ angular.module('app.services.healthKit')
         	var deferred = $q.defer();
         	api.getWalkingAndRunningDistance().then(function(walkRunActivities){
                 var weekdayWeekendAverages = workoutProcessor.calculateWeekdayWeekendAverages(walkRunActivities);
-        		var labels = ["Weekday", "Weekend"];
+                determineWeekdayOrWeekendActive(weekdayWeekendAverages.weekdayAverage, weekdayWeekendAverages.weekendAverage);
+                
+                var labels = ["Weekday", "Weekend"];
                 var dataSets = 
                 [
                     {
@@ -74,6 +76,26 @@ angular.module('app.services.healthKit')
                 deferred.resolve(chartDataContainer);
         	});
         	return deferred.promise;
+        }
+
+        /* determine if weekday or weekend is more active and save to storage */
+        function determineWeekdayOrWeekendActive(weekdayDuration, weekendDuration){
+            var diff = weekdayDuration - weekendDuration;
+                var denominator = weekendDuration == 0 ? weekdayDuration : weekendDuration;
+                /* handle case where both weekend and weekday activities are 0 */
+                if (denominator == 0){
+                    decisionTreeStorage.weekdayOrWeekendActive = "equal";
+                }
+
+                var percentDiff = diff/denominator * 100;
+                if(percentDiff > 5){
+                    /* weekday > weekend */
+                    decisionTreeStorage.weekdayOrWeekendActive = "weekday";
+                }else if(percentDiff < -5){
+                    decisionTreeStorage.weekdayOrWeekendActive = "weekend";          
+                }else{
+                    decisionTreeStorage.weekdayOrWeekendActive = "equal";
+                }
         }
 
         function getActivityDurationByDate(){
@@ -156,21 +178,14 @@ angular.module('app.services.healthKit')
             return deferred.promise;
         }
 
+        function getWeekdayOrWeekendActive(){
+            return decisionTreeStorage.weekdayOrWeekendActive;
+        }
+
         function getMostActiveTimeOfWeek(){
             var deferred = $q.defer();
-            getWeekdayWeekendAverages().then(function(chartDataContainer){
-                var weekday = chartDataContainer.dataSets[0].data[0];
-                var weekend = chartDataContainer.dataSets[0].data[1];
-                var diff = weekday - weekend;
-                var denominator = weekend == 0 ? weekday : weekend;
-                /* handle case where both weekend and weekday activities are 0 */
-                if (denominator == 0){
-                    deferred.resolve(treeData['weekdayEqualWeekends']);
-                }
-
-                var percentDiff = diff/denominator * 100;
-
-                if(percentDiff > 5){
+            var weekdayOrWeekendActive = decisionTreeStorage.weekdayOrWeekendActive;
+                if(weekdayOrWeekendActive === "weekday"){
                     /* weekday > weekend */
                     getWeekdayTimesOfDayAverages().then(function(response){
                         var maxTimeOfDay = _.max(response, function(timeOfDay){
@@ -187,7 +202,7 @@ angular.module('app.services.healthKit')
                         deferred.resolve(mostActiveTimeOfWeek);
                     });
 
-                }else if(percentDiff < -5){
+                }else if(weekdayOrWeekendActive === "weekend"){
                     /* weekend > weekday */
                   getWeekendTimesOfDayAverages().then(function(response){
                         var maxTimeOfDay = _.max(response, function(timeOfDay){
@@ -220,10 +235,79 @@ angular.module('app.services.healthKit')
                         deferred.resolve(mostActiveTimeOfWeek);
                     });                
                 }
-            });
 
             return deferred.promise;
         }
+
+
+        // function getMostActiveTimeOfWeek(){
+        //     var deferred = $q.defer();
+        //     getWeekdayWeekendAverages().then(function(chartDataContainer){
+        //         var weekday = chartDataContainer.dataSets[0].data[0];
+        //         var weekend = chartDataContainer.dataSets[0].data[1];
+        //         var diff = weekday - weekend;
+        //         var denominator = weekend == 0 ? weekday : weekend;
+        //         /* handle case where both weekend and weekday activities are 0 */
+        //         if (denominator == 0){
+        //             deferred.resolve(treeData['weekdayEqualWeekends']);
+        //         }
+
+        //         var percentDiff = diff/denominator * 100;
+
+        //         if(percentDiff > 5){
+        //             /* weekday > weekend */
+        //             getWeekdayTimesOfDayAverages().then(function(response){
+        //                 var maxTimeOfDay = _.max(response, function(timeOfDay){
+        //                     return timeOfDay.duration;
+        //                 });
+                        
+        //                 var mostActiveTimeOfWeek = 
+        //                 {
+        //                     timeOfWeek: "weekday",
+        //                     timeOfDay: maxTimeOfDay.timeOfDay,
+        //                     duration: maxTimeOfDay.duration
+        //                 };
+
+        //                 deferred.resolve(mostActiveTimeOfWeek);
+        //             });
+
+        //         }else if(percentDiff < -5){
+        //              weekend > weekday 
+        //           getWeekendTimesOfDayAverages().then(function(response){
+        //                 var maxTimeOfDay = _.max(response, function(timeOfDay){
+        //                     return timeOfDay.duration;
+        //                 });
+                        
+        //                 var mostActiveTimeOfWeek = 
+        //                 {
+        //                     timeOfWeek: "weekend",
+        //                     timeOfDay: maxTimeOfDay.timeOfDay,
+        //                     duration: maxTimeOfDay.duration
+        //                 };
+
+        //                 deferred.resolve(mostActiveTimeOfWeek);
+        //             });                
+        //         }else{
+        //             /* equal, display weekday */
+        //           getWeekdayTimesOfDayAverages().then(function(response){
+        //                 var maxTimeOfDay = _.max(response, function(timeOfDay){
+        //                     return timeOfDay.duration;
+        //                 });
+                        
+        //                 var mostActiveTimeOfWeek = 
+        //                 {
+        //                     timeOfWeek: "weekday",
+        //                     timeOfDay: maxTimeOfDay.timeOfDay,
+        //                     duration: maxTimeOfDay.duration
+        //                 };
+
+        //                 deferred.resolve(mostActiveTimeOfWeek);
+        //             });                
+        //         }
+        //     });
+
+        //     return deferred.promise;
+        // }
 
         function getWeekendTimesOfDayAverages(){
             var deferred = $q.defer();
@@ -273,12 +357,6 @@ angular.module('app.services.healthKit')
                     duration: weekdayEveningAverage
                 },
             ];
-            
-            // var timesOfDayAverages = {
-            //     "morning": weekdayMorningAverage,
-            //     "afternoon": weekdayAfternoonAverage,
-            //     "evening": weekdayEveningAverage
-            // };
 
             return timesOfDayAverages;
         }
@@ -472,6 +550,7 @@ angular.module('app.services.healthKit')
                 getCombinedTimesOfDayAverages: getCombinedTimesOfDayAverages,
                 getMostActiveTimeOfWeek: getMostActiveTimeOfWeek,
                 checkHealthKitExists: checkHealthKitExists,
-                requestAuthorization: requestAuthorization
+                requestAuthorization: requestAuthorization,
+                getWeekdayOrWeekendActive: getWeekdayOrWeekendActive
 			}}]
 			);

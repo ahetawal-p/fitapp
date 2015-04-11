@@ -20,7 +20,6 @@ angular.module('app.utils')
 			dateTimeUtil,
 			commonFunc) {
 
-
 	var compareWeekdayWeekends = function(){
 		var deferred = $q.defer();
 
@@ -52,26 +51,14 @@ angular.module('app.utils')
 	var compareWeekdayWeekendsComments = function(){
 		var deferred = $q.defer();
 
-		healthKitService.getWeekdayWeekendAverages().then(function(chartDataContainer){
-				var weekday = chartDataContainer.dataSets[0].data[0];
-				var weekend = chartDataContainer.dataSets[0].data[1];
-				var diff = weekday - weekend;
-				var denominator = weekend == 0 ? weekday : weekend;
-				/* handle case where both weekend and weekday activities are 0 */
-				if (denominator == 0){
-					deferred.resolve(treeData['weekdayEqualWeekends']);
-				}
-
-				var percentDiff = diff/denominator * 100;
-
-				if(percentDiff > 5){
-					deferred.resolve(treeData['weekdayWarrior']);
-				}else if(percentDiff < -5){
-					deferred.resolve(treeData['weekendWarrior']);
-				}else{
-					deferred.resolve(treeData['weekdayEqualWeekendWarrior']);
-				}
-		});
+		var weekdayOrWeekendActive = healthKitService.getWeekdayOrWeekendActive();
+		if (weekdayOrWeekendActive === "weekday"){
+			deferred.resolve(treeData['weekdayWarrior']);
+		} else if (weekdayOrWeekendActive === "weekend"){
+			deferred.resolve(treeData['weekendWarrior']);			
+		} else {
+			deferred.resolve(treeData['weekdayEqualWeekendWarrior']);
+		}
 
 		return deferred.promise;
 	}
