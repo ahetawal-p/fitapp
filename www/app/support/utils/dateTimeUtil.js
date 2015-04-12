@@ -3,7 +3,7 @@ angular.module('app.utils')
 /**
  * utility class that processes/reformats date
  */
- .factory('dateTimeUtil', [ '$localstorage', function($localstorage) {
+ .factory('dateTimeUtil', [ '$localstorage', '$translate', function($localstorage, $translate) {
     function getAmPm(timeString){
         var timeObj = moment(timeString, "HH");
         return timeObj.format("hA");
@@ -92,32 +92,36 @@ angular.module('app.utils')
     function getDurationStringFromSeconds(durationInSeconds){
         var totalMinutes = Math.ceil(durationInSeconds/60);
         var convertedHours = Math.floor(totalMinutes/60);
-
+        var minText = $translate.instant("Minute_Text");
+        var hourText = $translate.instant("Hour_Text");
+        
         if (convertedHours >= 1){
             var leftOverMinutes = totalMinutes - convertedHours * 60;
-            var durationString = convertedHours.toString().concat(" hr ")
-            .concat(leftOverMinutes).concat(" min ");
+            var durationString = convertedHours.toString().concat(" ").concat(hourText).concat(" ")
+            .concat(leftOverMinutes).concat(" ").concat(minText).concat(" ");
 
             return durationString;
         }
 
-        var durationString = totalMinutes.toString().concat(" min ");
+        var durationString = totalMinutes.toString().concat(" ").concat(minText).concat(" ");
 
         return durationString;
     }
 
     function getDurationStringFromMinutes(durationInMinutes){
         var convertedHours = Math.floor(durationInMinutes/60);
+        var minText = $translate.instant("Minute_Text");
+        var hourText = $translate.instant("Hour_Text");
 
         if (convertedHours >= 1){
             var leftOverMinutes = durationInMinutes - convertedHours * 60;
-            var durationString = convertedHours.toString().concat(" hr ")
-            .concat(leftOverMinutes).concat(" min ");
+            var durationString = convertedHours.toString().concat(" ").concat(hourText).concat(" ")
+            .concat(leftOverMinutes).concat(" ").concat(minText).concat(" ");
 
             return durationString;
         }
 
-        var durationString = durationInMinutes.toString().concat(" min ");
+        var durationString = durationInMinutes.toString().concat(" ").concat(minText).concat(" ");
 
         return durationString;
     }

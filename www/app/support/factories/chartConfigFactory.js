@@ -1,7 +1,7 @@
 angular.module('app.factories')
 
-.factory('chartConfigFactory',['dateTimeUtil',
-    function(dateTimeUtil) {
+.factory('chartConfigFactory',['dateTimeUtil', '$translate',
+    function(dateTimeUtil, $translate) {
 
         /* create charts for conversation page */
         function createConversationChartConfig(chartDataContainer, chartType, chartTitle, firstBarLabel, secondBarLabel) {
@@ -266,7 +266,8 @@ angular.module('app.factories')
 
             var avgTotalDuration = getTotalDuration(chartDataContainer.dataSets[1].data);
             var avgTotalDurationString = dateTimeUtil.getDurationStringFromSeconds(avgTotalDuration);
-
+            var lineChartAverageText = $translate.instant("Line_Chart_Average");
+            var lineChartTodayText = $translate.instant("Line_Chart_Today");
             var chartConfig = {
                 title: {
                     text: ""
@@ -295,7 +296,9 @@ angular.module('app.factories')
                     },
                     labels: {
                         items: [{
-                            html: '<div id=""><span>TODAY</span><br><span>' + todayTotalDurationString + '</span></div>',
+                            html: '<div id=""><span>' + lineChartTodayText + '</span><br><span>' + todayTotalDurationString + '</span></div>',
+
+                            // html: '<div id=""><span>TODAY</span><br><span>' + todayTotalDurationString + '</span></div>',
                             style: {
                                 left: "10px",
                                 top: "5px",
@@ -308,7 +311,7 @@ angular.module('app.factories')
 
                         },
                         {
-                            html: '<div id="averageDurationLabel"><span>AVG</span><br><span>' + avgTotalDurationString + '</span>',
+                            html: '<div id="averageDurationLabel"><span>' + lineChartAverageText + '</span><br><span>' + avgTotalDurationString + '</span>',
                             style: {
                                 left: "10px",
                                 top: "40px",
