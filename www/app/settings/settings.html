@@ -8,7 +8,7 @@
   <div class="item item-divider" translate="General_Settings">
   </div>
   <a class="item item-icon-right" ng-click="vm.openEditProfileModal()">
-    Edit Profile
+  {{'Edit_Profile' | translate}}
     <i class="icon ion-chevron-right icon-accessory"></i>
   </a>
 <!--   <a class="item item-icon-right" href="#">
@@ -24,18 +24,22 @@
   </a> -->
   <div class="item item-divider" translate="Support_Settings">
   </div>
-  <a class="item" translate="Report_Problem" ng-click="vm.reportProblem()">
+  <a class="item" ng-click="vm.reportProblem()">
+  {{ "Report_Problem" | translate}}
   </a>
-  <a class="item" translate="Give_Feedback" ng-click="vm.giveFeedback()">
+  <a class="item" ng-click="vm.giveFeedback()">
+  {{"Give_Feedback" | translate}}
   </a>
 <!--     <a class="item item-icon-right" href="#">
     FAQ
     <i class="icon ion-chevron-right icon-accessory"></i>
   </a> -->
-  <a class="item item-icon-right" translate="Privacy" href="#">
+  <a class="item item-icon-right" href="#">
+    {{"Privacy" | translate}}
     <i class="icon ion-chevron-right icon-accessory"></i>
   </a>
-  <a class="item item-icon-right" translate="Terms_Of_Service" href="#">
+  <a class="item item-icon-right" href="#">
+      {{"Terms_Of_Service" | translate}}
     <i class="icon ion-chevron-right icon-accessory"></i>
   </a>
 </div>

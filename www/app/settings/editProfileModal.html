@@ -1,30 +1,30 @@
 <ion-modal-view>
     <ion-header-bar>
-        <button class="button button-clear button-primary" ng-click="editProfileModal.cancel()">Cancel</button>
-        <h1 class="title">Profile</h1>
-        <button class="button button-clear button-primary" ng-click="editProfileModal.done()">Done</button>
+        <button class="button button-clear button-primary" ng-click="editProfileModal.cancel()">{{"Cancel_Button_Text" | translate}}</button>
+        <h1 class="title">{{"Profile" | translate}}</h1>
+        <button class="button button-clear button-primary" ng-click="editProfileModal.done()">{{"Done_Button_Text" | translate}}</button>
     </ion-header-bar>
     <ion-content>
         <div class="list">
             <div class="item item-divider">
                 </br>
-                USER INFO
+                {{"User_Info" | translate}}
             </div>
             <label class="item item-input">
-                <span class="input-label">Email</span>
+                <span class="input-label">{{"Email" | translate}}</span>
                 <span>{{vm.myProfile.email}}</span>
             </label>
-            <label class="item item-input">
+<!--             <label class="item item-input">
                 <span class="input-label">Name</span>
                 <input type="text" ng-model="vm.myProfile.name" />
-            </label>
+            </label> -->
             <label class="item item-input">
-                <span class="input-label">Nickname</span>
+                <span class="input-label">{{"Nickname" | translate}}</span>
                 <input type="text" ng-model="vm.nickname" ng-change="vm.setNickname()"/>
             </label>
             <div class="item item-divider">
                 </br>
-                LANGUAGE    
+                {{"Language" | translate}}    
             </div>
                 <ion-radio  ng-repeat="language in vm.languages" ng-value="language.id" ng-model="vm.selectedLanguageId" ng-click="vm.changeLanguage(language)" name="language">{{language.languageName}}
                 </ion-radio>

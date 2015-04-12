@@ -14,7 +14,7 @@
 			},
 			{
 				id: "zh_ZH",
-				languageName: "Chinese"
+				languageName: "中文"
 			}
 		];
 
