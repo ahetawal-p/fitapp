@@ -7,7 +7,8 @@
             'healthKitService',
             'chartConfigFactory',
             '$ionicLoading',
-            function($scope, $state, $ionicModal, healthKitService, chartConfigFactory, $ionicLoading) {
+            'dateTimeUtil',
+            function($scope, $state, $ionicModal, healthKitService, chartConfigFactory, $ionicLoading, dateTimeUtil) {
 
                 var vm = this;
                 $ionicLoading.show({
@@ -22,13 +23,17 @@
                 loadActivities("regular");
 
                 /* testing here */
-                healthKitService.getCombinedTimesOfDayAverages().then(function(response){
-                    console.log("RESOPNSE");
-                    console.log(response);
-                });
+                // healthKitService.getCombinedTimesOfDayAverages().then(function(response){
+                //     console.log("RESOPNSE");
+                //     console.log(response);
+                // });
 
                 vm.reloadActivities = function(){
                     loadActivities("reload");
+                }
+
+                vm.localizeDateString = function(date){
+                    return dateTimeUtil.getLocalizedDateString(date);
                 }
 
                 function loadActivities(loadType) {

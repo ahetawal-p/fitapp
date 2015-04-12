@@ -6,7 +6,7 @@
         </ion-refresher>
         <div ng-repeat="chartConfig in vm.chartConfigs">
             <highchart id="activityChart" config="chartConfig"></highchart>
-            <h5 id="todaysDateDisplay">TODAY {{vm.todaysDate | date:'MMM d' | uppercase}}</h5>
+            <h5 id="todaysDateDisplay" translate="Today_Display"></h5>
         </div>
 
         <div class="list">

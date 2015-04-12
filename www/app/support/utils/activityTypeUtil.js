@@ -21,9 +21,9 @@ angular.module('app.utils')
       var isRun = isRunActivity(distanceInKm, durationInSec);
 
       if (isRun){
-        return "run";
+        return "Activity_Type_Run";
       } else {
-        return "walk";
+        return "Activity_Type_Walk";
       }
 
     }

@@ -14,17 +14,22 @@ angular.module('app.utils')
 		for (var ii=0; ii<groupedActivities.length; ii++){
 			var groupedActivity = groupedActivities[ii];
 			var calories = calculateCalories(groupedActivity);
-			var durationString = dateTimeUtil.getDurationString(groupedActivity.startDate, groupedActivity.endDate);
+			var durationString = dateTimeUtil.getDurationInMinutes(groupedActivity.startDate, groupedActivity.endDate);
 			var distanceString = groupedActivity.distance.toFixed(2) + " km";
-			var description = distanceString + ", " + calories + " cal";
+			// var description = distanceString + ", " + calories + " cal";
+			var distance = groupedActivity.distance.toFixed(2);
 			var date = dateTimeUtil.getFormattedDateString(groupedActivity.startDate);
+			var localizedDate = dateTimeUtil.getLocalizedDateString(groupedActivity.startDate);
 			var timeStamp = dateTimeUtil.getTimeStamp(groupedActivity.startDate);
 			var activityType = groupedActivity.activityType;
 			var img = iconUtil.getIcon(groupedActivity);
 			processedActivities.push({
 				timeStamp: timeStamp,
 				date: date,
-				description: description,
+				localizedDate: localizedDate,
+				// description: description,
+				distance: distance,
+				calories: calories,
 				duration: durationString,
 				activityType: activityType,
 				img: img

@@ -3,8 +3,23 @@
  	"App_Full_Name" : "PokiFit",
  	"Enter_Name"    : "Enter your nick name?",
  	"Clear_Data"	: "Clear Data",
- 	
-
+	"Activity_List_Tab" : "List",
+ 	"Activity_Charts_Tab" : "Charts",
+ 	"Activity_Page" : "Activities",
+ 	"Settings_Page" : "Settings",
+ 	"General_Settings" : "GENERAL",
+ 	"Support_Settings" : "SUPPORT",
+ 	"Report_Problem" : "Report a Problem",
+ 	"Give_Feedback" : "Give Feedback",
+ 	"Privacy" : "Privacy",
+ 	"Terms_Of_Service" : "Terms of Service",
+ 	"Today_Display" : "Today",
+ 	"Activity_Duration_Type" : "{{duration}} min {{activityType}}",
+ 	 "Distance_Calories" : "{{distance}} km {{calories}} cal",
+ 	"Activity_Type_Walk" : "walk",
+ 	"Activity_Type_Run" : "run",
+ 	"km" : "km",
+ 	"cal" : "cal",
  	"6"  : "Sounds Great",
  	"7"  : "Please Explain",
  	"11" : "No Thanks",
@@ -60,5 +75,4 @@
 	"50" : "Thats all I got for now",
 	"51" : "Keep on bringing your phone with you to ensure data is tracked",
 	"52" : "Sorry, but this app requires HealthKit to run"
-
 }

@@ -1,6 +1,6 @@
   <ion-view id="activityPage" title="Activity" ng-controller="ActivityParentCtrl as vm">
     <ion-header-bar align-title="center" class="bar">
-       <h1 class="title">PokiFit</h1>
+       <h1 class="title" translate="App_Full_Name"></h1>
 <!--        <div class="buttons">
         <button class="button button-clear" ng-click="vm.createActivity()">
           <i class="icon ion-ios7-plus-empty icon-accessory"></i>
@@ -9,11 +9,9 @@
     </ion-header-bar>
     <div class="bar bar-subheader">
       <div class=" button-bar">
-        <a class="button button-light button-ios" ng-class="{ 'button\-positive': demo == 'ios' }" ng-click="setPlatform('ios')" ui-sref="tab.activity.activityList">
-          List
+        <a class="button button-light button-ios" ng-class="{ 'button\-positive': demo == 'ios' }" ng-click="setPlatform('ios')" ui-sref="tab.activity.activityList" translate="Activity_List_Tab">
         </a>
-        <a class="button button-light button-ios" ng-class="{ 'button\-positive': demo == 'android' }" ng-click="setPlatform('android')" ui-sref="tab.activity.activityChart">
-          Chart
+        <a class="button button-light button-ios" ng-class="{ 'button\-positive': demo == 'android' }" ng-click="setPlatform('android')" ui-sref="tab.activity.activityChart" translate="Activity_Charts_Tab">
         </a>
       </div>
     </div>

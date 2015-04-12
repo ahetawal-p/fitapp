@@ -1,12 +1,11 @@
 <ion-view view-title="Settings" ng-controller="SettingsCtrl as vm">
 <ion-header-bar align-title="center" class="bar">
-  <h1 class="title">Settings</h1>
+  <h1 class="title" translate="Settings_Page"></h1>
 </ion-header-bar>
   <ion-content class="has-header">
   <div class="list">
-  <div class="item item-divider">
-    </br>
-    GENERAL
+
+  <div class="item item-divider" translate="General_Settings">
   </div>
   <a class="item item-icon-right" ng-click="vm.openEditProfileModal()">
     Edit Profile
@@ -23,26 +22,20 @@
   <a class="item" href="#">
     Share lark with friends
   </a> -->
-  <div class="item item-divider">
-    </br>
-    SUPPORT
+  <div class="item item-divider" translate="Support_Settings">
   </div>
-  <a class="item" item-icon-right"" ng-click="vm.reportProblem()">
-    Report a Problem
+  <a class="item" translate="Report_Problem" ng-click="vm.reportProblem()">
   </a>
-  <a class="item" ng-click="vm.giveFeedback()">
-    Give Feedback
+  <a class="item" translate="Give_Feedback" ng-click="vm.giveFeedback()">
   </a>
 <!--     <a class="item item-icon-right" href="#">
     FAQ
     <i class="icon ion-chevron-right icon-accessory"></i>
   </a> -->
-  <a class="item item-icon-right" href="#">
-    Privacy
+  <a class="item item-icon-right" translate="Privacy" href="#">
     <i class="icon ion-chevron-right icon-accessory"></i>
   </a>
-  <a class="item item-icon-right" href="#">
-    Terms of Service
+  <a class="item item-icon-right" translate="Terms_Of_Service" href="#">
     <i class="icon ion-chevron-right icon-accessory"></i>
   </a>
 </div>

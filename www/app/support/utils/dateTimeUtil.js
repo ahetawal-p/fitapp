@@ -3,7 +3,7 @@ angular.module('app.utils')
 /**
  * utility class that processes/reformats date
  */
- .factory('dateTimeUtil', [function() {
+ .factory('dateTimeUtil', [ '$localstorage', function($localstorage) {
     function getAmPm(timeString){
         var timeObj = moment(timeString, "HH");
         return timeObj.format("hA");
@@ -12,6 +12,17 @@ angular.module('app.utils')
     function getFormattedDateString(date){
         var dateObj = moment(date);
         return dateObj.format("YYYY-MM-DD");
+    }
+
+    function getLocalizedDateString(date){
+        if ($localstorage.getUserLanguageId() == "zh_ZH"){
+            moment.locale('zh-cn');
+        } else {
+            moment.locale('en-US');
+        }
+
+        var dateObj = moment(date);
+        return dateObj.format("ddd MMM Do");
     }
 
     function getDayOfMonth(date){
@@ -60,6 +71,14 @@ angular.module('app.utils')
     function getDurationString(startDate, endDate){
         var timeDiffInSeconds = getDurationInSeconds(startDate, endDate);
         return getDurationStringFromSeconds(timeDiffInSeconds);
+    }
+
+    function getDurationInMinutes(startDate, endDate){
+        var startDateObj = moment(startDate);
+        var endDateObj = moment(endDate);
+        var diff = endDateObj.diff(startDateObj, "seconds");
+
+        return getMinutesFromSeconds(diff);
     }
 
     function getDurationInSeconds(startDate, endDate){
@@ -140,10 +159,12 @@ angular.module('app.utils')
 
     return {
         getFormattedDateString: getFormattedDateString,
+        getLocalizedDateString: getLocalizedDateString,
         getTimeStamp: getTimeStamp,
         getDurationString: getDurationString,
         getDurationInHours: getDurationInHours,
         getDurationInSeconds: getDurationInSeconds,
+        getDurationInMinutes: getDurationInMinutes,
         getDurationStringFromSeconds: getDurationStringFromSeconds,
         getMonthDay: getMonthDay,
         getMinutesFromSeconds: getMinutesFromSeconds,
