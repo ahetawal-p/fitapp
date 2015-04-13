@@ -1,6 +1,8 @@
 {
  	"App_Nick_Name" : "贝奇",
  	"App_Full_Name" : "贝奇小助手",
+ 	"Email_Validation_Message" : "Enter a valid email address CH",
+ 	"Login_Text" : "Login CH",
  	"Enter_Name"    : "Enter your nick name?",
  	"Clear_Data"	: "清除資料",
  	"Activity_List_Tab" : "列表",

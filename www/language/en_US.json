@@ -1,6 +1,8 @@
 {
  	"App_Nick_Name" : "Poki",
  	"App_Full_Name" : "PokiFit",
+ 	"Email_Validation_Message" : "Enter a valid email address",
+ 	"Login_Text" : "Login",
  	"Enter_Name"    : "Enter your nick name?",
  	"Clear_Data"	: "Clear Data",
 	"Activity_List_Tab" : "List",

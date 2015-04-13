@@ -231,3 +231,9 @@
   background-image: none;
   border-top: none;
 }
+
+/* login page */
+#emailValidationMsg {
+  color: white;
+  margin-top:15px;
+}

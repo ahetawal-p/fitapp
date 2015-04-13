@@ -1,9 +1,12 @@
 	angular.module('app.login').controller('LoginCtrl', ['$state', '$scope', LoginCtrl]);
 	function LoginCtrl($state, $scope){
 		var vm = this;
+		vm.user = {
+			email: ''
+		};
 
 		// vm.myProfile = stubService.getProfile();
-		vm.login = function(){
+		vm.logIn = function(form){
                 // Wechat.isInstalled(function (installed) {
                 //     alert("Wechat installed: " + (installed ? "Yes" : "No"));
                 // });
@@ -17,9 +20,11 @@
                     alert("Failed: " + reason);
 			});
 
-	*/
-            $state.go('tab.conversation');
-
-
+			*/
+			console.log(form);
+			if (form.$valid){
+				console.log("Log in", vm.email);
+	            $state.go('tab.conversation');
+			}
 		}
 	};
