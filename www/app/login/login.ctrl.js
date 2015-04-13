@@ -1,8 +1,18 @@
-	angular.module('app.login').controller('LoginCtrl', ['$state', '$scope', LoginCtrl]);
-	function LoginCtrl($state, $scope){
+	angular.module('app.login').controller('LoginCtrl', ['$state', '$scope', '$localstorage', LoginCtrl]);
+	function LoginCtrl($state, $scope, $localstorage){
 		var vm = this;
+
+		/* check if user exists. if so, redirect to conversation.
+		   if not, then display login form */
+		vm.user = $localstorage.getUser();
+
+		if (vm.user){
+	        $state.go('tab.conversation');
+		}
+
 		vm.user = {
-			email: ''
+			email: '',
+			nickname: ''
 		};
 
 		// vm.myProfile = stubService.getProfile();
@@ -21,7 +31,6 @@
 			});
 
 			*/
-			console.log(form);
 			if (form.$valid){
 				console.log("Log in", vm.email);
 	            $state.go('tab.conversation');

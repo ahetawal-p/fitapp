@@ -9,7 +9,7 @@ angular.module('app.services.healthKit')
         // }else{
         //     api = healthKitStubApi;getMostActiveTimeOfWeek
         // }
-         //    api = healthKitStubApi;
+         //api = healthKitStubApi;
 
          api = healthKitApi;
 
