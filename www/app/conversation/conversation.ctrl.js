@@ -77,11 +77,12 @@ angular.module('app.conversation')
 			/*
 			* Fetch each nodes text value from the text file
 			* based on the current language in use.
-			* TODO: Need to add randomization for the nodes.
+			* 
 			*/
 			var getTextData = function(message){
 				if(typeof message.text === 'object'){
-					var randomIndex = 0; // used for randomizing the text nodes in future
+					var randomIndex = Math.floor((Math.random() * message.text.length));
+					//var randomIndex = 0; // used for randomizing the text nodes in future
 					message.text = message.text[randomIndex];
 				} 
 				return message;

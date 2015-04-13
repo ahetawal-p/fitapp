@@ -45,6 +45,8 @@
  	"Activity_Type_Run" : "run",
  	"km" : "km",
  	"cal" : "cal",
+ 	
+
  	"6"  : "Sounds Great",
  	"7"  : "Please Explain",
  	"11" : "No Thanks",
@@ -56,6 +58,13 @@
  	"35" : "Wow",
  	"38" : "Yes",
 	"39" : "No",
+	"46" : "Thanks",
+	"64" : "Yay!",
+	"65" : "Busy...",
+	"66" : "Taking a break",
+	"73" : "Thank you",
+	"76" : "Eating now",
+	"83" : "Good to know",
 
  	"0"  : "Hi There I am Poki",
  	"1"  : "What is your name?",
@@ -93,11 +102,43 @@
 	"43" : "A weekday warrior!",
 	"44" : "A weekend warrior!",
 	"45" : "Good job keeping the pace up everyday!",
-	"46" : "Thanks",
 	"47" : "On $$s, you're the most active in the %%s",
 	"48" : "You usually get around $$ minutes of activity around then",
 	"49" : "$$ is your power hour huh?",
 	"50" : "Thats all I got for now",
 	"51" : "Keep on bringing your phone with you to ensure data is tracked",
-	"52" : "Sorry, but this app requires HealthKit to run"
+	"52" : "Sorry, but this app requires HealthKit to run",
+
+	"53" : "Good Morning {{nickname}}!",
+	"54" : "Good to see you this early!",
+	"55" : "Morning, Sunshine!",
+	"56" : "Collecting data...",
+	"57" : "Analyzing your data...",
+	"58" : "Syncing your data...",
+	"59" : "You have logged $$ so far.",
+	"60" : "Good job keeping up the pace!", 
+	"61" : "Well done! Way to go!",
+	"62" : "You are doing more than your daily average!",
+	"63" : "Your daily average is no match for today!",
+	"67" : "Let's take a look at yesterday's activity.",
+	"68" : "It's time to summarize yesterday's activities.",
+	"69" : "You were active for $$ minutes yesterday!",
+	"70" : "Horay! You got xxx active minutes yesterday!",
+	"71" : "Great job to keep your feet moving!",
+	"72" : "Awesome, you were more active than your average weekday!",
+	"74" : "It is a bit less than what you have usually.",
+	"75" : "Have you eaten breakfast yet?",
+	"77" : "Good. Eating breakfast can help booting up your metabolism.",
+	"78" : "Also, many studies have shown that breakfast eaters tend to weigh less than breakfast skippers.",
+	"79" : "Eating breakfast will make you less hungry during lunch and comsume less.",
+	"80" : "You should consider eating breakfast. it can help booting up your metabolism.",
+	"81" : "",
+	"82" : "",
+	"84" : "Have a wonderful day!",
+	"85" : "That's it from me so far. Talk to you later!",
+	"86" : "Seems you are a bit under the weather. What's up.",
+	"87" : "You are less active so far. What's up?"
+
+
+
 }

@@ -136,6 +136,27 @@ angular.module('app.utils')
 	}
 
 
+	var loggedInTimeSoFar = function(currentNode){
+		var deferred = $q.defer();
+
+		healthKitService.getMostRecentActivity().then(function(response){
+				$translate(currentNode.text[0]).then(function (translated){
+					var weekdayOrWeekend = response.timeOfWeek;
+					var timeOfDay = response.timeOfDay;
+					var replaced = translated.replace("$$", weekdayOrWeekend);
+					replaced = replaced.replace("%%", timeOfDay);
+					currentNode.text = replaced;
+					currentNode.type = null;
+					deferred.resolve(currentNode);
+				});
+		});
+
+		return deferred.promise;
+
+	}
+
+
+
 	return {
 
 		calculateAverageMinsPerDay 	: calculateAverageMinsPerDay,
@@ -143,7 +164,8 @@ angular.module('app.utils')
 		calculatePercentOnButt		: calculatePercentOnButt,
 		mostActiveTimeOfWeekDuration: mostActiveTimeOfWeekDuration,
 		powerHour					: powerHour,
-		mostActiveTimeOfWeek 		: mostActiveTimeOfWeek
+		mostActiveTimeOfWeek 		: mostActiveTimeOfWeek,
+		loggedInTimeSoFar			: loggedInTimeSoFar
 
 	}
 

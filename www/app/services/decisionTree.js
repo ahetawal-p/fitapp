@@ -9,12 +9,14 @@ angular.module('app.services')
 	'$translate', 
 	'dateTimeUtil',
 	'onboardingTree',
+	'wkDayMorningTree',
 	function( 
 			$ionicPlatform, 
 			$localstorage, 
 			$translate, 
 			dateTimeUtil,
-			onboardingTree
+			onboardingTree,
+			wkDayMorningTree
 			) {
 
 
@@ -61,9 +63,9 @@ angular.module('app.services')
     	} else {
     		if(dayName != 'SUNDAY' && dayName !='SATURDAY') {
 		    	 if(currentHour >=5 && currentHour < 12){ // 5am - 12pm
-		    		return onboardingTree.getTree();
+		    		return wkDayMorningTree.getTree();
 		    	} else if(currentHour >=12 && currentHour < 17){ // 12pm - 5pm
-		    		return onboardingTree.getTree();
+		    		return wkDayMorningTree.getTree();
 		    	} else if(currentHour >=17 && currentHour < 21) { //5pm - 9pm
 		    		return onboardingTree.getTree();
 		    	} else if(currentHour >=21 || currentHour < 5) {
