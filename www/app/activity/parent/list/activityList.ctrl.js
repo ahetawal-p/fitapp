@@ -28,6 +28,11 @@
                 //     console.log(response);
                 // });
 
+                /* testing */
+                    healthKitService.getMostRecentActivity().then(function(response){
+                            console.log('most recent', response);
+                    });
+
                 vm.reloadActivities = function(){
                     loadActivities("reload");
                 }

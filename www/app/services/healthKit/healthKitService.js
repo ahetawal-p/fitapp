@@ -9,7 +9,7 @@ angular.module('app.services.healthKit')
         // }else{
         //     api = healthKitStubApi;getMostActiveTimeOfWeek
         // }
-         //api = healthKitStubApi;
+        // api = healthKitStubApi;
 
          api = healthKitApi;
 
@@ -239,76 +239,8 @@ angular.module('app.services.healthKit')
             return deferred.promise;
         }
 
-
-        // function getMostActiveTimeOfWeek(){
-        //     var deferred = $q.defer();
-        //     getWeekdayWeekendAverages().then(function(chartDataContainer){
-        //         var weekday = chartDataContainer.dataSets[0].data[0];
-        //         var weekend = chartDataContainer.dataSets[0].data[1];
-        //         var diff = weekday - weekend;
-        //         var denominator = weekend == 0 ? weekday : weekend;
-        //         /* handle case where both weekend and weekday activities are 0 */
-        //         if (denominator == 0){
-        //             deferred.resolve(treeData['weekdayEqualWeekends']);
-        //         }
-
-        //         var percentDiff = diff/denominator * 100;
-
-        //         if(percentDiff > 5){
-        //             /* weekday > weekend */
-        //             getWeekdayTimesOfDayAverages().then(function(response){
-        //                 var maxTimeOfDay = _.max(response, function(timeOfDay){
-        //                     return timeOfDay.duration;
-        //                 });
-                        
-        //                 var mostActiveTimeOfWeek = 
-        //                 {
-        //                     timeOfWeek: "weekday",
-        //                     timeOfDay: maxTimeOfDay.timeOfDay,
-        //                     duration: maxTimeOfDay.duration
-        //                 };
-
-        //                 deferred.resolve(mostActiveTimeOfWeek);
-        //             });
-
-        //         }else if(percentDiff < -5){
-        //              weekend > weekday 
-        //           getWeekendTimesOfDayAverages().then(function(response){
-        //                 var maxTimeOfDay = _.max(response, function(timeOfDay){
-        //                     return timeOfDay.duration;
-        //                 });
-                        
-        //                 var mostActiveTimeOfWeek = 
-        //                 {
-        //                     timeOfWeek: "weekend",
-        //                     timeOfDay: maxTimeOfDay.timeOfDay,
-        //                     duration: maxTimeOfDay.duration
-        //                 };
-
-        //                 deferred.resolve(mostActiveTimeOfWeek);
-        //             });                
-        //         }else{
-        //             /* equal, display weekday */
-        //           getWeekdayTimesOfDayAverages().then(function(response){
-        //                 var maxTimeOfDay = _.max(response, function(timeOfDay){
-        //                     return timeOfDay.duration;
-        //                 });
-                        
-        //                 var mostActiveTimeOfWeek = 
-        //                 {
-        //                     timeOfWeek: "weekday",
-        //                     timeOfDay: maxTimeOfDay.timeOfDay,
-        //                     duration: maxTimeOfDay.duration
-        //                 };
-
-        //                 deferred.resolve(mostActiveTimeOfWeek);
-        //             });                
-        //         }
-        //     });
-
-        //     return deferred.promise;
-        // }
-
+        /* average duration for morning, afternoon, and evenings 
+           on the weekend. mainly for onboarding tree */
         function getWeekendTimesOfDayAverages(){
             var deferred = $q.defer();
 
@@ -330,6 +262,9 @@ angular.module('app.services.healthKit')
             return deferred.promise;
         }
 
+        /* average duration for morning, afternoon, and evenings. 
+           mainly used for onboarding tree. can filter results using 
+           filterFunction param */
         function getTimesOfDayAverages(rawActivityObjects, filterFunction){
             var morningStartDateTime = new Date("1/1/1900 05:00");
             var morningEndDateTime = new Date("1/1/1900 12:00");
@@ -361,7 +296,8 @@ angular.module('app.services.healthKit')
             return timesOfDayAverages;
         }
 
-        /* get today's data points vs average */
+        /* get today's data points vs average and use for plotting. data is 
+           contained inside chartDataContainer obj */
         function getDateVsAverageDataPoints(startDateTime, endDateTime){
             var deferred = $q.defer();
             var labels = [];
@@ -396,6 +332,9 @@ angular.module('app.services.healthKit')
             return deferred.promise;
         }
 
+        /* returns average activity duration at each hour (7am, 8am...etc.)
+           between the specified times. feeding in start/end datetime, but only the 
+           time is used */
         function getAverageActivityDataPoints(startDateTime, endDateTime){
 			var deferred = $q.defer();
 			api.getWalkingAndRunningDistance().then(function(walkRunActivities){
@@ -426,7 +365,8 @@ angular.module('app.services.healthKit')
         }
 
 
-
+        /* returns activity durations at each hour (7am, 8am...etc.)between specified 
+           startDateTime and endDateTime */
         function getActivityDataPoints(startDateTime, endDateTime){
         	var deferred = $q.defer();
 			api.getWalkingAndRunningDistanceByDateTime(startDateTime, endDateTime).then(function(walkRunActivities){
@@ -453,6 +393,8 @@ angular.module('app.services.healthKit')
         	return deferred.promise;
         }
 
+        /* get last week's average and the week before. data is 
+           contained inside chartDataContainer obj */
         function getLastVsPreviousWeekAverage(){
             var deferred = $q.defer();
             getTwoWeeksAverages().then(function(response){
@@ -476,6 +418,7 @@ angular.module('app.services.healthKit')
             return deferred.promise;
         }
 
+        /* daily average duration and other users' average */
         function getDailyAverageVsAllUsers(){
             var deferred = $q.defer();
             getDailyAverageDuration().then(function(response){
@@ -511,6 +454,8 @@ angular.module('app.services.healthKit')
         	return deferred.promise;
         }
 
+        /* output today's total activity duration as formatted string
+            ex: 1 hr 5 min */
         function getTodaysDurationSum(){
         	var deferred = $q.defer();
 			api.getWalkingAndRunningDistance().then(function(walkRunActivities){
@@ -521,6 +466,19 @@ angular.module('app.services.healthKit')
         	return deferred.promise;
         }
 
+        /* output yesterday's total activity duration as formatted string
+            ex: 1 hr 5 min */        
+        function getYesterdaysDurationSum(){
+            var deferred = $q.defer();
+            api.getWalkingAndRunningDistance().then(function(walkRunActivities){
+                var total = workoutProcessor.calculateYesterdaysTotalDuration(walkRunActivities);
+                deferred.resolve(total);
+            });
+
+            return deferred.promise;
+        }
+
+        /* timestamp and detailed info of most recent activity */ 
         function getMostRecentActivity(){
         	var deferred = $q.defer();
 			api.getWalkingAndRunningDistance().then(function(walkRunActivities){
@@ -538,6 +496,7 @@ angular.module('app.services.healthKit')
 				getWeekdayWeekendAverages: getWeekdayWeekendAverages,
 				getDailyAverageDuration: getDailyAverageDuration,
 				getTodaysDurationSum: getTodaysDurationSum,
+                getYesterdaysDurationSum: getYesterdaysDurationSum,
 				getMostRecentActivity: getMostRecentActivity,
 				getActivityDataPoints: getActivityDataPoints,
 				getAverageActivityDataPoints: getAverageActivityDataPoints,

@@ -83,8 +83,13 @@ angular.module('app.services.healthKit')
                 permissions // Write permission
             ).then(function(success) {
                 // store that you have permissions
-                console.log("success! " + success);
-               deferred.resolve(success);
+                // $cordovaHealthKit.checkAuthStatus({
+
+                // }, function(response){
+                //         deferred.resolve(response);
+                // }, function(err){
+                //     deferred.reject(err);
+                // });
             }, function(err) {
                 console.log("error! " + err);
                 deferred.reject(err);

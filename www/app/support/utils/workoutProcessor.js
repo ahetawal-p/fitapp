@@ -334,15 +334,42 @@ angular.module('app.utils')
 		return dateTimeUtil.getMinutesFromSeconds(avgSeconds);
 	}
 
+	/* calcualte total activity duration for today */
 	function calculateTodaysTotalDuration(rawActivityObjects){
+		//filter by today's date
+		function todaysFilter(activity){
+			//var activityDate = new Date(activity.startDate.replace(/-/g, "/"));
+			var activityDate = moment(activity.startDate).dayOfYear();
+			var todaysDate = moment().dayOfYear();
+
+			//var time24HoursAgo = new Date(new Date().getTime()-24*60*60*1000);
+			return activityDate === todaysDate;
+		};
+
+		return calculateTotalDuration(rawActivityObjects, todaysFilter);
+	}
+
+	/* calculate total activity duration for yesterday */
+	function calculateYesterdaysTotalDuration(rawActivityObjects){
+		//filter by yesterday's date
+		function yesterdaysFilter(activity){
+			var activityDate = moment(activity.startDate).dayOfYear();
+			var todaysDate = moment().dayOfYear();
+
+			return activityDate === todaysDate;
+		}
+
+		return calculateTotalDuration(rawActivityObjects, yesterdaysFilter);
+	}
+
+	/* calculates total activity duration given a filter function.
+	   used mainly to calculate today/yesterday total activity duration 
+	*/
+	function calculateTotalDuration(rawActivityObjects, filterFunction){
 		var groupedActivities = groupActivities(rawActivityObjects.reverse());
 		//filter by today's date
 		var todaysDate = new Date().getDate();
-		groupedActivities = groupedActivities.filter(function (activity){
-			var activityDate = new Date(activity.startDate.replace(/-/g, "/"));
-			var time24HoursAgo = new Date(new Date().getTime()-24*60*60*1000);
-			return activityDate > time24HoursAgo;
-		});
+		groupedActivities = groupedActivities.filter(filterFunction);
 
 		var totalDuration = 0;
 		for(var ii=0; ii<groupedActivities.length; ii++){
@@ -423,6 +450,7 @@ angular.module('app.utils')
 	return {
 		processWorkouts: processWorkouts,
 		calculateTodaysTotalDuration: calculateTodaysTotalDuration,
+		calculateYesterdaysTotalDuration: calculateYesterdaysTotalDuration,
 		calculateDailyAverageDuration: calculateDailyAverageDuration,
 		calculateWeekdayWeekendAverages: calculateWeekdayWeekendAverages,
 		getActivityDataPoints: getActivityDataPoints,

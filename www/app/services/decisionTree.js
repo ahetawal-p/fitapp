@@ -62,7 +62,7 @@ angular.module('app.services')
     		return onboardingTree.getTree();
     	} else {
     		if(dayName != 'SUNDAY' && dayName !='SATURDAY') {
-		    	 if(currentHour >=5 && currentHour < 12){ // 5am - 12pm
+		    	 if(currentHour >=5 && currentHour < 23){ // 5am - 12pm
 		    		return wkDayMorningTree.getTree();
 		    	} else if(currentHour >=12 && currentHour < 17){ // 12pm - 5pm
 		    		return wkDayMorningTree.getTree();

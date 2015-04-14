@@ -5,16 +5,17 @@
 		/* check if user exists. if so, redirect to conversation.
 		   if not, then display login form */
 		vm.user = $localstorage.getUser();
+		vm.showLogin = false;
 
 		if (vm.user){
 	        $state.go('tab.conversation');
+		} else{
+			vm.showLogin = true;
+			vm.user = {
+				email: '',
+				nickname: ''
+			};
 		}
-
-		vm.user = {
-			email: '',
-			nickname: ''
-		};
-
 		// vm.myProfile = stubService.getProfile();
 		vm.logIn = function(form){
                 // Wechat.isInstalled(function (installed) {
