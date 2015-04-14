@@ -9,9 +9,9 @@ angular.module('app.services.healthKit')
         // }else{
         //     api = healthKitStubApi;getMostActiveTimeOfWeek
         // }
-        // api = healthKitStubApi;
+         api = healthKitStubApi;
 
-         api = healthKitApi;
+         //api = healthKitApi;
 
         function checkHealthKitExists(){
             var deferred = $q.defer();
@@ -122,30 +122,7 @@ angular.module('app.services.healthKit')
             return deferred.promise;
         }
 
-        // function getActivityDurationByDate(){
-        //     var deferred = $q.defer();
-        //     api.getWalkingAndRunningDistance().then(function(walkRunActivities){
-        //         var durationsByDate = workoutProcessor.getActivityDurationByDate(walkRunActivities);
-        //         var dataSets = [];
-        //         var labels = [];
-
-        //         _.each(durationsByDate, function(durationByDate){
-        //             dataSets.push({
-        //                 name: durationByDate.date,
-        //                 data: durationByDate.durationSum
-        //             });
-        //         });
-
-        //         var chartDataContainer = {
-        //             labels: labels,
-        //             dataSets: dataSets
-        //         }
-
-        //         deferred.resolve(chartDataContainer);
-        //     });
-        //     return deferred.promise;
-        // }
-
+        
         function getCombinedTimesOfDayAverages(){
             var deferred = $q.defer();
 
@@ -332,6 +309,30 @@ angular.module('app.services.healthKit')
             return deferred.promise;
         }
 
+        /*
+        * Provides current day and average activity duration
+        */
+        function getDateVsAverageDuration(startDateTime, endDateTime){
+            var deferred = $q.defer();
+            var labels = [];
+            var dataSets = [];
+            var dataPoints = {};
+            getActivityDataPoints(startDateTime, endDateTime).then(function(response){
+                labels = response.times;
+                console.log("response durations: " + response.durations);
+                dataPoints['todayData'] = response.durations[response.durations.length-1];
+            })
+            .then(function(){
+                return getAverageActivityDataPoints(startDateTime, endDateTime);
+            })
+            .then(function(response){
+               dataPoints['avgData'] = response.durations[response.durations.length-1];
+               deferred.resolve(dataPoints);
+            });
+
+            return deferred.promise;
+        }
+
         /* returns average activity duration at each hour (7am, 8am...etc.)
            between the specified times. feeding in start/end datetime, but only the 
            time is used */
@@ -510,6 +511,8 @@ angular.module('app.services.healthKit')
                 getMostActiveTimeOfWeek: getMostActiveTimeOfWeek,
                 checkHealthKitExists: checkHealthKitExists,
                 requestAuthorization: requestAuthorization,
-                getWeekdayOrWeekendActive: getWeekdayOrWeekendActive
+                getWeekdayOrWeekendActive: getWeekdayOrWeekendActive,
+                getDateVsAverageDuration : getDateVsAverageDuration
+
 			}}]
 			);

@@ -21,15 +21,20 @@ angular.module('app.utils')
 			commonFunc) {
 
 
-
 	var compareCurrentToDailyAvg = function(){
 		var deferred = $q.defer();
+		var startDate, endDate;
+		startDate = moment();
+       	startDate.hours(0);
+       	startDate.minutes(0); // 00:00 hours
+       	endDate = moment(); // right now
 
-		healthKitService.getCombinedTimesOfDayAverages().then(function(response){
-			var result = 50;
-			if(result > 50){
+       	healthKitService.getDateVsAverageDuration(startDate, endDate).then(function(response){
+			var today = response['todayData'];
+			var avgData = response['avgData'];
+			if(today >= avgData){
 				deferred.resolve(treeData['aboveAvg']);
-			}else {
+			} else {
 				deferred.resolve(treeData['belowAvg']);	
 			}
 			
@@ -42,12 +47,23 @@ angular.module('app.utils')
 
 	var comparePreviousToDailyAvg = function(){
 		var deferred = $q.defer();
+		var startDate, endDate;
+		startDate = moment().subtract(1, "day");
+       	startDate.hours(0);
+       	startDate.minutes(0); // 00:00 hours
+       	endDate = moment().subtract(1, "day"); // yesterday end
+       	endDate.hours(23);
+       	endDate.minutes(59);
 
-		healthKitService.getCombinedTimesOfDayAverages().then(function(response){
-			var result = 50;
-			if(result > 50){
+       	healthKitService.getDateVsAverageDuration(startDate, endDate).then(function(response){
+			var today = response['todayData'];
+			var avgData = response['avgData'];
+			var minString = '0 ' + $translate.instant("Minute_Text");
+			if(today == minString) {
+				deferred.resolve(treeData['noAvg']);
+			} else if(today >= avgData){
 				deferred.resolve(treeData['previousDayCommentMore']);
-			}else {
+			} else {
 				deferred.resolve(treeData['previousDayCommentLess']);	
 			}
 			
@@ -61,7 +77,6 @@ angular.module('app.utils')
 
 	var treeData = {
 		
-		// used when actual processing is in-progress for user data
 		'skeletonWaitNode' : {
 			wait : true,
 		},
@@ -78,22 +93,19 @@ angular.module('app.utils')
 
 		'dataCollectMsg' : {
 			text: ['56','57','58'],
-			//children: ['loggedMins']
-			children: ['aboveAvg'] // to be removed...
+			children: ['loggedMins']
 		},
 
-		// NEED to FIX the below 2 nodes...
 		'loggedMins' : {
 			text: ['59'],
 			type: 'replacer',
 			method: commonFunc.loggedInTimeSoFar,
-			children:['compareToDailyAvg']
+			children:['showChart']
 		},
 
-		// IS THIS NEEDED ?
 		'showChart': {
 			type: "chart",
-			//method: healthKitQueryFactory.getDailyAverageVsUsersChart,
+			method: healthKitQueryFactory.getTodayVsAverageChartConfig,
 			children: ['compareToDailyAvg']
 		},
 
@@ -107,15 +119,19 @@ angular.module('app.utils')
 		},
 
 
+		'noAvg' : {
+			text: ['81'],
+			children: ['closeMorningTree']
+
+		},
+
 		'aboveAvg' : {
 			text: ['60', '61'],
-			//children: ['loggedMins']
 			children: ['aboveAvgMore']
 		},
 
 		'aboveAvgMore' : {
 			text: ['62', '63'],
-			//children: ['loggedMins']
 			children: ['lookPreviousDay']
 		},
 
@@ -143,16 +159,22 @@ angular.module('app.utils')
 
 		'lookPreviousDay' : {
 			text: ['67', '68'],
-			//children: ['previousDayCalc']
-			children: ['previousDayCommentMore'] // to be removed
+			children: ['showPreviousDayChart'] 
 		},
 
 
-		'previousDayCalc' : {
-			text: ['69', '70'],
-			type: 'replacer',
-			method: commonFunc.loggedInTimeSoFar,
-			children:['comparePreviousDayToAvg']
+		// 'previousDayCalc' : { REMOVED DUE TO 0 MIN CHECK
+		// 	text: ['69', '70'],
+		// 	type: 'replacer',
+		// 	method: commonFunc.loggedInTimeYesterday,
+		// 	children:['showPreviousDayChart']
+		// },
+
+
+		'showPreviousDayChart': {
+			type: "chart",
+			method: healthKitQueryFactory.getYesterdayVsAverageChartConfig,
+			children: ['comparePreviousDayToAvg']
 		},
 
 
@@ -172,6 +194,12 @@ angular.module('app.utils')
 
 		'previousDayCommentLess' : {
 			text: ['74'],
+			children: ['previousDayCommentLessNoWorries']
+			
+		},
+
+		'previousDayCommentLessNoWorries' : {
+			text: ['81'],
 			children: ['brkfstTip']
 			
 		},

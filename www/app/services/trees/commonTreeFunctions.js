@@ -22,11 +22,15 @@ angular.module('app.utils')
 
 
 
+		var getRandomNode = function(textMsgArray) {
+			var randomIndex = Math.floor((Math.random() * textMsgArray.length));
+			return randomIndex;
+		};
+
 		var calculateAverageMinsPerDay = function(currentNode){
 			var deferred = $q.defer();
 			healthKitService.getDailyAverageDuration().then(function(minutes){
-			// TODO : Will add randomization later if required.
-				$translate(currentNode.text[0]).then(function (translated){
+				$translate(currentNode.text[getRandomNode(currentNode.text)]).then(function (translated){
 					var replaced = translated.replace("$$", minutes);
 					currentNode.text = replaced;
 					currentNode.type = null;
@@ -139,12 +143,10 @@ angular.module('app.utils')
 	var loggedInTimeSoFar = function(currentNode){
 		var deferred = $q.defer();
 
-		healthKitService.getMostRecentActivity().then(function(response){
-				$translate(currentNode.text[0]).then(function (translated){
-					var weekdayOrWeekend = response.timeOfWeek;
-					var timeOfDay = response.timeOfDay;
-					var replaced = translated.replace("$$", weekdayOrWeekend);
-					replaced = replaced.replace("%%", timeOfDay);
+		healthKitService.getTodaysDurationSum().then(function(response){
+				$translate(currentNode.text[getRandomNode(currentNode.text)]).then(function (translated){
+					var totalSum = response;
+					var replaced = translated.replace("$$", totalSum);
 					currentNode.text = replaced;
 					currentNode.type = null;
 					deferred.resolve(currentNode);
@@ -155,6 +157,20 @@ angular.module('app.utils')
 
 	}
 
+	var loggedInTimeYesterday = function(currentNode) {
+		var deferred = $q.defer();
+		healthKitService.getYesterdaysDurationSum().then(function(response){
+				$translate(currentNode.text[getRandomNode(currentNode.text)]).then(function (translated){
+					var totalSum = response;
+					var replaced = translated.replace("$$", totalSum);
+					currentNode.text = replaced;
+					currentNode.type = null;
+					deferred.resolve(currentNode);
+				});
+		});
+
+		return deferred.promise;
+	}
 
 
 	return {
@@ -165,7 +181,8 @@ angular.module('app.utils')
 		mostActiveTimeOfWeekDuration: mostActiveTimeOfWeekDuration,
 		powerHour					: powerHour,
 		mostActiveTimeOfWeek 		: mostActiveTimeOfWeek,
-		loggedInTimeSoFar			: loggedInTimeSoFar
+		loggedInTimeSoFar			: loggedInTimeSoFar,
+		loggedInTimeYesterday		: loggedInTimeYesterday
 
 	}
 
