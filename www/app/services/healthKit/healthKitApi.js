@@ -1,21 +1,20 @@
 angular.module('app.services.healthKit')
 
-.factory('healthKitApi', ['$cordovaHealthKit', '$q',
-    function($cordovaHealthKit, $q) {
+.factory('healthKitApi', ['$cordovaHealthKit', '$q', '$window',
+    function($cordovaHealthKit, $q, $window) {
         var healthKitExists = false;
+        var NUM_OF_DAYS_DATA = 20;
 
         function getWalkingAndRunningDistance() {
             var deferred = $q.defer();
             var queryObject = {
-                'startDate': new Date(new Date().getTime() - 20 * 24 * 60 * 60 * 1000),
+                'startDate': new Date(new Date().getTime() - NUM_OF_DAYS_DATA * 24 * 60 * 60 * 1000),
                 'endDate': new Date(),
                 'sampleType': "HKQuantityTypeIdentifierDistanceWalkingRunning",
                 'unit': 'km'
             };
 
             $cordovaHealthKit.querySampleType(queryObject).then(function(response) {
-                // console.log("#######getWalkingAndRunningDistance#######");
-                // console.log(JSON.stringify(response));
                 deferred.resolve(response);
             }, function(err) {
                 alert(err);
@@ -67,29 +66,34 @@ angular.module('app.services.healthKit')
             return deferred.promise;
         }
 
+        /* request HealthKit authorization and check 
+        * if permissions are enabled 
+        */
         function requestAuthorization() {
             var deferred = $q.defer();
 
-            /* just let it pass if no healthkit present */
-            deferred.resolve(true);
-
+            var distanceWalkRunPermissions = 'HKQuantityTypeIdentifierDistanceWalkingRunning';
             var permissions = [
-                'HKQuantityTypeIdentifierDistanceWalkingRunning'
+                distanceWalkRunPermissions
                 //,'HKCategoryValueSleepAnalysisAsleep'
             ];
 
+            /* first request authorization from user */
             $cordovaHealthKit.requestAuthorization(
-                permissions, // Read permission
-                permissions // Write permission
+                permissions // Read permission
+                ,permissions // Write permission
             ).then(function(success) {
-                // store that you have permissions
-                // $cordovaHealthKit.checkAuthStatus({
+                /* then check if auth permissions are enabled */
+                $window.plugins.healthkit.checkAuthStatus({
+                        'type': distanceWalkRunPermissions
+                    }, function(response){
+                        console.log('checkAuth', JSON.stringify(response));
+                        deferred.resolve(response);
+                    }, function(err){
+                        console.log('checkAuthStatus error');
+                        deferred.reject(err);
+                    });
 
-                // }, function(response){
-                //         deferred.resolve(response);
-                // }, function(err){
-                //     deferred.reject(err);
-                // });
             }, function(err) {
                 console.log("error! " + err);
                 deferred.reject(err);

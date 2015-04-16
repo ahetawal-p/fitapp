@@ -99,9 +99,13 @@ angular.module('app.utils')
 		var deferred = $q.defer();
 
 		healthKitService.requestAuthorization().then(function(response){
-			deferred.resolve(treeData['addDataHApp']);
+			if (response === "authorized"){
+				deferred.resolve(treeData['addDataHApp']);
+			} else {
+				deferred.resolve(treeData['healthKitNotExist']);
+			}
 		}, function(err){
-			deferred.resolve(treeData['addDataHApp']);
+			deferred.resolve(treeData['healthKitNotExist']);
 		});
 
 		return deferred.promise;
