@@ -21,7 +21,14 @@ angular.module('app.services.healthKit')
 
         function requestAuthorization() {
             var deferred = $q.defer();
-            deferred.resolve(true);
+            deferred.resolve("authorized");
+
+            return deferred.promise;
+        }
+
+        function checkHealthKitExists() {
+            var deferred = $q.defer();
+			deferred.resolve(false);
 
             return deferred.promise;
         }
@@ -29,7 +36,8 @@ angular.module('app.services.healthKit')
 		return {
 			requestAuthorization: requestAuthorization,
 			getWalkingAndRunningDistance: getWalkingAndRunningDistance,
-			getWalkingAndRunningDistanceByDateTime: getWalkingAndRunningDistanceByDateTime
+			getWalkingAndRunningDistanceByDateTime: getWalkingAndRunningDistanceByDateTime,
+			checkHealthKitExists: checkHealthKitExists
 		}
 	}]
 	);

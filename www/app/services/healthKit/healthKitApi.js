@@ -83,7 +83,10 @@ angular.module('app.services.healthKit')
                 permissions // Read permission
                 ,permissions // Write permission
             ).then(function(success) {
-                /* then check if auth permissions are enabled */
+                /* then check if auth permissions are enabled. 
+                 * checkAuthStatus not added to ngCordova yet
+                 * so using $window.plugins for now 
+                */
                 $window.plugins.healthkit.checkAuthStatus({
                         'type': distanceWalkRunPermissions
                     }, function(response){

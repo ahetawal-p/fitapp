@@ -1,6 +1,9 @@
-<ion-view view-title="Login" name="login-view" ng-controller="LoginCtrl as vm">
-  <ion-content class="padding" ng-show="vm.showLogin" style="background-color:#00A0E9">
-    <img ng-src="img/login-img.png" style="width:100%;"/>
+<ion-view view-title="Login" name="login-view" ng-controller="LoginCtrl as vm" style="background-color:#00A0E9;">
+  <ion-content class="padding animated slideInUp" ng-show="vm.showLogin">
+      <div class="">
+
+      <img ng-src="img/login-img.png" style="width:100%"/>
+
     <form name="loginForm" ng-submit="vm.logIn(loginForm)">
         <label class="item item-input" ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine}">
             <input type="email" name="email" placeholder="Email" ng-model="vm.user.email" required>
@@ -9,5 +12,6 @@
         </p>
         <button class="button button-block button-energized" ng-click="vm.login(user)">{{"Login_Text" | translate}}</button>
     </form>
+    </div>
   </ion-content>
 </ion-view>
