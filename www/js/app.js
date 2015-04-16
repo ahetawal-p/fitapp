@@ -22,8 +22,7 @@ angular.module('fitapp', [
 
 .run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage) {
   $ionicPlatform.ready(function() {
-
-    console.log($localstorage.getUser());
+        console.log($localstorage.getUser());
     //
 
     
