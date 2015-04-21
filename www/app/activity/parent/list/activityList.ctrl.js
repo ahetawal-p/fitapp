@@ -8,7 +8,8 @@
             'chartConfigFactory',
             '$ionicLoading',
             'dateTimeUtil',
-            function($scope, $state, $ionicModal, healthKitService, chartConfigFactory, $ionicLoading, dateTimeUtil) {
+            'exceptionHandlerUtil',
+            function($scope, $state, $ionicModal, healthKitService, chartConfigFactory, $ionicLoading, dateTimeUtil, exceptionHandlerUtil) {
 
                 var vm = this;
                 $ionicLoading.show({
@@ -29,9 +30,9 @@
                 // });
 
                 /* testing */
-                    healthKitService.getMostRecentActivity().then(function(response){
-                            console.log('most recent', response);
-                    });
+                    // healthKitService.getMostRecentActivity().then(function(response){
+                    //         console.log('most recent', response);
+                    // });
 
                 vm.reloadActivities = function(){
                     loadActivities("reload");
@@ -49,6 +50,8 @@
                         if (loadType === "reload"){
                             $scope.$broadcast('scroll.refreshComplete');
                         }
+                    }, function(err){
+                        exceptionHandlerUtil.healthKitNotExistErrorHandler(err);
                     });
                 }
 

@@ -14,6 +14,10 @@ angular.module('app.services.healthKit')
                 'unit': 'km'
             };
 
+            if (!$cordovaHealthKit){
+                deferred.reject();
+            }
+
             $cordovaHealthKit.querySampleType(queryObject).then(function(response) {
                 deferred.resolve(response);
             }, function(err) {

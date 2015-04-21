@@ -23,37 +23,6 @@ angular.module('fitapp', [
 .run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage) {
   $ionicPlatform.ready(function() {
         console.log($localstorage.getUser());
-    //
-
-    
-
-  //   //Ask/set user permissions for Healthkit data
-  //   try {
-  //     $cordovaHealthKit.isAvailable().then(function(yes) {
-  //       // HK is available
-  //       $rootScope.healthkitExists = true;
-  //       var permissions = [
-  //       'HKQuantityTypeIdentifierDistanceWalkingRunning',
-  //       'HKCategoryValueSleepAnalysisAsleep'];
-     
-  //       $cordovaHealthKit.requestAuthorization(
-  //           permissions, // Read permission
-  //           permissions // Write permission
-  //       ).then(function(success) {
-  //           // store that you have permissions
-  //           alert('here');
-  //       }, function(err) {
-  //           // handle error
-  //       });
-     
-  //       }, function(no) {
-  //           // No HK available
-  //           alert("no");
-  //       }); 
-  //   } catch (exception){
-  //     alert('no');
-  //     $rootScope.healthkitExists = false;
-  // }
   });
 })
 
