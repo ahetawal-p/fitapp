@@ -1,5 +1,5 @@
 <ion-view view-title="Login" name="login-view" ng-controller="LoginCtrl as vm" style="background-color:#00A0E9;">
-  <ion-content class="padding animated slideInUp" ng-if="vm.showLogin">
+  <ion-content class="padding animated slideInUp" ng-show="vm.showLogin">
     <img ng-src="img/login-img.png" style="width:100%"/>
     <form name="loginForm" ng-submit="vm.logIn(loginForm)">
         <label class="item item-input" ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine}">

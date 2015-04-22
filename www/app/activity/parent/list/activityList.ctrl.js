@@ -50,9 +50,13 @@
                         if (loadType === "reload"){
                             $scope.$broadcast('scroll.refreshComplete');
                         }
-                    }, function(err){
+                    }
+                    // exceptionHandlerUtil.healthKitNotExistErrorHandler
+                    , function(err){
                         exceptionHandlerUtil.healthKitNotExistErrorHandler(err);
-                    });
+                    }
+
+                    );
                 }
 
                 vm.openEditActivityModal = function(activity) {

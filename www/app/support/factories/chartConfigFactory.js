@@ -211,7 +211,7 @@ angular.module('app.factories')
                     chart: {
                         type: 'column',
                         backgroundColor: "rgba(0,0,0, 0.1)",
-                        margin: [5, 0, 30, 0]
+                        margin: [10, 0, 30, 0]
                     },
                     tooltip: {
                         enabled: false

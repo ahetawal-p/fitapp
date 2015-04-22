@@ -5,18 +5,14 @@
         on-refresh='vm.reloadActivities()'>
       </ion-refresher>
       <div class="transaction-list item-container" ng-repeat="activityDate in vm.activities | groupBy: 'date' | toArray:true | orderBy:'$key':true">
-      <div class="item item-divider">
-<!--         <p>{{activityDate.$key | date:'EEE, MMM d'}}</p>
- -->      
+      <div class="item item-divider">  
         <p>{{vm.localizeDateString(activityDate.$key)}}</p>
 
  </div>
-      <div class="item transaction-item item-icon-left" ng-repeat="activity in activityDate" href="" ng-click="vm.openEditActivityModal(activity)">
+      <div class="item transaction-item item-icon-left" ng-repeat="activity in activityDate">
         <div class="row">
-            <i class="icon"><img ng-src="img/icon-walk-32.png"/></i>          
+            <i class="icon"><img ng-src="{{activity.img}}"/></i>          
             <div class="col">
-<!--               <p>{{activity.duration}} {{activity.activityType}}</p>
- -->              
                <span translate="Activity_Duration_Type" translate-values="{duration: activity.duration}"></span><span translate="{{activity.activityType}}"></span>
               <p translate="Distance_Calories" translate-values="{distance: activity.distance, calories: activity.calories}"></p>
           </div>

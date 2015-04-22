@@ -6,10 +6,13 @@ angular.module('app.services.healthKit')
         var NUM_OF_DAYS_DATA = 20;
 
         function getWalkingAndRunningDistance() {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+                startDate = new Date(new Date().getTime() - NUM_OF_DAYS_DATA * 24 * 60 * 60 * 1000),
+                endDate = new Date();
+
             var queryObject = {
-                'startDate': new Date(new Date().getTime() - NUM_OF_DAYS_DATA * 24 * 60 * 60 * 1000),
-                'endDate': new Date(),
+                'startDate': startDate,
+                'endDate': endDate,
                 'sampleType': "HKQuantityTypeIdentifierDistanceWalkingRunning",
                 'unit': 'km'
             };
