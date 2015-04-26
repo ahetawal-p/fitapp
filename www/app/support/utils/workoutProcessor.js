@@ -22,7 +22,7 @@ angular.module('app.utils')
 			var localizedDate = dateTimeUtil.getLocalizedDateString(groupedActivity.startDate);
 			var timeStamp = dateTimeUtil.getTimeStamp(groupedActivity.startDate);
 			var activityType = groupedActivity.activityType;
-			console.log(activityType);
+			//console.log(activityType);
 			var img = iconUtil.getIcon(activityType);
 			processedActivities.push({
 				timeStamp: timeStamp,
