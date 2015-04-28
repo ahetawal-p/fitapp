@@ -81,7 +81,7 @@ angular.module('app.services')
 		    	} else if(currentHour >=17 && currentHour < 21) { // 5pm - 9pm
 		    		return wkDayEveTree.getTree();
 		    	} else if(currentHour >=21 && currentHour < 24) { // 9pm - midnight
-		    		return wkDayLateNiteTree.getTree();
+		    		return wkDayNiteTree.getTree();
 		    	} else if(currentHour >=0 && currentHour < 5) { // midnight -  5am
 		    		return wkDayLateNiteTree.getTree();
 		    	}
