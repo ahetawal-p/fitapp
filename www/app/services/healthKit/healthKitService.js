@@ -9,9 +9,9 @@ angular.module('app.services.healthKit')
         // }else{
         //     api = healthKitStubApi;getMostActiveTimeOfWeek
         // }
-         api = healthKitStubApi;
+         //api = healthKitStubApi;
 
-         //api = healthKitApi;
+         api = healthKitApi;
 
         function checkHealthKitExists(){
             var deferred = $q.defer();
@@ -34,7 +34,7 @@ angular.module('app.services.healthKit')
         	var deferred = $q.defer();
         	api.getWalkingAndRunningDistance().then(function(walkRunActivities){
         		var processedActivities = workoutProcessor.processWorkouts(walkRunActivities);
-        		deferred.resolve(processedActivities);
+                deferred.resolve(processedActivities);
         	});
         	return deferred.promise;
         }

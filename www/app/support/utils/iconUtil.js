@@ -7,7 +7,6 @@ angular.module('app.utils')
 
     function getIcon(activityType){
   		var icon = iconDictionary[activityType];
-      console.log(icon);
       return icon;
     }
 
