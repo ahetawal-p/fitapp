@@ -1,6 +1,6 @@
 angular.module('app.utils')
 
-.factory('wkDayNoonTree', [
+.factory('wkDayAfterNoonTree', [
 	'healthKitService', 
 	'$q', 
 	'chartConfigFactory', 
@@ -57,8 +57,8 @@ angular.module('app.utils')
 			wait : false
 		},
 
-		'wkDayNoonRoot' : {
-			text: ['82','88','89' ,'90', '91'],
+		'wkDayAfterNoonRoot' : {
+			text: ['108','88','89' ,'90', '91'],
 			children: ['dataCollectMsg']
 		},
 
@@ -104,36 +104,36 @@ angular.module('app.utils')
 		'userResAboveAvg' : {
 			text: ['15', '100', '101', '102'],
 			type: "user",
-			children: ['askLunchSuggest']
+			children: ['askWalkSuggest']
 		},
 
-		'askLunchSuggest' : {
-			text: ['103'],
-			children: ['userResYesAskLunchSuggest', 'userResNoAskLunchSuggest']
+		'askWalkSuggest' : {
+			text: ['109'],
+			children: ['userResYesAskWalkSuggest', 'userResNoAskWalkSuggest']
 		},
 
 
-		'userResYesAskLunchSuggest' : {
-			text: ['38'],
+		'userResYesAskWalkSuggest' : {
+			text: ['110'],
 			type: 'user',
-			children: ['lunchTip1']
+			children: ['walkTip1']
 
 		},
 
-		'lunchTip1' : {
-			text: ['104'],
-			children: ['lunchTip2']
+		'walkTip1' : {
+			text: ['112'],
+			children: ['walkTip2']
 
 		},
 
-		'lunchTip2' : {
-			text: ['105'],
-			children: ['lunchTip3']
+		'walkTip2' : {
+			text: ['113'],
+			children: ['walkTip3']
 
 		},
 
-		'lunchTip3' : {
-			text: ['106'],
+		'walkTip3' : {
+			text: ['114'],
 			children: ['userGoodToKnow']
 
 		},
@@ -141,48 +141,46 @@ angular.module('app.utils')
 		'userGoodToKnow' : {
 			text: ['83'],
 			type: "user",
-			children: ['closeNoonTree']
+			children: ['closeAfterNoonTree']
 		},
 
-		'closeNoonTree' : {
+		'closeAfterNoonTree' : {
 			text: ['84','85'],
 			children: []
 		},
 
 
-		'userResNoAskLunchSuggest' : {
-			text: ['39'],
+		'userResNoAskWalkSuggest' : {
+			text: ['111'],
 			type: 'user',
-			children: ['closeNoonTree']
+			children: ['userNoResTip1']
 
 		},
+
+		'userNoResTip1' : {
+			text: ['115'],
+			children: ['userNoResTip2']
+
+		},
+
+		'userNoResTip2' : {
+			text: ['116'],
+			children: ['userNoResTip3']
+
+		},
+
+		'userNoResTip3' : {
+			text: ['117'],
+			children: ['userGoodToKnow']
+
+		},
+
 
 		'belowAvg' : {
 			text: ['86', '87', '97', '98', '99'],
-			children: ['askUserBusy', 'askUserOnBreak']
-		},
-
-		'askUserBusy': {
-			text: ['65'],
-			type: "user",
-			children: ['isee']
-		},
-
-		'askUserOnBreak':{
-			text: ['66'],
-			type: "user",
-			children: ['isee']
-		},
-
-		'isee' : {
-			text: ['22'],
-			children: ['tipToBeMoreActive']
-		},
-
-		'tipToBeMoreActive' : {
-			text: ['107'],
-			children: ['askLunchSuggest']
+			children: ['askWalkSuggest']
 		}
+
 
 	};
 
@@ -190,7 +188,7 @@ angular.module('app.utils')
 	return {
 		getTree : function() {
     		return {
-	    		rootType : 'wkDayNoonRoot',
+	    		rootType : 'wkDayAfterNoonRoot',
 	    		allNodes : treeData
 	    	};
     	}

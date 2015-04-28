@@ -1,6 +1,6 @@
 angular.module('app.utils')
 
-.factory('wkDayNoonTree', [
+.factory('wkDayLateNiteTree', [
 	'healthKitService', 
 	'$q', 
 	'chartConfigFactory', 
@@ -57,8 +57,8 @@ angular.module('app.utils')
 			wait : false
 		},
 
-		'wkDayNoonRoot' : {
-			text: ['82','88','89' ,'90', '91'],
+		'wkDayLateNiteRoot' : {
+			text: ['129', '130', '131'],
 			children: ['dataCollectMsg']
 		},
 
@@ -104,85 +104,21 @@ angular.module('app.utils')
 		'userResAboveAvg' : {
 			text: ['15', '100', '101', '102'],
 			type: "user",
-			children: ['askLunchSuggest']
+			children: ['closeLateNiteTree']
 		},
 
-		'askLunchSuggest' : {
-			text: ['103'],
-			children: ['userResYesAskLunchSuggest', 'userResNoAskLunchSuggest']
-		},
-
-
-		'userResYesAskLunchSuggest' : {
-			text: ['38'],
-			type: 'user',
-			children: ['lunchTip1']
-
-		},
-
-		'lunchTip1' : {
-			text: ['104'],
-			children: ['lunchTip2']
-
-		},
-
-		'lunchTip2' : {
-			text: ['105'],
-			children: ['lunchTip3']
-
-		},
-
-		'lunchTip3' : {
-			text: ['106'],
-			children: ['userGoodToKnow']
-
-		},
-
-		'userGoodToKnow' : {
-			text: ['83'],
-			type: "user",
-			children: ['closeNoonTree']
-		},
-
-		'closeNoonTree' : {
-			text: ['84','85'],
+		
+		'closeLateNiteTree' : {
+			text: ['85', '126', '127'],
 			children: []
 		},
 
-
-		'userResNoAskLunchSuggest' : {
-			text: ['39'],
-			type: 'user',
-			children: ['closeNoonTree']
-
-		},
-
+		
 		'belowAvg' : {
-			text: ['86', '87', '97', '98', '99'],
-			children: ['askUserBusy', 'askUserOnBreak']
-		},
-
-		'askUserBusy': {
-			text: ['65'],
-			type: "user",
-			children: ['isee']
-		},
-
-		'askUserOnBreak':{
-			text: ['66'],
-			type: "user",
-			children: ['isee']
-		},
-
-		'isee' : {
-			text: ['22'],
-			children: ['tipToBeMoreActive']
-		},
-
-		'tipToBeMoreActive' : {
-			text: ['107'],
-			children: ['askLunchSuggest']
+			text: ['133', '134', '135'],
+			children: ['closeLateNiteTree']
 		}
+
 
 	};
 
@@ -190,7 +126,7 @@ angular.module('app.utils')
 	return {
 		getTree : function() {
     		return {
-	    		rootType : 'wkDayNoonRoot',
+	    		rootType : 'wkDayLateNiteRoot',
 	    		allNodes : treeData
 	    	};
     	}
