@@ -13,7 +13,7 @@ angular.module('app.conversation')
 	function ($rootScope, $scope, $state, talky, $ionicScrollDelegate, $timeout, $parse, $localstorage, $translate) {
 
 
-			console.log("HERRE>>>" + $translate.preferredLanguage());
+			//console.log("HERRE>>>" + $translate.preferredLanguage());
 			//$translate.use("en_US");
 
 			// upper limit constant to fake the waiting time after system input
