@@ -1,10 +1,8 @@
-	angular.module('app.settings').controller('SettingsCtrl', ['$state', 'stubService','$ionicModal', '$scope', 'emailInfoFactory', '$ionicPopup', '$localstorage', '$translate', SettingsCtrl]);
-	function SettingsCtrl($state, stubService, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage, $translate){
+	angular.module('app.settings').controller('SettingsCtrl', ['$state','$ionicModal', '$scope', 'emailInfoFactory', '$ionicPopup', '$localstorage', '$translate', SettingsCtrl]);
+	function SettingsCtrl($state, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage, $translate){
 		var vm = this;
-		vm.myProfile = stubService.getProfile();
 		vm.nickname = $localstorage.getUserNickname();
-		vm.goalTypes = stubService.getGoalTypes();
-		vm.selectedGoalTypeId = vm.myProfile.goalTypeId;
+		vm.email = $localstorage.getEmail();
 		vm.selectedLanguageId = $localstorage.getUserLanguageId();
 
 		vm.languages = 
@@ -17,6 +15,11 @@
 				languageName: "中文"
 			}
 		];
+
+		function clearFrontEndData(){
+			vm.email = "";
+			vm.nickname = "";
+		}
 
 		vm.reportProblem = function(){
     		  window.plugin.email.open(emailInfoFactory.createEmail('reportProblem') , 
@@ -48,7 +51,9 @@
 			   confirmPopup.then(function(res) {
 			     if(res) {
 			       console.log('Clearing storage');
+			       			       clearFrontEndData();
 			       $localstorage.removeUser();
+			       $scope.editProfileModal.hide();
 			     } else {
 			       console.log('Cancel no clear');
 			     }
@@ -62,7 +67,6 @@
 		    $scope.editProfileModal = modal;
 		    $scope.editProfileModal.done = function() {
 		    	/* set input values */
-
 		    	$localstorage.setUserNickname(vm.nickname);
 		    	$scope.editProfileModal.hide();
 		  	}

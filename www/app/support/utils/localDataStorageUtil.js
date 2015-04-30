@@ -36,6 +36,12 @@ angular.module('app.utils')
       currObject.nickname = nickname;
       this.setUser(currObject);
     },
+    getEmail: function(){
+      return this.getObject("email");
+    },
+    setEmail: function(email){
+      this.setObject("email", email);
+    },
     getUserLanguageId: function(){
       var languageId = this.getUser().language;
       return languageId;

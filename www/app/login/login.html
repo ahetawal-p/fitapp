@@ -3,7 +3,7 @@
     <img ng-src="img/login-img.png" style="width:100%"/>
     <form name="loginForm" ng-submit="vm.logIn(loginForm)">
         <label class="item item-input" ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine}">
-            <input type="email" name="email" placeholder="Email" ng-model="vm.user.email" required>
+            <input type="email" name="email" placeholder="Email" ng-model="vm.email" required>
         </label>
         <p id="emailValidationMsg" ng-show="loginForm.email.$invalid && !loginForm.email.$pristine" class="help-block">{{"Email_Validation_Message" | translate}}
         </p>

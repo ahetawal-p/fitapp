@@ -11,10 +11,7 @@
 	        $state.go('tab.conversation');
 		} else{
 			vm.showLogin = true;
-			vm.user = {
-				email: '',
-				nickname: ''
-			};
+			vm.email = "";
 		}
 		// vm.myProfile = stubService.getProfile();
 		vm.logIn = function(form){
@@ -33,7 +30,7 @@
 
 			*/
 			if (form.$valid){
-				console.log("Log in", vm.email);
+				$localstorage.setEmail(vm.email);
 	            $state.go('tab.conversation');
 			}
 		}
