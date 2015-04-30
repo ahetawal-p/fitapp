@@ -3,7 +3,7 @@ angular.module('app.services.healthKit')
 .factory('healthKitApi', ['$cordovaHealthKit', '$q', '$window',
     function($cordovaHealthKit, $q, $window) {
         var healthKitExists = false;
-        var NUM_OF_DAYS_DATA = 20;
+        var NUM_OF_DAYS_DATA = 15;
 
         function getWalkingAndRunningDistance() {
             var deferred = $q.defer(),
