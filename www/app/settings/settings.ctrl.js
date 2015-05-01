@@ -44,9 +44,13 @@
 		}
 
 		vm.clearData = function(){
+			var clearDataString = $translate.instant("Clear_Data");
+			var clearDataQuesString = $translate.instant("Clear_Data_Ques");
+			
+
 			var confirmPopup = $ionicPopup.confirm({
-			     title: 'Clear data',
-			     template: 'Are you sure you want to clear data?'
+			     title: clearDataString,
+			     template: clearDataQuesString
 			   });
 			   confirmPopup.then(function(res) {
 			     if(res) {

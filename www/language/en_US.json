@@ -45,7 +45,7 @@
  	"Activity_Type_Run" : "run",
  	"km" : "km",
  	"cal" : "cal",
- 	
+ 	"Clear_Data_Ques" : "Are you sure you want to clear data?",
 
  	"6"  : "Sounds Great",
  	"7"  : "Please Explain",

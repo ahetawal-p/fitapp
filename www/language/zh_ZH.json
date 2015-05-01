@@ -46,7 +46,8 @@
 	"Activity_Type_Run"	:	"跑步",
 	"km"	:	"公里",
 	"cal"	:	"卡",
-		
+	"Clear_Data_Ques" : "FIX ME : Are you sure you want to clear data?",
+
 			
 	"6"	:	"不错",
 	"7"	:	"请解释",
