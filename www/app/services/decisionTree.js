@@ -68,7 +68,7 @@ angular.module('app.services')
     	var rootName = null;
     	var currentHour = dateTimeUtil.getCurrentHour();
     	var dayName = dateTimeUtil.getDayOfWeekName();
-    	if($localstorage.getUser() == null){
+    	if($localstorage.getUserNickname() == null){
     		return onboardingTree.getTree();
     	} else {
     		//if(dayName != 'SUNDAY' && dayName !='SATURDAY') {

@@ -2,18 +2,9 @@
 	function LoginCtrl($state, $scope, $localstorage){
 		var vm = this;
 
-		/* check if user exists. if so, redirect to conversation.
-		   if not, then display login form */
-		vm.user = $localstorage.getUser();
-		vm.showLogin = false;
-
-		if (vm.user){
-	        $state.go('tab.conversation');
-		} else{
-			vm.showLogin = true;
-			vm.email = "";
-		}
-		// vm.myProfile = stubService.getProfile();
+		vm.showLogin = true;
+		vm.email = "";
+		
 		vm.logIn = function(form){
                 // Wechat.isInstalled(function (installed) {
                 //     alert("Wechat installed: " + (installed ? "Yes" : "No"));

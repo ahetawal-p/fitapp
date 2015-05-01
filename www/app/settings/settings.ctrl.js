@@ -17,7 +17,7 @@
 		];
 
 		function clearFrontEndData(){
-			vm.email = "";
+			$translate.use("en_US");
 			vm.nickname = "";
 		}
 
@@ -51,8 +51,16 @@
 			   confirmPopup.then(function(res) {
 			     if(res) {
 			       console.log('Clearing storage');
-			       			       clearFrontEndData();
+			       clearFrontEndData();
+			       
+			       // User object manupulation
 			       $localstorage.removeUser();
+			       // create new user object
+			       $translate.preferredLanguage('en_US');
+			       var skeletonUser = $localstorage.createUserSkeleton($translate.preferredLanguage());
+			       $localstorage.setObject("user", skeletonUser);
+			       vm.selectedLanguageId = $localstorage.getUserLanguageId();
+			       
 			       $scope.editProfileModal.hide();
 			     } else {
 			       console.log('Cancel no clear');

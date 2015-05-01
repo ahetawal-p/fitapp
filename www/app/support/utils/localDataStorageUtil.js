@@ -29,7 +29,10 @@ angular.module('app.utils')
     	this.setUser(currObject);
     },
     getUserNickname: function(){
-      return this.getUser().nickname;
+      if(this.getUser() !=null)
+        return this.getUser().nickname;
+
+      return null;
     },
     setUserNickname: function(nickname){
       var currObject = this.getUser();
@@ -50,6 +53,17 @@ angular.module('app.utils')
       var currObject = this.getUser();
       currObject.language = languageId;
       this.setUser(currObject);    
+    },
+
+    createUserSkeleton: function(language){
+      var userSkeleton = {
+                'name': null,
+                'nickname' : null,
+                'lastLoginTime': new Date(),
+                'language' : language
+              };
+
+      return userSkeleton;
     }
 
   }

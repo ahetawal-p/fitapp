@@ -45,13 +45,8 @@ angular.module('app.conversation')
 				$scope.messages = [];
 				$scope.waitIndicator = false;
 
-				$scope.user = {
-						'name': null,
-						'nickname' : null,
-						'lastLoginTime': new Date(),
-						'language' : $translate.preferredLanguage()
-				};
-
+				$scope.user = $localstorage.createUserSkeleton($translate.preferredLanguage());
+				
   				if($localstorage.getUser() != null){
   					$localstorage.updateUserLoginTime();
   					angular.copy($localstorage.getUser(), $scope.user);

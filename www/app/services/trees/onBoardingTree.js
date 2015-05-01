@@ -113,7 +113,7 @@ angular.module('app.utils')
 
 	var userInputPopup = function(myScope){
 		var deferred = $q.defer();
-		if($localstorage.getUser() != null){
+		if($localstorage.getUserNickname() != null){
 			deferred.resolve(treeData['greetUser']);
   		} else {
   			$translate('Enter_Name').then(function (enterNameMsg) {

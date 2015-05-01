@@ -25,7 +25,7 @@ angular.module('fitapp', [
 
         /* always route to conversation and refresh when resume */
         function onResume() {
-            if ($localstorage.getUser()) {
+            if ($localstorage.getUserNickname()) {
                 $window.location.hash = "#tab/conversation";
             } else {
                 $window.location.hash = "#login";
@@ -73,7 +73,7 @@ angular.module('fitapp', [
             });
 
         // if none of the above states are matched, use this as the fallback
-        if ($localstorageProvider.$get().getUser()) {
+        if ($localstorageProvider.$get().getUserNickname() != null) {
             $urlRouterProvider.otherwise('/tab/conversation');
         } else {
             $urlRouterProvider.otherwise('/login');
