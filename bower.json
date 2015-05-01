@@ -1,11 +1,44 @@
 {
-  "name": "fitapp",
-  "private": "true",
+  "name": "PokiFit",
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.0.0-beta.14",
     "platform": "~1.3.0"
   },
   "dependencies": {
-    "ngCordova": "~0.1.12-alpha"
-  }
+    "angular-cookies": "~1.3.15",
+    "angular-filter": "https://github.com/a8m/angular-filter.git#~0.5.2",
+    "angular-translate-loader-static-files": "~2.6.1",
+    "angular-translate-storage-local": "~2.6.1",
+    "angular-translate": "~2.6.1",
+    "angular-underscore-module": "~1.0.1",
+    "highcharts-ng": "~0.0.8",
+    "highcharts": "~4.1.4",
+    "jquery-legacy": "jquery#1.11",
+    "moment": "~2.9.0",
+    "ngInfiniteScroll": "1.0.0",
+    "underscore": "~1.8.2"
+  },
+  "version": "1.0.0",
+  "homepage": "https://github.com/ahetawal/fitapp",
+  "authors": [
+    "Amit Hetawal <amit.hetawal@gmail.com>",
+    "Beck Chen <bcfchen@gmail.com>"
+  ],
+  "description": "Pokifit initial version",
+  "main": "app.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "health"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/lib",
+    "test",
+    "tests"
+  ]
 }
