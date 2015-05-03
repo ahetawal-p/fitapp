@@ -10,7 +10,7 @@ angular.module('app.services.stubs')
 
         var activityTypes = JSON.parse('[{"activityType": "walk", "icon": "ion-leaf"}, {"activityType": "run", "icon": "ion-waterdrop"}, {"activityType": "bike", "icon": "ion-flame"}, {"activityType": "workout", "icon": "ion-fireball"}, {"activityType": "sports", "icon": "ion-bonfire"}, {"activityType": "sleep", "icon": "ion-ios7-moon"}]');
 
-        var larkMessages = [
+        var messages = [
             { content: '<p>Nice to have you back so soon!</p>' },
             { content: '<p>You\'re coming in at 5 minutes so far.</p>' },
             { content: '<p>Not quite where you usually are on weekdays</p>' },
