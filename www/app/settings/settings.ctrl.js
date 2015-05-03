@@ -34,6 +34,7 @@
 		}
 
 		  vm.openEditProfileModal = function() {
+		  	vm.nickname = $localstorage.getUserNickname();
 		    $scope.editProfileModal.show();
 		  };
 
@@ -42,6 +43,11 @@
 			$translate.use(language.id);
 			$localstorage.setUserLanguageId(language.id);
 		}
+
+		vm.setNickname = function() {
+			if(vm.nickname == "") return;
+			$localstorage.setUserNickname(vm.nickname);			
+		};
 
 		vm.clearData = function(){
 			var clearDataString = $translate.instant("Clear_Data");
