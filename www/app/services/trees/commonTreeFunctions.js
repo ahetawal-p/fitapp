@@ -111,7 +111,8 @@ angular.module('app.utils')
 		healthKitService.getMostActiveTimeOfWeek().then(function(response){
 				$translate(currentNode.text[0]).then(function (translated){
 					var timeOfDay = response.timeOfDay;
-					var replaced = translated.replace("$$", timeOfDay);
+					var timeOfDayTrans = $translate.instant(timeOfDay);
+					var replaced = translated.replace("$$", timeOfDayTrans);
 					currentNode.text = replaced;
 					currentNode.type = null;
 					deferred.resolve(currentNode);
@@ -129,8 +130,9 @@ angular.module('app.utils')
 					var weekdayOrWeekend = response.timeOfWeek;
 					var weekdayOrWeekendTrans = $translate.instant(weekdayOrWeekend);
 					var timeOfDay = response.timeOfDay;
+					var timeOfDayTrans = $translate.instant(timeOfDay);
 					var replaced = translated.replace("$$", weekdayOrWeekendTrans);
-					replaced = replaced.replace("%%", timeOfDay);
+					replaced = replaced.replace("%%", timeOfDayTrans);
 					currentNode.text = replaced;
 					currentNode.type = null;
 					deferred.resolve(currentNode);

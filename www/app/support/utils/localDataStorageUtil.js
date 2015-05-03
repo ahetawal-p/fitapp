@@ -46,7 +46,12 @@ angular.module('app.utils')
       this.setObject("email", email);
     },
     getUserLanguageId: function(){
-      var languageId = this.getUser().language;
+      /* change this to zh_ZH before release */
+      var languageId = "en_US";
+      if (this.getUser()){
+        languageId = this.getUser().language;
+      }
+
       return languageId;
     },
     setUserLanguageId: function(languageId){

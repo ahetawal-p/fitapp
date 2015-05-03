@@ -43,6 +43,8 @@ angular.module('fitapp', [
             prefix: 'language/',
             suffix: '.json'
         });
+
+        /* set this to zh_ZH before release */
         $translateProvider.preferredLanguage('en_US');
 
         $translateProvider.useLocalStorage();

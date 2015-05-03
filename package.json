@@ -16,5 +16,8 @@
   },
   "cordovaPlugins": [
     "com.telerik.plugins.healthkit"
+  ],
+  "cordovaPlatforms": [
+    "ios"
   ]
 }
