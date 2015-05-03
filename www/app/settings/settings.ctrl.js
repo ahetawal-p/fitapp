@@ -66,6 +66,7 @@
 			       // User object manupulation
 			       $localstorage.removeUser();
 			       // create new user object
+			       /* set this to zh_ZH before release */
 			       $translate.preferredLanguage('en_US');
 			       var skeletonUser = $localstorage.createUserSkeleton($translate.preferredLanguage());
 			       $localstorage.setObject("user", skeletonUser);
