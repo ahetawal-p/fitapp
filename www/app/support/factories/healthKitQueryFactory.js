@@ -96,8 +96,8 @@ angular.module('app.factories')
 	var getWeekdayVsWeekendChart = function() {
 		var deferred = $q.defer();
 		var weekdayVsWeekendText = $translate.instant("Weekday_Vs_Weekend");
-		var weekdayText = $translate.instant("Weekday");
-		var weekendText = $translate.instant("Weekend");
+		var weekdayText = $translate.instant("weekday");
+		var weekendText = $translate.instant("weekend");
 		healthKitService.getWeekdayWeekendAverages().then(
 			function(response){
 				var chartConfig = chartConfigFactory.createConversationChartConfig(response, "bar", weekdayVsWeekendText, weekdayText, weekendText);
