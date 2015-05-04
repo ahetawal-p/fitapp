@@ -32,7 +32,7 @@ angular.module('app.utils')
        	healthKitService.getDateVsAverageDuration(startDate, endDate).then(function(response){
 			var today = response['todayData'];
 			var avgData = response['avgData'];
-			if(today >= avgData){
+			if(today >= avgData && today > 0){
 				deferred.resolve(treeData['aboveAvg']);
 			} else {
 				deferred.resolve(treeData['belowAvg']);	
