@@ -87,8 +87,8 @@ angular.module('app.utils')
 				deferred.resolve(treeData['askName']);
 			} else {
 				/* MODIFY THIS IN PRODUCTION TO RETURN healthKitNotExist node */
-				//deferred.resolve(treeData['healthKitNotExist']);
-				deferred.resolve(treeData['askName']);
+				deferred.resolve(treeData['healthKitNotExist']);
+				//deferred.resolve(treeData['askName']);
 			}
 		});
 
