@@ -10,7 +10,19 @@ angular.module('app.utils')
     alert(alertMessage);
   }
 
+  function healthKitPermissionsErrorHandler(msg, ionicLoading){
+      console.log(JSON.stringify(msg));
+      var alertMessage = $translate.instant("52");
+      alert(alertMessage);
+
+      //hide ionicLoading popup if it exists
+      if (ionicLoading){
+        ionicLoading.hide();
+      }
+  }
+
   return {
-    healthKitNotExistErrorHandler: healthKitNotExistErrorHandler
+    healthKitNotExistErrorHandler: healthKitNotExistErrorHandler,
+    healthKitPermissionsErrorHandler: healthKitPermissionsErrorHandler
   }
 }]);

@@ -112,6 +112,21 @@ angular.module('app.services.healthKit')
             return deferred.promise;
         }
 
+        function checkAuthStatus(){
+            var deferred = $q.defer();
+            $window.plugins.healthkit.checkAuthStatus({
+                'type': 'HKQuantityTypeIdentifierDistanceWalkingRunning'
+            }, function(response){
+                console.log('checkAuth', JSON.stringify(response));
+                deferred.resolve(response);
+            }, function(err){
+                console.log('checkAuthStatus error');
+                deferred.reject(err);
+            });
+
+            return deferred.promise;
+        }
+
         function getWorkouts() {
             return $cordovaHealthKit.findWorkouts();
         }
@@ -179,6 +194,7 @@ angular.module('app.services.healthKit')
             getWorkoutCalories: getWorkoutCalories,
             checkHealthKitExists: checkHealthKitExists,
             requestAuthorization: requestAuthorization,
+            checkAuthStatus: checkAuthStatus,
             getWorkoutDistanceAndCalories: getWorkoutDistanceAndCalories,
             getWalkingAndRunningDistance: getWalkingAndRunningDistance,
             getWalkingAndRunningDistanceByDateTime: getWalkingAndRunningDistanceByDateTime
