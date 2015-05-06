@@ -2,15 +2,17 @@ angular.module('app.factories')
 
 .factory('emailInfoFactory',[
     function($cordovaDevice) {
-        var SUPPORT_EMAIL = "bcfchen@gmail.com";
+        var SUPPORT_EMAIL = "pokifit@gmail.com";
 
         var systemInfo = function(){
             var platform = ionic.Platform.platform();
             var version = ionic.Platform.version();
+            var deviceInformation = ionic.Platform.device();
 
             return {
                 platform: platform,
-                version: version
+                version: version,
+                device: deviceInformation
             }
         }
 
@@ -19,10 +21,11 @@ angular.module('app.factories')
             var systemInfoObj = new systemInfo();
 
             this.getBodyText = function getBodyText() {
-                var userRow = createRow("User: ", "user@gmail.com");
+               // var userRow = createRow("User: ", "user@gmail.com");
+                var deviceInformation = createRow("Device: ", systemInfoObj.device);
                 var versionRow = createRow("Version: ", systemInfoObj.version);
                 var platformRow = createRow("Platform: ", systemInfoObj.platform);
-                return userRow.concat(versionRow).concat(platformRow);
+                return deviceInformation.concat(versionRow).concat(platformRow);
             }
 
             function createRow(property, value){
