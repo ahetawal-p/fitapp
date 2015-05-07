@@ -1,14 +1,15 @@
 angular.module('app.factories')
 
-.factory('emailInfoFactory',[
+.factory('emailInfoFactory',["$cordovaDevice",
     function($cordovaDevice) {
         var SUPPORT_EMAIL = "pokifit@gmail.com";
 
         var systemInfo = function(){
             var platform = ionic.Platform.platform();
             var version = ionic.Platform.version();
-            var deviceInformation = ionic.Platform.device();
-
+            var deviceInformation = ionic.Platform.device().model;
+            console.log("DEVICE INFO");
+            console.log(JSON.stringify(deviceInformation));
             return {
                 platform: platform,
                 version: version,
