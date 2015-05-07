@@ -2,9 +2,10 @@ angular.module('app.utils')
 
 .factory('workoutProcessor', ['activityTypeUtil', 'dateTimeUtil', 'iconUtil', 'groupedActivityBuilder', '_',
 	function(activityTypeUtil, dateTimeUtil, iconUtil, groupedActivityBuilder, _) {
-
+		var DISTANCE_THRESHOLD = 0.05;
 		function processWorkouts(rawActivityObjects){
 			var groupedActivities = groupActivities(rawActivityObjects.reverse());
+
 		//sort group activities by startDate (time)
 		groupedActivities.sort(sortByStartDate);
 
@@ -199,6 +200,7 @@ angular.module('app.utils')
 	function getActivityDataPoints(startDateTime, endDateTime, rawActivityObjects){
 		var iterDateTime = moment(startDateTime);
 		var dataPoints = [];
+
 		//get grouped activities between startDateTime adn iterDateTime
 		var groupedActivities = groupActivities(rawActivityObjects.reverse());
 		groupedActivities = _.filter(groupedActivities, function(activity){
@@ -399,6 +401,7 @@ angular.module('app.utils')
 			var workoutEndDate = moment(rawActivityObject.endDate);
 			var nextWorkout = rawActivityObjects[ii + 1];
 			if (nextWorkout == null){
+				groupedActivityBuilder.addDistance(rawActivityObject.quantity);
 				groupedActivities.push(groupedActivityBuilder.getGroupedActivity(rawActivityObject.endDate));
 			}
 			else{
@@ -432,7 +435,7 @@ angular.module('app.utils')
 
 	function filterGroupedActivities(groupedActivity){
 		//need to externalize the lower limit to a config
-		return groupedActivity.distance > 0.2;
+		return groupedActivity.distance > DISTANCE_THRESHOLD;
 	}
 
 	function calculateCalories(groupedActivity){
