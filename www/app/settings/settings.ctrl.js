@@ -33,10 +33,12 @@
             this);    
 		}
 
-		  vm.openEditProfileModal = function() {
+		 vm.openEditProfileModal = function() {
 		  	vm.nickname = $localstorage.getUserNickname();
 		    $scope.editProfileModal.show();
-		  };
+		 };
+
+		
 
 		vm.changeLanguage = function(language){
 			console.log(language);
@@ -94,9 +96,51 @@
 		    	$scope.editProfileModal.hide();
 		  	}
 		  });
+
+		  vm.openTermsOfServiceModal = function() {
+		  	$scope.termsOfServiceModal.show();
+		 };
+
+		  $ionicModal.fromTemplateUrl('app/settings/termsOfServiceModal.html', {
+		    scope: $scope,
+		    animation: 'slide-in-up'
+		  }).then(function(modal) {
+		    $scope.termsOfServiceModal = modal;
+		    $scope.termsOfServiceModal.done = function() {
+		    	$scope.termsOfServiceModal.hide();
+		  	}
+
+		  	$scope.termsOfServiceModal.cancel = function() {
+		    	$scope.termsOfServiceModal.hide();
+		  	}
+		  });
+
+		 
+		 vm.openPrivacyModal = function() {
+		  	$scope.privacyModal.show();
+		 };
+
+		  $ionicModal.fromTemplateUrl('app/settings/privacyModal.html', {
+		    scope: $scope,
+		    animation: 'slide-in-up'
+		  }).then(function(modal) {
+		    $scope.privacyModal = modal;
+		    $scope.privacyModal.done = function() {
+		    	$scope.privacyModal.hide();
+		  	}
+
+		  	$scope.privacyModal.cancel = function() {
+		    	$scope.privacyModal.hide();
+		  	}
+		  });
+
+
 		  //Cleanup the modal when we're done with it!
 		  $scope.$on('$destroy', function() {
 		    $scope.editProfileModal.remove();
+		    $scope.termsOfServiceModal.remove();
+		    $scope.privacyModal.remove();
+
 		  });
 		  // Execute action on hide modal
 		  $scope.$on('editProfileModal.hidden', function() {
