@@ -45,7 +45,7 @@ angular.module('fitapp', [
         });
 
         /* set this to zh_ZH before release */
-        $translateProvider.preferredLanguage('en_US');
+        $translateProvider.preferredLanguage('zh_ZH');
 
         $translateProvider.useLocalStorage();
 

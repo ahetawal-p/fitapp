@@ -47,7 +47,7 @@ angular.module('app.utils')
     },
     getUserLanguageId: function(){
       /* change this to zh_ZH before release */
-      var languageId = "en_US";
+      var languageId = "zh_ZH";
       if (this.getUser()){
         languageId = this.getUser().language;
       }

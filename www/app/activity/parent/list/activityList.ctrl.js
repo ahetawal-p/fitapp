@@ -9,7 +9,8 @@
             '$ionicLoading',
             'dateTimeUtil',
             'exceptionHandlerUtil',
-            function($scope, $state, $ionicModal, healthKitService, chartConfigFactory, $ionicLoading, dateTimeUtil, exceptionHandlerUtil) {
+            '$translate',
+            function($scope, $state, $ionicModal, healthKitService, chartConfigFactory, $ionicLoading, dateTimeUtil, exceptionHandlerUtil, $translate) {
 
                 var vm = this;
                 $ionicLoading.show({
@@ -21,7 +22,24 @@
                 });
 
                 /* load activities */
-                loadActivities("regular");
+                healthKitService.checkAuthStatus().then(function(response){
+                            if (response === "authorized"){
+                                loadActivities("regular");
+                            } else {
+                                healthKitService.requestAuthorization().then(function(response){
+                                    if (response === "authorized"){
+                                        loadActivities("regular");
+                                    } else {
+                                        exceptionHandlerUtil.healthKitPermissionsErrorHandler("permissions denied", $ionicLoading);
+                                    }
+                                }, function(err){
+                                    exceptionHandlerUtil.healthKitPermissionsErrorHandler(err, $ionicLoading);
+                                });
+                            }
+                        }, function(err){
+                            exceptionHandlerUtil.healthKitPermissionsErrorHandler(err, $ionicLoading);
+                });
+
 
                 /* testing here */
                 // healthKitService.getCombinedTimesOfDayAverages().then(function(response){

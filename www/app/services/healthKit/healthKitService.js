@@ -30,6 +30,10 @@ angular.module('app.services.healthKit')
             return api.requestAuthorization();
         }
 
+        function checkAuthStatus(){
+            return api.checkAuthStatus();
+        }
+
         function getActivities(){
         	var deferred = $q.defer();
         	api.getWalkingAndRunningDistance().then(function(walkRunActivities){
@@ -511,6 +515,7 @@ angular.module('app.services.healthKit')
                 getMostActiveTimeOfWeek: getMostActiveTimeOfWeek,
                 checkHealthKitExists: checkHealthKitExists,
                 requestAuthorization: requestAuthorization,
+                checkAuthStatus: checkAuthStatus,
                 getWeekdayOrWeekendActive: getWeekdayOrWeekendActive,
                 getDateVsAverageDuration : getDateVsAverageDuration
 
