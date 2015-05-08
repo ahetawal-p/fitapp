@@ -5,7 +5,7 @@ angular.module('app.utils')
 		var DISTANCE_THRESHOLD = 0.05;
 		var isOS81 = ionic.Platform.version() === 8.1;
 		if (isOS81){
-			DISTANCE_THRESHOLD = 0.01;
+			DISTANCE_THRESHOLD = 0.005;
 		}
 
 		function processWorkouts(rawActivityObjects){
