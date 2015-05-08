@@ -49,7 +49,7 @@
 	"Activity_Type_Run"	:	"跑步",
 	"km"	:	"公里",
 	"cal"	:	"卡",
-	"Clear_Data_Ques" : "FIX ME : Are you sure you want to clear data?",
+	"Clear_Data_Ques" : "确定清除数据吗?",
 
 			
 	"6"	:	"不错",
