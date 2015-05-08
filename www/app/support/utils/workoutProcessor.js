@@ -1,10 +1,15 @@
 angular.module('app.utils')
 
-.factory('workoutProcessor', ['activityTypeUtil', 'dateTimeUtil', 'iconUtil', 'groupedActivityBuilder', '_',
-	function(activityTypeUtil, dateTimeUtil, iconUtil, groupedActivityBuilder, _) {
+.factory('workoutProcessor', ['activityTypeUtil', 'dateTimeUtil', 'iconUtil', 'groupedActivityBuilder', '_', "$cordovaDevice",
+	function(activityTypeUtil, dateTimeUtil, iconUtil, groupedActivityBuilder, _, $cordovaDevice) {
 		var DISTANCE_THRESHOLD = 0.05;
+		var isOS81 = ionic.Platform.version() === 8.1;
+		if (isOS81){
+			DISTANCE_THRESHOLD = 0.01;
+		}
+
 		function processWorkouts(rawActivityObjects){
-			var groupedActivities = groupActivities(rawActivityObjects.reverse());
+		var groupedActivities = groupActivities(rawActivityObjects.reverse());
 
 		//sort group activities by startDate (time)
 		groupedActivities.sort(sortByStartDate);
