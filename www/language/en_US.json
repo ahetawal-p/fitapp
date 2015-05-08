@@ -49,6 +49,9 @@
  	"km" : "km",
  	"cal" : "cal",
  	"Clear_Data_Ques" : "Are you sure you want to clear data?",
+ 	"TOS" : "<b> ttest this again</b>",
+
+
  	"6"  : "Sounds Great",
  	"7"  : "Please Explain",
  	"11" : "No Thanks",
@@ -188,6 +191,7 @@
 	"133" : "Seems you skipped couple of usual walks",
 	"134" : "You havent been as active as your daily average so far",
 	"135" : "You seem less active so far"
+
 
 
 
