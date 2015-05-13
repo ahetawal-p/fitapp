@@ -2,10 +2,11 @@ angular.module('app.utils')
 
 .factory('workoutProcessor', ['activityTypeUtil', 'dateTimeUtil', 'iconUtil', 'groupedActivityBuilder', '_', "$cordovaDevice",
 	function(activityTypeUtil, dateTimeUtil, iconUtil, groupedActivityBuilder, _, $cordovaDevice) {
-		var DISTANCE_THRESHOLD = 0.05;
+		var GROUPED_DISTANCE_THRESHOLD = 0.1;
+		var RAW_DISTANCE_THRESHOLD = 0.05;
 		var isOS81 = ionic.Platform.version() === 8.1;
 		if (isOS81){
-			DISTANCE_THRESHOLD = 0.005;
+			RAW_DISTANCE_THRESHOLD = 0.001;
 		}
 
 		function processWorkouts(rawActivityObjects){
@@ -378,6 +379,7 @@ angular.module('app.utils')
 		//filter by today's date
 		var todaysDate = new Date().getDate();
 		groupedActivities = groupedActivities.filter(filterFunction);
+		groupedActivities = groupedActivities.filter(filterGroupedActivities);
 
 		var totalDuration = 0;
 		for(var ii=0; ii<groupedActivities.length; ii++){
@@ -387,9 +389,9 @@ angular.module('app.utils')
 	}
 
 	function groupActivities(rawActivityObjects){
-		/* pre-filter raw activities to exclude those < 0.1km*/
+		/* pre-filter raw activities to exclude those < RAW_DISTANCE_THRESHOLD*/
 		rawActivityObjects = _.filter(rawActivityObjects, function(rawActivityObject){
-			return rawActivityObject.quantity > 0.1;
+			return rawActivityObject.quantity > RAW_DISTANCE_THRESHOLD;
 		});
 
 		var groupedActivities = [];
@@ -440,7 +442,7 @@ angular.module('app.utils')
 
 	function filterGroupedActivities(groupedActivity){
 		//need to externalize the lower limit to a config
-		return groupedActivity.distance > DISTANCE_THRESHOLD;
+		return groupedActivity.distance > GROUPED_DISTANCE_THRESHOLD;
 	}
 
 	function calculateCalories(groupedActivity){
