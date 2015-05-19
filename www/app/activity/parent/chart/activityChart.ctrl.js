@@ -7,27 +7,31 @@
         'chartConfigFactory',
         '$timeout',
         '$q',
-        function($scope, healthKitService, chartConfigFactory, $timeout, $q) {
+        'dateTimeUtil',
+        function($scope, healthKitService, chartConfigFactory, $timeout, $q, dateTimeUtil) {
 
             var vm = this;
+            vm.selectedDate = "";
             var SCROLL_ITEM_NUM = 5;
             var allComposites;
             var loader;
 
             var chartLoader = function(){
-                var startDate, endDate;
 
-                function initializeDates(){
-                    startDate = moment();
-                    startDate.hours(0);
-                    startDate.minutes(0);
-                    endDate = moment();
-                }
+                function loadLineChart(date){
+                    vm.selectedDate = dateTimeUtil.getLocalizedDateString(date);
+                    var startDate = moment(date);
+                        startDate.hours(0);
+                        startDate.minutes(0);
 
-                function loadTodaysLineChart(){
+                    // assign current time as endDate time
+                    var currTime = new moment();
+                    var endDate = moment(date);
+                        endDate.hours(currTime.hours());
+                        endDate.minutes(currTime.minutes());
                     return healthKitService.getDateVsAverageDataPoints(startDate, endDate).then(function(response) {
                         var chartConfig = chartConfigFactory.createActivityChartConfig(response, "line");
-                        vm.chartConfigs.push(chartConfig);
+                        vm.chartConfigs[0] = chartConfig;
                     });
                 }
 
@@ -50,8 +54,8 @@
 
                 function loadAllCharts(){
                     var deferred = $q.defer();
-                    initializeDates();
-                    loadTodaysLineChart().then(loadActivityBarCharts).then(function(){
+                    var date = moment();
+                    loadLineChart(date).then(loadActivityBarCharts).then(function(){
                         deferred.resolve();
                     });
 
@@ -62,8 +66,14 @@
                     return healthKitService.getActivityDurationByDate().then(function(response) {
                         _.each(response, function(chartDataContainer) {
                             var durationBarChartConfig = chartConfigFactory.createActivityChartConfig(chartDataContainer, "bar");
+                            durationBarChartConfig.options.plotOptions.series.events = {
+                                click: function(){
+                                loadLineChart(durationBarChartConfig.date);
+                                }
+                            };
+
                             var durationByDateComposite = {
-                                date: new Date(durationBarChartConfig.date),
+                                date: new moment(durationBarChartConfig.date),
                                 chartConfig: durationBarChartConfig
                             };
 
@@ -76,8 +86,7 @@
                 }
 
                 return {
-                    initializeDates: initializeDates,
-                    loadTodaysLineChart: loadTodaysLineChart,
+                    loadLineChart: loadLineChart,
                     loadActivityBarCharts: loadActivityBarCharts,
                     loadMore: loadMore,
                     loadAllCharts: loadAllCharts     
@@ -102,7 +111,6 @@
             vm.reloadCharts = function(){
                 loadCharts();
                 $scope.$broadcast('scroll.refreshComplete');
-
             }
         }
 

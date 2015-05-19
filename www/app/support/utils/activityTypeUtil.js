@@ -3,8 +3,8 @@ angular.module('app.utils')
 .factory('activityTypeUtil', function() {
 	var workoutDictionary = {};
 
-  /* avg running speed is 6m/h = 0.00268 km/sec */
-  var RUNNING_SPEED = 0.00268;
+  /* avg running speed is 5m/h = 0.00268 km/sec */
+  var RUNNING_SPEED = 0.0022352;
 
     function isRunActivity(distanceInKm, durationInSec){
         var speed = distanceInKm/durationInSec;

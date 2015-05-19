@@ -10,6 +10,7 @@
  	"Activity_Charts_Tab" : "Charts",
  	"Line_Chart_Average" : "AVG",
  	"Line_Chart_Today" : "TODAY",
+ 	"Line_Chart_Selected" : "SELECTED",
  	"Minute_Text" : "min",
  	"Hour_Text" : "hr",
  	"Activity_Today" : "Activity Today",

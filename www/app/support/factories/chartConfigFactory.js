@@ -267,7 +267,7 @@ angular.module('app.factories')
             var avgTotalDuration = getTotalDuration(chartDataContainer.dataSets[1].data);
             var avgTotalDurationString = dateTimeUtil.getDurationStringFromSeconds(avgTotalDuration);
             var lineChartAverageText = $translate.instant("Line_Chart_Average");
-            var lineChartTodayText = $translate.instant("Line_Chart_Today");
+            var lineChartTodayText = $translate.instant("Line_Chart_Selected");
             var chartConfig = {
                 title: {
                     text: ""

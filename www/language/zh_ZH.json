@@ -11,6 +11,7 @@
 	"Activity_Charts_Tab"	:	"图表",
 	"Line_Chart_Average"	:	"平均",
 	"Line_Chart_Today"	:	"今天",
+	"Line_Chart_Selected" : "选取日期",
 	"Minute_Text"	:	"分钟",
 	"Hour_Text"	:	"小时",
 	"Activity_Today"	:	"今日活动",
