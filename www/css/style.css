@@ -75,10 +75,8 @@
 }
 
 .innerDiv {
-  /*font-size:.875rem;*/
-  
   font-size:.95rem;
-left: 0;
+  left: 0;
   overflow: auto;
 }
 
@@ -96,14 +94,13 @@ left: 0;
 }
 
 .innerUser {
-  font-size:.875rem;
+  font-size:.95rem;
   right: 0;
   overflow: auto;
   border-radius: 0 .75rem 0 .75rem;
   background:#33C507;
   color:white;
   padding:.6875rem;
-  font-size:.875rem;
   opacity: 1;
 }
 
