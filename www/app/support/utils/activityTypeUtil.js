@@ -4,7 +4,8 @@ angular.module('app.utils')
 	var workoutDictionary = {};
 
   /* avg running speed is 5m/h = 0.00268 km/sec */
-  var RUNNING_SPEED = 0.0022352;
+  // var RUNNING_SPEED = 0.0022352;
+  var RUNNING_SPEED = 0.0018352;
 
     function isRunActivity(distanceInKm, durationInSec){
         var speed = distanceInKm/durationInSec;

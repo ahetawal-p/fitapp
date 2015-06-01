@@ -25,14 +25,30 @@
                         startDate.minutes(0);
 
                     // assign current time as endDate time
-                    var currTime = new moment();
-                    var endDate = moment(date);
-                        endDate.hours(currTime.hours());
-                        endDate.minutes(currTime.minutes());
+                    var endDate = __getEndDate(date);
                     return healthKitService.getDateVsAverageDataPoints(startDate, endDate).then(function(response) {
+                        console.log(JSON.stringify(response));
                         var chartConfig = chartConfigFactory.createActivityChartConfig(response, "line");
                         vm.chartConfigs[0] = chartConfig;
                     });
+                }
+
+                function __getEndDate(date){
+                    var endDateTime = moment(date);
+                    var currDateTime = new moment();
+                    var sameDay = endDateTime.dayOfYear() === currDateTime.dayOfYear();
+                    
+                    /* if selected date is today, use current time
+                     * else, use full day */
+                    if (sameDay){
+                        endDateTime.hours(currDateTime.hours());
+                        endDateTime.minutes(currDateTime.minutes());                    
+                    } else {
+                        endDateTime.hours(23);
+                        endDateTime.minutes(59);
+                    }
+
+                    return endDateTime;
                 }
 
                 function loadMore(){
@@ -71,11 +87,11 @@
                                 loadLineChart(durationBarChartConfig.date);
                                 }
                             };
-
                             var durationByDateComposite = {
-                                date: new moment(durationBarChartConfig.date),
+                                date:  moment(durationBarChartConfig.date),
                                 chartConfig: durationBarChartConfig
                             };
+                            console.log("DATE: " + durationByDateComposite.date.date() + " CHARTCONFIG: " + durationByDateComposite.chartConfig.series[0].data);
 
                             allComposites.push(durationByDateComposite);
 

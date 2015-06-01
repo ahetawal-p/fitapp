@@ -1,13 +1,12 @@
 angular.module('app.services.healthKit')
 
-.factory('healthKitApi', ['$cordovaHealthKit', '$q', '$window',
-    function($cordovaHealthKit, $q, $window) {
+.factory('healthKitApi', ['$cordovaHealthKit', '$q', '$window', 'HEALTHKIT_CONSTANTS',
+    function($cordovaHealthKit, $q, $window, HEALTHKIT_CONSTANTS) {
         var healthKitExists = false;
-        var NUM_OF_DAYS_DATA = 15;
 
         function getWalkingAndRunningDistance() {
             var deferred = $q.defer(),
-                startDate = new Date(new Date().getTime() - NUM_OF_DAYS_DATA * 24 * 60 * 60 * 1000),
+                startDate = new Date(new Date().getTime() - HEALTHKIT_CONSTANTS.NUM_DAYS_DATA * 24 * 60 * 60 * 1000),
                 endDate = new Date();
 
             var queryObject = {
