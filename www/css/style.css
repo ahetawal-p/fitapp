@@ -75,8 +75,10 @@
 }
 
 .innerDiv {
-  font-size:.875rem;
-  left: 0;
+  /*font-size:.875rem;*/
+  
+  font-size:.95rem;
+left: 0;
   overflow: auto;
 }
 
@@ -89,7 +91,7 @@
   margin:0 0 .8rem 0;
   padding-bottom: .6875rem;
   float: right;
-  font-size:.875rem;
+  font-size:.95rem;
   opacity: 1;
 }
 
@@ -161,7 +163,7 @@
     border-radius:.75rem 0 .75rem 0;
     padding: .5rem;
     margin-right:1px;
-    font-size:.875rem;
+    font-size:.95rem;
 }
 
 .message-chart {
@@ -190,6 +192,7 @@
 #activityChartsPage #todaysDateDisplay{
   text-align:center;
   color:#BEBEBE;
+  font-size: 20px;
 }
 
 #activityChartsPage .rowDateDisplay{

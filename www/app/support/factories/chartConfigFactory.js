@@ -302,7 +302,7 @@ angular.module('app.factories')
                             style: {
                                 left: "10px",
                                 top: "5px",
-                                fontSize: "8px",
+                                fontSize: "12px",
                                 margin: "0px",
                                 color: "#33C507",
                                   itemMarginTop: 0,
@@ -315,7 +315,7 @@ angular.module('app.factories')
                             style: {
                                 left: "10px",
                                 top: "40px",
-                                fontSize: "8px",
+                                fontSize: "12px",
                                 color: "#BEBEBE"
                             }
 
