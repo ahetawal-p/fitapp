@@ -8,7 +8,8 @@
         '$timeout',
         '$q',
         'dateTimeUtil',
-        function($scope, healthKitService, chartConfigFactory, $timeout, $q, dateTimeUtil) {
+        '$ionicLoading', 
+        function($scope, healthKitService, chartConfigFactory, $timeout, $q, dateTimeUtil, $ionicLoading) {
 
             var vm = this;
             vm.selectedDate = "";
@@ -28,6 +29,7 @@
                     var endDate = __getEndDate(date);
                     return healthKitService.getDateVsAverageDataPoints(startDate, endDate).then(function(response) {
                         console.log(JSON.stringify(response));
+                        $ionicLoading.hide();
                         var chartConfig = chartConfigFactory.createActivityChartConfig(response, "line");
                         vm.chartConfigs[0] = chartConfig;
                     });
@@ -84,7 +86,15 @@
                             var durationBarChartConfig = chartConfigFactory.createActivityChartConfig(chartDataContainer, "bar");
                             durationBarChartConfig.options.plotOptions.series.events = {
                                 click: function(){
-                                loadLineChart(durationBarChartConfig.date);
+                                    $ionicLoading.show({
+                                        content: 'Loading',
+                                        animation: 'fade-in',
+                                        showBackdrop: false,
+                                        maxWidth: 200,
+                                        showDelay: 0
+                                    });
+
+                                    loadLineChart(durationBarChartConfig.date);
                                 }
                             };
                             var durationByDateComposite = {
