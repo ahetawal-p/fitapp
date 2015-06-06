@@ -19,10 +19,12 @@ angular.module('fitapp', [
 
 ])
 
-.run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage, $window, $state) {
+.run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage, $window, $state, $translate) {
     $ionicPlatform.ready(function() {
-        document.addEventListener("resume", onResume, false);
+        
 
+        // Startup code...
+        document.addEventListener("resume", onResume, false);
         /* always route to conversation and refresh when resume */
         function onResume() {
             if ($localstorage.getUserNickname()) {
@@ -32,7 +34,40 @@ angular.module('fitapp', [
             }
             $window.location.reload(true);
         }
-    });
+        
+        // Notification logic
+        if ($window.device && $window.device.platform === 'iOS') {
+                window.plugin.notification.local.registerPermission();
+        }
+        var count = 0;
+        var notificationId = 1;
+        var isWebView = ionic.Platform.isWebView();
+        alert(isWebView);
+        
+        $window.plugin.notification.local.isScheduled(notificationId, function (isScheduled) {
+            if(!isScheduled) {
+                var today = new Date();
+                var tomorrow = new Date();
+                tomorrow.setDate(today.getDate()+1);
+                tomorrow.setHours(10);
+                var tomorrow_at_10_am = tomorrow;
+                $window.plugin.notification.local.schedule({
+                    id: notificationId,
+                    text: $translate.instant("89"), 
+                    every: 'day',
+                    firstAt: tomorrow_at_10_am
+                }, function () {
+                    console.log("Scheduled..");
+                });
+            }
+        });
+
+        $window.plugin.notification.local.on('click', function (notification) {
+            console.log("Notification clicked");
+            count = 0;
+        });
+
+     });
 })
 
 .config(['$stateProvider', '$urlRouterProvider', '$translateProvider', '$localstorageProvider',
