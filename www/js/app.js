@@ -41,9 +41,6 @@ angular.module('fitapp', [
         }
         var count = 0;
         var notificationId = 1;
-        var isWebView = ionic.Platform.isWebView();
-        alert(isWebView);
-        
         $window.plugin.notification.local.isScheduled(notificationId, function (isScheduled) {
             if(!isScheduled) {
                 var today = new Date();
