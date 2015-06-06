@@ -9,7 +9,15 @@
         '$q',
         'dateTimeUtil',
         '$ionicLoading', 
-        function($scope, healthKitService, chartConfigFactory, $timeout, $q, dateTimeUtil, $ionicLoading) {
+        '$ionicScrollDelegate',
+        function($scope, 
+                healthKitService, 
+                chartConfigFactory, 
+                $timeout, 
+                $q, 
+                dateTimeUtil, 
+                $ionicLoading,
+                $ionicScrollDelegate) {
 
             var vm = this;
             vm.selectedDate = "";
@@ -32,6 +40,8 @@
                         $ionicLoading.hide();
                         var chartConfig = chartConfigFactory.createActivityChartConfig(response, "line");
                         vm.chartConfigs[0] = chartConfig;
+                        // scroll to the top of list after refresh
+                        $ionicScrollDelegate.scrollTop();
                     });
                 }
 
