@@ -43,22 +43,26 @@ angular.module('fitapp', [
         var notificationId = 1;
         
         var getCurrentActivityData = function() {
-            return $translate.instant("89");
+            var d = new Date();
+            return $translate.instant("89") + d;
 
         };
 
         $window.plugin.notification.local.isScheduled(notificationId, function (isScheduled) {
             if(!isScheduled) {
                 var today = new Date();
-                var tomorrow = new Date();
-                tomorrow.setDate(today.getDate()+1);
-                tomorrow.setHours(10);
-                var tomorrow_at_10_am = tomorrow;
+                today.setHours(10);
+                // var tomorrow = new Date();
+                // tomorrow.setDate(today.getDate()+1);
+                // tomorrow.setHours(10);
+                // var tomorrow_at_10_am = tomorrow;
                 $window.plugin.notification.local.schedule({
                     id: notificationId,
-                    text: getCurrentActivityData(), 
-                    every: 'day',
-                    firstAt: tomorrow_at_10_am
+                    text: "", 
+                    every: 'hour', // for testing, then change to day
+                    //firstAt: tomorrow_at_10_am
+                    at : today,
+                    badge : count
                 }, function () {
                     console.log("Scheduled..");
                 });
@@ -67,8 +71,30 @@ angular.module('fitapp', [
 
         $window.plugin.notification.local.on('click', function (notification) {
             console.log("Notification clicked");
-            count = 0;
+            $window.plugin.notification.local.clearAll(function() {
+                    count = 0;
+                    console.log("clearing all notification");
+                    updateNotification(notification, 0);
+                }, this);
+
+         });
+
+        $window.plugin.notification.local.on('trigger', function(notification) {
+            console.log("triggered: " + notification.id);
+            ++count;
+            updateNotification(notification, count);
         });
+
+        function updateNotification(notification, count){
+            $window.plugin.notification.local.update({
+                id: notification.id,
+                text: getCurrentActivityData(),
+                badge: count
+            }, function() {
+                console.log("Update callback...");
+            });
+        }
+
 
      });
 })
