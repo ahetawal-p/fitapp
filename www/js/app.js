@@ -41,6 +41,12 @@ angular.module('fitapp', [
         }
         var count = 0;
         var notificationId = 1;
+        
+        var getCurrentActivityData = function() {
+            return $translate.instant("89");
+
+        };
+
         $window.plugin.notification.local.isScheduled(notificationId, function (isScheduled) {
             if(!isScheduled) {
                 var today = new Date();
@@ -50,7 +56,7 @@ angular.module('fitapp', [
                 var tomorrow_at_10_am = tomorrow;
                 $window.plugin.notification.local.schedule({
                     id: notificationId,
-                    text: $translate.instant("89"), 
+                    text: getCurrentActivityData(), 
                     every: 'day',
                     firstAt: tomorrow_at_10_am
                 }, function () {
