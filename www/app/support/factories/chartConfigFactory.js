@@ -457,7 +457,14 @@ angular.module('app.factories')
                     },
                     plotOptions: {
                         series: {
-                            pointWidth: 70
+                            pointWidth: 70,
+                            allowPointSelect: true,
+                            states: {
+                                select: {
+                                    color: '#33C507',
+                                    borderColor: '#FFF'
+                                }
+                            }
                         }
                     }
                 }

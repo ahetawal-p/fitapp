@@ -10,6 +10,8 @@
         'dateTimeUtil',
         '$ionicLoading', 
         '$ionicScrollDelegate',
+        '$location',
+        '$anchorScroll',
         function($scope, 
                 healthKitService, 
                 chartConfigFactory, 
@@ -17,7 +19,9 @@
                 $q, 
                 dateTimeUtil, 
                 $ionicLoading,
-                $ionicScrollDelegate) {
+                $ionicScrollDelegate,
+                $location,
+                $anchorScroll) {
 
             var vm = this;
             vm.selectedDate = "";
@@ -41,7 +45,6 @@
                         var chartConfig = chartConfigFactory.createActivityChartConfig(response, "line");
                         vm.chartConfigs[0] = chartConfig;
                         // scroll to the top of list after refresh
-                        $ionicScrollDelegate.scrollTop();
                     });
                 }
 
@@ -90,12 +93,27 @@
                     return deferred.promise;
                 }
 
+                /* ionic 1.5 seems to have issues scrolling to top consistently,
+                 * potentially because the delegateHandle is not fetched correctly. 
+                 * manually finding the delegateHandle as a workaround
+                */ 
+                function __scrollToTop(){
+                    $timeout(function() {
+                        var startHandle = _.find($ionicScrollDelegate._instances, function (s) {
+                            return s.$$delegateHandle === "scrollHandle";
+                        });
+                        startHandle.scrollTop();
+                    });
+                }
+
                 function loadActivityBarCharts(){
+                    var previouslyClicked = null;
                     return healthKitService.getActivityDurationByDate().then(function(response) {
                         _.each(response, function(chartDataContainer) {
                             var durationBarChartConfig = chartConfigFactory.createActivityChartConfig(chartDataContainer, "bar");
                             durationBarChartConfig.options.plotOptions.series.events = {
-                                click: function(){
+                                click: function(clickedItem){
+                                    __scrollToTop();
                                     $ionicLoading.show({
                                         content: 'Loading',
                                         animation: 'fade-in',
