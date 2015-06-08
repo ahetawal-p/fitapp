@@ -60,7 +60,7 @@ angular.module('fitapp', [
                 $window.plugin.notification.local.schedule({
                     id: notificationId,
                     text: "", 
-                    every: 'minute', // for testing, then change to day
+                    every: 'hour', // for testing, then change to day
                     //firstAt: tomorrow_at_10_am
                     at : today,
                     badge : count
@@ -75,7 +75,7 @@ angular.module('fitapp', [
             $window.plugin.notification.local.clearAll(function() {
                     count = 0;
                     console.log("clearing all notification");
-                    updateNotification(notification, 0);
+                    updateNotification(notification, 0, "");
                 }, this);
 
          });
@@ -84,7 +84,8 @@ angular.module('fitapp', [
             console.log("triggered: " + notification.id);
             ++count;
             pushTextService.getTodaysActivityDurationText().then(function(responseText){
-                updateNotification(notification, count, responseText);
+                var newResponse = responseText;
+                updateNotification(notification, count, newResponse);
             });
         });
 
