@@ -15,11 +15,12 @@ angular.module('fitapp', [
     'underscore',
     'highcharts-ng',
     'pascalprecht.translate',
-    'ngCookies'
+    'ngCookies',
+    'app.services.push'
 
 ])
 
-.run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage, $window, $state, $translate) {
+.run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage, $window, $state, $translate, pushTextService) {
     $ionicPlatform.ready(function() {
         
 
@@ -59,7 +60,7 @@ angular.module('fitapp', [
                 $window.plugin.notification.local.schedule({
                     id: notificationId,
                     text: "", 
-                    every: 'hour', // for testing, then change to day
+                    every: 'minute', // for testing, then change to day
                     //firstAt: tomorrow_at_10_am
                     at : today,
                     badge : count
@@ -82,13 +83,15 @@ angular.module('fitapp', [
         $window.plugin.notification.local.on('trigger', function(notification) {
             console.log("triggered: " + notification.id);
             ++count;
-            updateNotification(notification, count);
+            pushTextService.getTodaysActivityDurationText().then(function(responseText){
+                updateNotification(notification, count, responseText);
+            });
         });
 
-        function updateNotification(notification, count){
+        function updateNotification(notification, count, text){
             $window.plugin.notification.local.update({
                 id: notification.id,
-                text: getCurrentActivityData(),
+                text: text, //getCurrentActivityData(),
                 badge: count
             }, function() {
                 console.log("Update callback...");
