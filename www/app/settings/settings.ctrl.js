@@ -1,5 +1,5 @@
-	angular.module('app.settings').controller('SettingsCtrl', ['$state','$ionicModal', '$scope', 'emailInfoFactory', '$ionicPopup', '$localstorage', '$translate', SettingsCtrl]);
-	function SettingsCtrl($state, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage, $translate){
+	angular.module('app.settings').controller('SettingsCtrl', ['$state','$ionicModal', '$scope', 'emailInfoFactory', '$ionicPopup', '$localstorage', '$translate', '$window', SettingsCtrl]);
+	function SettingsCtrl($state, $ionicModal, $scope, emailInfoFactory, $ionicPopup, $localstorage, $translate, $window){
 		var vm = this;
 		vm.nickname = $localstorage.getUserNickname();
 		vm.email = $localstorage.getEmail();
@@ -65,6 +65,11 @@
 			       console.log('Clearing storage');
 			       clearFrontEndData();
 			       
+			       // clear push notification info
+			        $window.plugin.notification.local.cancelAll(function() {
+			            alert("done");
+			        }, this);
+
 			       // User object manupulation
 			       $localstorage.removeUser();
 			       // create new user object
