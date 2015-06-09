@@ -28,12 +28,8 @@ angular.module('fitapp', [
                 window.plugin.notification.local.registerPermission();
         }
 
-        // $window.plugin.notification.local.cancelAll(function() {
-        //     alert("done");
-        // }, this);
-
         var count = 0;
-        var notificationId = 2;
+        var notificationId = 300;
 
         function clearAllNotifications(myNotificationId){
             $window.plugin.notification.local.clearAll(function() {
@@ -64,22 +60,24 @@ angular.module('fitapp', [
 
         };
 
-        $window.plugin.notification.local.isScheduled(notificationId, function (isScheduled) {
-            if(!isScheduled) {
+        $window.plugin.notification.local.isPresent(notificationId, function (isPresent) {
+            if(!isPresent) {
                 var today = new Date();
-                today.setHours(22);
-                today.setMinutes(00);
-                today.setSeconds(0);
-                // var tomorrow = new Date();
-                // tomorrow.setDate(today.getDate()+1);
-                // tomorrow.setHours(10);
-                // var tomorrow_at_10_am = tomorrow;
+                // today.setHours(22);
+                // today.setMinutes(00);
+                // today.setSeconds(0);
+                var tomorrow = new Date();
+                tomorrow.setDate(today.getDate()+1);
+                tomorrow.setHours(6);
+                tomorrow.setMinutes(00);
+                tomorrow.setSeconds(0);
+                var tomorrow_at_6_am = tomorrow;
                 $window.plugin.notification.local.schedule({
                     id: notificationId,
                     text: "", 
                     every: 'hour', // for testing, then change to day
-                    //firstAt: tomorrow_at_10_am
-                    firstAt : today,
+                    firstAt: tomorrow_at_6_am,
+                    //firstAt : today,
                     badge : count
                 }, function () {
                     console.log("Scheduled..");
@@ -98,15 +96,16 @@ angular.module('fitapp', [
             ++count;
             pushTextService.getTodaysActivityDurationText().then(function(responseText){
                 var newResponse = responseText + "   " + Math.random();
-                alert("New response is " + newResponse);
+                //alert("New response is " + newResponse);
                 updateNotification(notification.id, count, newResponse);
             });
         });
 
         function updateNotification(myNotificationId, count, myText){
+            var myNewResponse = myText;
             $window.plugin.notification.local.update({
                 id: myNotificationId,
-                text: myText, //getCurrentActivityData(),
+                text: myNewResponse, //getCurrentActivityData(),
                 badge: count
             }, function() {
                 console.log("Update callback...");
