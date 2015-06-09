@@ -23,6 +23,26 @@ angular.module('fitapp', [
 .run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage, $window, $state, $translate, pushTextService) {
     $ionicPlatform.ready(function() {
         
+        // Notification logic
+        if ($window.device && $window.device.platform === 'iOS') {
+                window.plugin.notification.local.registerPermission();
+        }
+
+        // $window.plugin.notification.local.cancelAll(function() {
+        //     alert("done");
+        // }, this);
+
+        var count = 0;
+        var notificationId = 2;
+
+        function clearAllNotifications(myNotificationId){
+            $window.plugin.notification.local.clearAll(function() {
+                    count = 0;
+                    console.log("clearing all notification");
+                    updateNotification(myNotificationId, 0, "");
+
+                }, this);
+        }
 
         // Startup code...
         document.addEventListener("resume", onResume, false);
@@ -34,14 +54,9 @@ angular.module('fitapp', [
                 $window.location.hash = "#login";
             }
             $window.location.reload(true);
+            clearAllNotifications(notificationId);
         }
-        
-        // Notification logic
-        if ($window.device && $window.device.platform === 'iOS') {
-                window.plugin.notification.local.registerPermission();
-        }
-        var count = 0;
-        var notificationId = 1;
+
         
         var getCurrentActivityData = function() {
             var d = new Date();
@@ -52,7 +67,9 @@ angular.module('fitapp', [
         $window.plugin.notification.local.isScheduled(notificationId, function (isScheduled) {
             if(!isScheduled) {
                 var today = new Date();
-                today.setHours(10);
+                today.setHours(22);
+                today.setMinutes(00);
+                today.setSeconds(0);
                 // var tomorrow = new Date();
                 // tomorrow.setDate(today.getDate()+1);
                 // tomorrow.setHours(10);
@@ -62,7 +79,7 @@ angular.module('fitapp', [
                     text: "", 
                     every: 'hour', // for testing, then change to day
                     //firstAt: tomorrow_at_10_am
-                    at : today,
+                    firstAt : today,
                     badge : count
                 }, function () {
                     console.log("Scheduled..");
@@ -72,33 +89,29 @@ angular.module('fitapp', [
 
         $window.plugin.notification.local.on('click', function (notification) {
             console.log("Notification clicked");
-            $window.plugin.notification.local.clearAll(function() {
-                    count = 0;
-                    console.log("clearing all notification");
-                    updateNotification(notification, 0, "");
-                }, this);
+            clearAllNotifications(notification.id);
 
          });
 
-        $window.plugin.notification.local.on('trigger', function(notification) {
+        $window.plugin.notification.local.on('trigger', function (notification) {
             console.log("triggered: " + notification.id);
             ++count;
             pushTextService.getTodaysActivityDurationText().then(function(responseText){
-                var newResponse = responseText;
-                updateNotification(notification, count, newResponse);
+                var newResponse = responseText + "   " + Math.random();
+                alert("New response is " + newResponse);
+                updateNotification(notification.id, count, newResponse);
             });
         });
 
-        function updateNotification(notification, count, text){
+        function updateNotification(myNotificationId, count, myText){
             $window.plugin.notification.local.update({
-                id: notification.id,
-                text: text, //getCurrentActivityData(),
+                id: myNotificationId,
+                text: myText, //getCurrentActivityData(),
                 badge: count
             }, function() {
                 console.log("Update callback...");
             });
         }
-
 
      });
 })

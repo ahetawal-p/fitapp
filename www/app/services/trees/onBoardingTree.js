@@ -168,7 +168,7 @@ angular.module('app.utils')
 		'onboarding' : {
 			text: ['0'],
 			children: ['checkHealthKitExists']
-			// children: ['askName']
+			//children: ['askName']
 		},
 
 		'checkHealthKitExists' : {
@@ -411,7 +411,7 @@ angular.module('app.utils')
 		"showMoreDetailsNo": {
 			text: ['39'],
 			type: 'user',
-			children:[]
+			children:['thatsAllIHave']
 		},	
 		"compareWeekdayWeekends": {
 			evalInfo : {
