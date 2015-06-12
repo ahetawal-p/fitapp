@@ -64,12 +64,6 @@
 			     if(res) {
 			       console.log('Clearing storage');
 			       clearFrontEndData();
-			       
-			       // clear push notification info
-			        $window.plugin.notification.local.cancelAll(function() {
-			            alert("done");
-			        }, this);
-
 			       // User object manupulation
 			       $localstorage.removeUser();
 			       // create new user object

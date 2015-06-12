@@ -28,89 +28,73 @@ angular.module('fitapp', [
                 window.plugin.notification.local.registerPermission();
         }
 
-        var count = 0;
-        var notificationId = 300;
-
-        function clearAllNotifications(myNotificationId){
-            $window.plugin.notification.local.clearAll(function() {
-                    count = 0;
-                    console.log("clearing all notification");
-                    updateNotification(myNotificationId, 0, "");
-
-                }, this);
+        var notificationId = 301;
+        function cancelAllNotifications(myNotificationId){
+            // clear push notification info
+            $window.plugin.notification.local.cancelAll(function() {
+                console.log("cleaned all notifications");
+            }, this);
         }
 
         // Startup code...
         document.addEventListener("resume", onResume, false);
         /* always route to conversation and refresh when resume */
         function onResume() {
+            
+            cancelAllNotifications(notificationId);
+            
             if ($localstorage.getUserNickname()) {
                 $window.location.hash = "#tab/conversation";
             } else {
                 $window.location.hash = "#login";
             }
             $window.location.reload(true);
-            clearAllNotifications(notificationId);
         }
 
         
-        var getCurrentActivityData = function() {
-            var d = new Date();
-            return $translate.instant("89") + d;
-
-        };
-
         $window.plugin.notification.local.isPresent(notificationId, function (isPresent) {
             if(!isPresent) {
                 var today = new Date();
-                // today.setHours(22);
-                // today.setMinutes(00);
-                // today.setSeconds(0);
+                 // today.setHours(21);
+                 // today.setMinutes(05);
+                 // today.setSeconds(00);
                 var tomorrow = new Date();
                 tomorrow.setDate(today.getDate()+1);
-                tomorrow.setHours(6);
+                tomorrow.setHours(10);
                 tomorrow.setMinutes(00);
                 tomorrow.setSeconds(0);
-                var tomorrow_at_6_am = tomorrow;
+                // var tomorrow_at_6_am = tomorrow;
                 $window.plugin.notification.local.schedule({
                     id: notificationId,
-                    text: "", 
-                    every: 'hour', // for testing, then change to day
-                    firstAt: tomorrow_at_6_am,
+                    text: $translate.instant("137"), 
+                    every: 'day', 
+                    firstAt: tomorrow,
                     //firstAt : today,
-                    badge : count
+                    badge : 1
                 }, function () {
                     console.log("Scheduled..");
                 });
             }
         });
 
-        $window.plugin.notification.local.on('click', function (notification) {
-            console.log("Notification clicked");
-            clearAllNotifications(notification.id);
+        // cordova.plugins.notification.local.getTriggeredIds(function (ids) {
+        //     alert(ids);
+        // });
 
-         });
+        // $window.plugin.notification.local.on('click', function (notification) {
+        //     console.log("Notification clicked");
+        //    
+        //  });
 
         $window.plugin.notification.local.on('trigger', function (notification) {
             console.log("triggered: " + notification.id);
-            ++count;
-            pushTextService.getTodaysActivityDurationText().then(function(responseText){
-                var newResponse = responseText + "   " + Math.random();
-                //alert("New response is " + newResponse);
-                updateNotification(notification.id, count, newResponse);
-            });
+            // pushTextService.getTodaysActivityDurationText().then(function(responseText){
+            //     var newResponse = responseText + "   " + Math.random();
+            //     //alert("New response is " + newResponse);
+            //     //updateNotification(notification.id, count, newResponse);
+            // });
         });
 
-        function updateNotification(myNotificationId, count, myText){
-            var myNewResponse = myText;
-            $window.plugin.notification.local.update({
-                id: myNotificationId,
-                text: myNewResponse, //getCurrentActivityData(),
-                badge: count
-            }, function() {
-                console.log("Update callback...");
-            });
-        }
 
      });
 })
