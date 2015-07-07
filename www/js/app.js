@@ -23,6 +23,7 @@ angular.module('fitapp', [
 .run(function($ionicPlatform, $cordovaHealthKit, $rootScope, $localstorage, $window, $state, $translate, pushTextService) {
     $ionicPlatform.ready(function() {
         
+        
         // Notification logic
         if ($window.device && $window.device.platform === 'iOS') {
                 window.plugin.notification.local.registerPermission();
@@ -30,9 +31,10 @@ angular.module('fitapp', [
 
         var notificationId = 301;
         function cancelAllNotifications(myNotificationId){
-            // clear push notification info
-            $window.plugin.notification.local.cancelAll(function() {
-                console.log("cleaned all notifications");
+            $window.plugin.notification.local.clearAll(function() {
+                $window.plugin.notification.local.cancelAll(function() {
+                    console.log("cleaned all notifications");
+                }, this);
             }, this);
         }
 
@@ -108,8 +110,13 @@ angular.module('fitapp', [
             suffix: '.json'
         });
 
-        /* set this to zh_ZH before release */
-        $translateProvider.preferredLanguage('zh_ZH');
+        var language = window.navigator.userLanguage || window.navigator.language;
+        if(language && language.indexOf("zh") > -1){
+            /* set this to zh_ZH before release */
+            $translateProvider.preferredLanguage('zh_ZH');
+        }else {
+             $translateProvider.preferredLanguage('en_US');
+        }
 
         $translateProvider.useLocalStorage();
 

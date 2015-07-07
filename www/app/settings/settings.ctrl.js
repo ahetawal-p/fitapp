@@ -68,7 +68,16 @@
 			       $localstorage.removeUser();
 			       // create new user object
 			       /* set this to zh_ZH before release */
-			       $translate.preferredLanguage('en_US');
+			       var language = $window.navigator.userLanguage || $window.navigator.language;
+			       if(language && language.indexOf("zh") > -1){
+            			$translate.preferredLanguage('zh_ZH');
+            			$translate.use('zh_ZH');
+        			}else {
+             			$translate.preferredLanguage('en_US');
+             			$translate.use('en_US');
+        			}
+
+			       //$translate.preferredLanguage('en_US');
 			       var skeletonUser = $localstorage.createUserSkeleton($translate.preferredLanguage());
 			       $localstorage.setObject("user", skeletonUser);
 			       vm.selectedLanguageId = $localstorage.getUserLanguageId();
