@@ -30,11 +30,43 @@ angular.module('fitapp', [
         }
 
         var notificationId = 301;
-        function cancelAllNotifications(myNotificationId){
-            $window.plugin.notification.local.clearAll(function() {
-                $window.plugin.notification.local.cancelAll(function() {
-                    console.log("cleaned all notifications");
-                }, this);
+        function setUpNotifications(myNotificationId){
+         $window.plugin.notification.local.isPresent(myNotificationId, function (isPresent) {
+                    if(!isPresent) {
+                        var today = new Date();
+                         //today.setHours(09);
+                         //today.setMinutes(48);
+                         //today.setSeconds(00);
+                        var tomorrow = new Date();
+                        tomorrow.setDate(today.getDate()+1);
+                        tomorrow.setHours(10);
+                        tomorrow.setMinutes(00);
+                        tomorrow.setSeconds(0);
+                        // var tomorrow_at_6_am = tomorrow;
+                        $window.plugin.notification.local.schedule({
+                            id: myNotificationId,
+                            text: $translate.instant("137"), 
+                            every: 'day', 
+                            firstAt: tomorrow,
+                            //firstAt : today,
+                            badge : 1
+                        }, function () {
+                            console.log("Scheduled..");
+                        });
+                    }
+                });
+
+        }
+
+        function cancelAllNotificationsAndRedirect(){
+             $window.plugin.notification.local.cancelAll(function() {
+                    if ($localstorage.getUserNickname()) {
+                        $window.location.hash = "#tab/conversation";
+                    } else {
+                        $window.location.hash = "#login";
+                    }
+                    // reload causes to setup the notifications again
+                    $window.location.reload(true);
             }, this);
         }
 
@@ -42,51 +74,10 @@ angular.module('fitapp', [
         document.addEventListener("resume", onResume, false);
         /* always route to conversation and refresh when resume */
         function onResume() {
-            
-            cancelAllNotifications(notificationId);
-            
-            if ($localstorage.getUserNickname()) {
-                $window.location.hash = "#tab/conversation";
-            } else {
-                $window.location.hash = "#login";
-            }
-            $window.location.reload(true);
+            cancelAllNotificationsAndRedirect();
         }
 
-        
-        $window.plugin.notification.local.isPresent(notificationId, function (isPresent) {
-            if(!isPresent) {
-                var today = new Date();
-                 // today.setHours(21);
-                 // today.setMinutes(05);
-                 // today.setSeconds(00);
-                var tomorrow = new Date();
-                tomorrow.setDate(today.getDate()+1);
-                tomorrow.setHours(10);
-                tomorrow.setMinutes(00);
-                tomorrow.setSeconds(0);
-                // var tomorrow_at_6_am = tomorrow;
-                $window.plugin.notification.local.schedule({
-                    id: notificationId,
-                    text: $translate.instant("137"), 
-                    every: 'day', 
-                    firstAt: tomorrow,
-                    //firstAt : today,
-                    badge : 1
-                }, function () {
-                    console.log("Scheduled..");
-                });
-            }
-        });
-
-        // cordova.plugins.notification.local.getTriggeredIds(function (ids) {
-        //     alert(ids);
-        // });
-
-        // $window.plugin.notification.local.on('click', function (notification) {
-        //     console.log("Notification clicked");
-        //    
-        //  });
+         setUpNotifications(notificationId);
 
         $window.plugin.notification.local.on('trigger', function (notification) {
             console.log("triggered: " + notification.id);
